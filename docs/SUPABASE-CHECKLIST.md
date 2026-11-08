@@ -103,6 +103,18 @@ select public.make_admin('14101ghsspandi@gmail.com');
 - [ ] `register.html` offers no administrator option, and a sign-up asking for
       the admin role is rejected
 
+### "You are signed in, but this account has no school profile yet"
+
+The sign-in worked; the row in `public.profiles` is missing. It is created by the
+trigger in `11-signup-trigger-fix.sql`, so an account made before that file was
+run has none.
+
+- Office accounts: run `supabase/12-set-admin-password.sql`. Section 3 creates the
+  profile and makes both office addresses active administrators.
+- Any other account: in the SQL Editor run `select * from public.repair_signup();`
+  for every gap, or `select public.repair_signup('someone@example.com');` for one.
+  `select * from public.signup_report;` lists what is missing.
+
 ### "Incorrect email or password" at admin.html
 
 1. Run `supabase/17-why-cant-i-sign-in.sql` and read its four grids.

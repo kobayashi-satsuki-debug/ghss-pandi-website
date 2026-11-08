@@ -55,10 +55,14 @@
         }
       }
       const text = API.errorText(err);
-      const hint = /incorrect/i.test(text)
-        ? ' ' + L('If the office reset the password, use the newest one printed by 12-set-admin-password.sql.',
-                   'ഓഫീസ് പാസ്‌വേഡ് പുതുക്കിയെങ്കിൽ, 12-set-admin-password.sql അവസാനം കാണിച്ച പുതിയ പാസ്‌വേഡ് ഉപയോഗിക്കുക.')
-        : '';
+      let hint = '';
+      if (/incorrect/i.test(text)) {
+        hint = ' ' + L('If the office reset the password, use the newest one printed by 12-set-admin-password.sql.',
+                       'ഓഫീസ് പാസ്‌വേഡ് പുതുക്കിയെങ്കിൽ, 12-set-admin-password.sql അവസാനം കാണിച്ച പുതിയ പാസ്‌വേഡ് ഉപയോഗിക്കുക.');
+      } else if (/no school profile/i.test(text)) {
+        hint = ' ' + L('Run supabase/12-set-admin-password.sql once more: it creates the office profile and gives both accounts the administrator role.',
+                       'supabase/12-set-admin-password.sql വീണ്ടും ഓടിക്കുക: അത് ഓഫീസ് പ്രൊഫൈൽ ഉണ്ടാക്കി രണ്ട് അക്കൗണ്ടുകൾക്കും അഡ്മിനിസ്ട്രേറ്റർ അനുമതി നൽകും.');
+      }
       UI.showMsg(msg, text + hint, 'error');
       UI.busy(btn, false);
     }

@@ -84,7 +84,50 @@ exception when others then
   raise notice 'Identity repair skipped: %', sqlerrm;
 end $$;
 
--- ---------- 3. the password (this is the grid you copy from) ----------
+-- ---------- 3. the school profile, with the administrator role ----------
+-- The site reads the role from public.profiles, not from the sign-in. An account
+-- without that row signs in correctly and is then refused with "this account has
+-- no school profile yet" — which is what happens to an account made before the
+-- sign-up trigger existed. The trigger in 15-admin-allowlist.sql permits exactly
+-- these two addresses to hold the role admin.
+do $$
+declare
+  v_created integer := 0;
+  r record;
+begin
+  if to_regclass('public.profiles') is null then
+    raise notice 'public.profiles does not exist: run supabase/01-schema.sql first.';
+    return;
+  end if;
+
+  for r in
+    select u.id, lower(u.email) as email
+      from auth.users u
+     where lower(u.email) in ('14101ghsspandi@gmail.com', 'ziyadahmad778@gmail.com')
+       and not exists (select 1 from public.profiles p
+                        where p.id = u.id or lower(p.email) = lower(u.email))
+  loop
+    insert into public.profiles (id, email, full_name, role, status)
+    values (r.id, r.email, '', 'admin'::public.app_role, 'active'::public.account_status);
+    v_created := v_created + 1;
+    raise notice 'Created the school profile for %.', r.email;
+  end loop;
+
+  update public.profiles
+     set role = 'admin'::public.app_role,
+         status = 'active'::public.account_status,
+         updated_at = now()
+   where lower(email) in ('14101ghsspandi@gmail.com', 'ziyadahmad778@gmail.com');
+
+  raise notice 'School profiles created: %, and both are active administrators now.', v_created;
+end $$;
+
+select p.email, p.role, p.status, p.full_name
+  from public.profiles p
+ where lower(p.email) in ('14101ghsspandi@gmail.com', 'ziyadahmad778@gmail.com')
+ order by p.email;
+
+-- ---------- 4. the password (this is the grid you copy from) ----------
 -- One invented password per account, printed once:
 with target as (
   select u.id, u.email, u.email_confirmed_at,
@@ -105,14 +148,6 @@ returning u.email as account,
 -- If that grid came back empty, neither office address has an account yet.
 -- Fix that first: Authentication -> Users -> Add user, tick "Auto confirm user",
 -- save, then run this file again.
-
--- ---------- 4. optional: make them full administrators ----------
--- Uncomment these two lines only if the office accounts cannot open the
--- administrator dashboard yet. The trigger in 15-admin-allowlist.sql permits
--- exactly these two addresses to hold the role.
---
---   update public.profiles set role = 'admin', status = 'active', updated_at = now()
---    where lower(email) in ('14101ghsspandi@gmail.com', 'ziyadahmad778@gmail.com');
 
 -- ---------- 5. optional: choose the password yourself ----------
 -- If you would rather pick the password than have one invented, copy the block
