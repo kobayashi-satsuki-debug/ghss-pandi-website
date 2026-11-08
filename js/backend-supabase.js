@@ -7,6 +7,7 @@
 (function () {
   let sb = null;
   let cachedProfile = null;
+  let selfHealed = false;
 
   function client() {
     if (!sb) sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
@@ -19,19 +20,38 @@
 
   async function profile(session) {
     const s = session || (await client().auth.getSession()).data.session;
-    if (!s) { cachedProfile = null; return null; }
-    const { data, error } = await client().rpc('get_my_profile');
-    if (error) {
-      const m = String(error.message || '');
-      const c = String(error.code || '');
-      if (c === 'PGRST202' || c === '42883' || /could not find the function|function .* does not exist|schema cache/i.test(m)) {
-        throw new Error('err.dbSetup');
+    if (!s) { cachedProfile = null; selfHealed = false; return null; }
+
+    const read = async () => {
+      const { data, error } = await client().rpc('get_my_profile');
+      if (error) {
+        const m = String(error.message || '');
+        const c = String(error.code || '');
+        if (c === 'PGRST202' || c === '42883' || /could not find the function|function .* does not exist|schema cache/i.test(m)) {
+          throw new Error('err.dbSetup');
+        }
+        // A dead or refreshed token is a real signed-out state; anything else is not.
+        if (c === '401' || /jwt|token .*expired|invalid claim/i.test(m)) { cachedProfile = null; return null; }
+        fail(error);
       }
-      // A dead or refreshed token is a real signed-out state; anything else is not.
-      if (c === '401' || /jwt|token .*expired|invalid claim/i.test(m)) { cachedProfile = null; return null; }
-      fail(error);
+      return data && data.profile ? data : null;
+    };
+
+    let out = await read();
+    if (out) { cachedProfile = out; return out; }
+
+    /* Signed in, yet no school profile: the account was made before the sign-up
+       trigger, or an older row holds this email under another id.
+       ensure_my_profile() (supabase/19) creates or re-links it, once per page. */
+    if (!selfHealed) {
+      selfHealed = true;
+      try {
+        const { error: healErr } = await client().rpc('ensure_my_profile');
+        if (!healErr) out = await read();
+      } catch (e) { /* older database without the function: the message stands */ }
     }
-    cachedProfile = data && data.profile ? data : null;
+
+    cachedProfile = out || null;
     return cachedProfile;
   }
 

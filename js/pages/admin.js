@@ -60,8 +60,8 @@
         hint = ' ' + L('If the office reset the password, use the newest one printed by 12-set-admin-password.sql.',
                        'ഓഫീസ് പാസ്‌വേഡ് പുതുക്കിയെങ്കിൽ, 12-set-admin-password.sql അവസാനം കാണിച്ച പുതിയ പാസ്‌വേഡ് ഉപയോഗിക്കുക.');
       } else if (/no school profile/i.test(text)) {
-        hint = ' ' + L('Run supabase/12-set-admin-password.sql once more: it creates the office profile and gives both accounts the administrator role.',
-                       'supabase/12-set-admin-password.sql വീണ്ടും ഓടിക്കുക: അത് ഓഫീസ് പ്രൊഫൈൽ ഉണ്ടാക്കി രണ്ട് അക്കൗണ്ടുകൾക്കും അഡ്മിനിസ്ട്രേറ്റർ അനുമതി നൽകും.');
+        hint = ' ' + L('The site creates it automatically — run supabase/19-self-healing-profile.sql once if it keeps happening.',
+                       'സൈറ്റ് അത് തനിയെ ഉണ്ടാക്കും — വീണ്ടും സംഭവിച്ചാൽ supabase/19-self-healing-profile.sql ഒരിക്കൽ ഓടിക്കുക.');
       }
       UI.showMsg(msg, text + hint, 'error');
       UI.busy(btn, false);

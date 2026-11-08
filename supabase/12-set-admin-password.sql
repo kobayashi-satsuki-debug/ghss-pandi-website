@@ -100,6 +100,23 @@ begin
     return;
   end if;
 
+  -- An older profile may hold the address under an id with no account behind
+  -- it. Move such a leftover row to the real account instead of leaving the
+  -- person with a working password and no profile.
+  for r in
+    select p.id as old_id, u.id as new_id
+      from public.profiles p
+      join auth.users u on lower(u.email) = lower(p.email) and u.id <> p.id
+     where not exists (select 1 from auth.users u2 where u2.id = p.id)
+  loop
+    begin
+      update public.profiles set id = r.new_id, updated_at = now() where id = r.old_id;
+      raise notice 'Moved a leftover profile to its account.';
+    exception when others then
+      raise notice 'Could not move profile % (%); running supabase/19-self-healing-profile.sql may help.', r.old_id, sqlerrm;
+    end;
+  end loop;
+
   for r in
     select u.id, lower(u.email) as email
       from auth.users u

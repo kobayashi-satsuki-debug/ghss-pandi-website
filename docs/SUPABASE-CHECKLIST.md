@@ -107,12 +107,20 @@ select public.make_admin('14101ghsspandi@gmail.com');
 
 The sign-in worked; the row in `public.profiles` is missing. It is created by the
 trigger in `11-signup-trigger-fix.sql`, so an account made before that file was
-run has none.
+run has none. Sometimes the row exists but under an **old id**, so the account
+still looks empty.
 
-- Office accounts: run `supabase/12-set-admin-password.sql`. Section 3 creates the
-  profile and makes both office addresses active administrators.
-- Any other account: in the SQL Editor run `select * from public.repair_signup();`
-  for every gap, or `select public.repair_signup('someone@example.com');` for one.
+- **First, just try again.** `supabase/19-self-healing-profile.sql` adds
+  `ensure_my_profile()`, which the site calls automatically the moment a signed-in
+  account has no profile. It creates the row (and the matching student, teacher or
+  parent row) and moves a leftover profile onto the real account. Sign in once
+  more after the page has refreshed.
+- If it repeats, run `supabase/19-self-healing-profile.sql` in the SQL Editor. It
+  lists every account in that state, repairs them, then prints the administrators.
+- Office accounts: run `supabase/12-set-admin-password.sql`. Section 3 also moves
+  a leftover profile and makes both office addresses active administrators.
+- Any other account: `select * from public.repair_signup();` repairs every gap, or
+  `select public.repair_signup('someone@example.com');` one.
   `select * from public.signup_report;` lists what is missing.
 
 ### "Incorrect email or password" at admin.html
@@ -166,7 +174,7 @@ That message now appears only when there really is no session. Two other cases h
 
 | What you see | What it means | What to do |
 | --- | --- | --- |
-| **"You are signed in, but this account has no school profile yet."** | The login itself worked, but no row in `public.profiles` matches this user, so the app has no role or status to work with. | Confirm the sign-up trigger is installed (`supabase/11-signup-trigger-fix.sql`), then check `select * from public.signup_report();`. An account made before the trigger was installed needs its profile row created once. |
+| **"You are signed in, but this account has no school profile yet."** | The login itself worked, but no row in `public.profiles` matches this user, so the app has no role or status to work with. | Run `supabase/19-self-healing-profile.sql`; the site then repairs the account on the next sign-in by itself. `select * from public.signup_report();` shows what is still missing. |
 | **"The school database is not set up yet, or a database update is missing."** | `get_my_profile` could not be found, so no page can load a role. | Run the SQL files in `supabase/` in order (see `docs/SETUP.md`), at minimum `01`–`03` and `13`. Then reload. |
 | The note appears once on the login page, then normal pages work | A page was opened without a session; the login page now says so. | Sign in. |
 

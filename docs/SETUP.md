@@ -166,6 +166,14 @@ created, in preview mode and in live mode.
        list. The school offers the Commerce stream only. The file deletes a
        class only when no student is still in it and names anybody it had to
        leave; safe to run twice.
+   18. `supabase/19-self-healing-profile.sql` — the fix for *"You are signed in,
+       but this account has no school profile yet"*. Adds `ensure_my_profile()`,
+       which the site calls by itself the moment a signed-in account has no
+       profile row, so the account repairs instead of waiting for the office. It
+       also moves a leftover profile that sits under an old id onto the real
+       account, lists every account in that state, and repairs them all. Safe to
+       run twice; needs no password. Run it immediately if anybody sees the
+       message.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to
