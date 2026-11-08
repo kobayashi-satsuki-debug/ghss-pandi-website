@@ -1,6 +1,14 @@
 /* Kannada translations, keyed by the English string.
    Used by js/i18n.js when the site language is "kn". */
 window.KN_TEXT = {
+  'Open in Google Drive': 'Google Drive ನಲ್ಲಿ ತೆರೆಯಿರಿ',
+  'School Google Drive': 'ಶಾಲೆಯ Google Drive',
+  'Android app (.apk)': 'ಆಂಡ್ರಾಯ್ಡ್ ಆ್ಯಪ್ (.apk)',
+  'Format': 'ಸ್ವರೂಪ',
+  'Hosted on': 'ಹೋಸ್ಟ್ ಮಾಡಿದೆ',
+  'Price': 'ಬೆಲೆ',
+  'Free': 'ಉಚಿತ',
+  'Older builds on GitHub': 'GitHub ನಲ್ಲಿ ಹಳೆಯ ಬಿಲ್ಡ್‌ಗಳು',
   'Download APK': 'APK ಡೌನ್‌ಲೋಡ್',
   'Download the APK': 'APK ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ',
   'All versions': 'ಎಲ್ಲಾ ಆವೃತ್ತಿಗಳು',

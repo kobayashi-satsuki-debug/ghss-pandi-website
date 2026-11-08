@@ -46,17 +46,20 @@
           </div>
         </div>
 
-        <div id="app-release" role="status" aria-live="polite">
-          <p class="small muted" data-en="Checking the latest published build…" data-ml="ഏറ്റവും പുതിയ ബിൽഡ് പരിശോധിക്കുന്നു…">Checking the latest published build…</p>
+        <div class="app-release-facts" id="app-release">
+          <div><span class="small muted" data-en="File" data-ml="ഫയൽ">File</span><strong>ghss-pandi.apk</strong></div>
+          <div><span class="small muted" data-en="Format" data-ml="ഫോർമാറ്റ്">Format</span><strong data-en="Android app (.apk)" data-ml="ആൻഡ്രോയിഡ് ആപ്പ് (.apk)">Android app (.apk)</strong></div>
+          <div><span class="small muted" data-en="Hosted on" data-ml="ഹോസ്റ്റ് ചെയ്യുന്നത്">Hosted on</span><strong data-en="School Google Drive" data-ml="സ്കൂളിന്റെ ഗൂഗിൾ ഡ്രൈവ്">School Google Drive</strong></div>
+          <div><span class="small muted" data-en="Price" data-ml="വില">Price</span><strong data-en="Free" data-ml="സൗജന്യം">Free</strong></div>
         </div>
 
         <div class="app-actions">
-          <a class="btn btn-primary" id="app-download" href="https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app/releases/latest" rel="noopener">
+          <a class="btn btn-primary" id="app-download" href="https://drive.google.com/uc?export=download&amp;id=1KqKcHoUgwLHk3un0-iJu7IJcUnXPRHA0" rel="noopener">
             <span data-en="Download APK" data-ml="APK ഡൗൺലോഡ് ചെയ്യുക">Download APK</span></a>
-          <a class="btn btn-ghost" id="app-versions" href="https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app/releases" rel="noopener">
-            <span data-en="All versions" data-ml="എല്ലാ പതിപ്പുകളും">All versions</span></a>
+          <a class="btn btn-ghost" id="app-drive" href="https://drive.google.com/file/d/1KqKcHoUgwLHk3un0-iJu7IJcUnXPRHA0/view" rel="noopener">
+            <span data-en="Open in Google Drive" data-ml="ഗൂഗിൾ ഡ്രൈവിൽ തുറക്കുക">Open in Google Drive</span></a>
         </div>
-        <p class="small muted" data-en="The APK is downloaded straight from the school's own GitHub releases — no ads, no in-app payments, no third-party store." data-ml="APK സ്കൂളിന്റെ സ്വന്തം GitHub റിലീസുകളിൽ നിന്ന് നേരിട്ടാണ് ഡൗൺലോഡ് ചെയ്യുന്നത് — പരസ്യങ്ങളോ പണമിടപാടുകളോ മൂന്നാം കക്ഷി സ്റ്റോറോ ഇല്ല.">The APK comes straight from the school's own GitHub releases.</p>
+        <p class="small muted" data-en="The file sits in the school's own Google Drive, shared by the office — no ads, no in-app payments, no third-party store. If Google asks you to sign in, the office needs to set the file's sharing to “Anyone with the link”." data-ml="ഫയൽ സ്കൂളിന്റെ സ്വന്തം ഗൂഗിൾ ഡ്രൈവിലാണ്, ഓഫീസ് പങ്കുവച്ചത് — പരസ്യങ്ങളോ പണമിടപാടുകളോ മൂന്നാം കക്ഷി സ്റ്റോറോ ഇല്ല. ഗൂഗിൾ സൈൻ ഇൻ ആവശ്യപ്പെടുന്നുവെങ്കിൽ, ഫയലിന്റെ ഷെയറിംഗ് “Anyone with the link” ആക്കണം.">The file sits in the school's own Google Drive. If Google asks you to sign in, the office needs to set sharing to “Anyone with the link”.</p>
       </div>
 
       <div>
@@ -84,7 +87,7 @@
       <div class="card step-card">
         <span class="step-num">1</span>
         <h3 data-en="Download the APK" data-ml="APK ഡൗൺലോഡ് ചെയ്യുക">Download the APK</h3>
-        <p data-en="Press Download APK above. The file is named something like ghss-pandi-1.0.0.apk and is usually under 20 MB." data-ml="മുകളിലെ Download APK അമർത്തുക. ghss-pandi-1.0.0.apk പോലെയുള്ള ഫയലാണ് ലഭിക്കുക; സാധാരണ 20 MB-യിൽ താഴെ.">Press Download APK above. The file is usually under 20 MB.</p>
+        <p data-en="Press Download APK above. Google Drive may ask you to confirm the download first — press Download anyway." data-ml="മുകളിലെ Download APK അമർത്തുക. ഗൂഗിൾ ഡ്രൈവ് ആദ്യം സ്ഥിരീകരണം ചോദിച്ചേക്കാം — Download anyway അമർത്തുക.">Press Download APK above; Google Drive may ask you to confirm first.</p>
       </div>
       <div class="card step-card">
         <span class="step-num">2</span>
@@ -137,13 +140,13 @@
       <div class="card">
         <h3 data-en="For the school office" data-ml="സ്കൂൾ ഓഫീസിന്">For the school office</h3>
         <ol class="check-list">
-          <li data-en="Build the signed APK as described in the app repository's README." data-ml="ആപ്പ് റിപോസിറ്ററിയിലെ README പ്രകാരം സൈൻ ചെയ്ത APK നിർമ്മിക്കുക.">Build the signed APK as the app repository's README describes.</li>
-          <li data-en="Create a GitHub release on kobayashi-satsuki-debug/GHSS-PANDI-app and attach the .apk file." data-ml="kobayashi-satsuki-debug/GHSS-PANDI-app ൽ ഒരു GitHub റിലീസ് ഉണ്ടാക്കി .apk ഫയൽ ചേർക്കുക.">Create a release and attach the .apk file.</li>
-          <li data-en="Tag it with a version like v1.0.0. This page then shows the version, size and date by itself — nothing here needs editing." data-ml="v1.0.0 പോലെ ഒരു വേർഷൻ ടാഗ് നൽകുക. അപ്പോൾ ഈ പേജ് വേർഷൻ, വലിപ്പം, തീയതി എന്നിവ സ്വയം കാണിക്കും — ഇവിടെ ഒന്നും തിരുത്തേണ്ടതില്ല.">Tag it v1.0.0 or similar; this page then shows the version, size and date by itself.</li>
+          <li data-en="Upload the signed APK to the school Google Drive account." data-ml="സൈൻ ചെയ്ത APK സ്കൂളിന്റെ ഗൂഗിൾ ഡ്രൈവ് അക്കൗണ്ടിൽ അപ്‌ലോഡ് ചെയ്യുക.">Upload the signed APK to the school Google Drive account.</li>
+          <li data-en="Right-click the file → Share → General access → “Anyone with the link”, then Copy link and send it to the office." data-ml="ഫയലിൽ റൈറ്റ് ക്ലിക്ക് → Share → General access → “Anyone with the link”, തുടർന്ന് Copy link ചെയ്ത് ഓഫീസിന് അയക്കുക.">Share it as “Anyone with the link” and copy the link.</li>
+          <li data-en="The link goes into the Download APK button on this page — one line to change when a new build is uploaded." data-ml="ഈ പേജിലെ Download APK ബട്ടണിൽ ആ ലിങ്ക് ചേർക്കും — പുതിയ ബിൽഡ് വരുമ്പോൾ ഒരു വരി മാറ്റിയാൽ മതി.">The link goes into the Download APK button here.</li>
         </ol>
-        <p class="small muted" data-en="If there is no release yet, the buttons lead to the repository and its Releases page, so the page never shows a broken download." data-ml="ഇതുവരെ റിലീസ് ഇല്ലെങ്കിൽ ബട്ടണുകൾ റിപോസിറ്ററിയിലേക്കും Releases പേജിലേക്കും നയിക്കും — ഒരിക്കലും പൊട്ടിയ ഡൗൺലോഡ് കാണിക്കില്ല.">With no release yet, the buttons lead to the repository and its Releases page.</p>
-        <a class="btn btn-gold" href="https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app/releases" rel="noopener" data-en="Open the Releases page" data-ml="Releases പേജ് തുറക്കുക">Open the Releases page</a>
-        <p class="small muted" style="margin-top:.7rem" data-en="No account on GitHub is needed to download — the releases are public." data-ml="ഡൗൺലോഡ് ചെയ്യാൻ GitHub അക്കൗണ്ട് വേണ്ട — റിലീസുകൾ പൊതുവായതാണ്.">No GitHub account is needed to download.</p>
+        <p class="small muted" data-en="The button uses the direct-download form of the Drive link, so families never need a Google account — as long as the file is shared publicly." data-ml="ബട്ടൺ ഡ്രൈവ് ലിങ്കിന്റെ നേരിട്ടുള്ള ഡൗൺലോഡ് രൂപമാണ് ഉപയോഗിക്കുന്നത്, അതിനാൽ ഫയൽ പൊതുവായി പങ്കുവച്ചിരിക്കുന്നിടത്തോളം ഗൂഗിൾ അക്കൗണ്ട് ആവശ്യമില്ല.">The button uses Drive's direct-download form, so no Google account is needed once the file is shared publicly.</p>
+        <a class="btn btn-gold" href="https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app/releases" rel="noopener" data-en="Older builds on GitHub" data-ml="GitHub-ലെ പഴയ ബിൽഡുകൾ">Older builds on GitHub</a>
+        <p class="small muted" style="margin-top:.7rem" data-en="The app's source code and build instructions stay on GitHub." data-ml="ആപ്പിന്റെ സോഴ്സ് കോഡും ബിൽഡ് നിർദ്ദേശങ്ങളും GitHub-ൽ തുടരുന്നു.">The app's source code and build instructions stay on GitHub.</p>
       </div>
     </div>
   </div>

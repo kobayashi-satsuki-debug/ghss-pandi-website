@@ -30,9 +30,9 @@ creative.html         Creative corner — tailoring, electrical, plumbing and cr
 achievements.html     Student achievements
 faculty.html          Teachers and office staff
 notices.html          Notice board
-app.html              APK download page — links straight at the newest .apk in
-                      kobayashi-satsuki-debug/GHSS-PANDI-app releases, and shows
-                      its version, size, date and download count
+app.html              APK download page — the Download APK button points at the
+                      school Google Drive file (drive.google.com/uc?export=download
+                      &id=…); update that id when a new build is uploaded
 results.html          Result lookup (students, parents, teachers)
 login.html            Sign in (student / teacher / parent tabs)
 register.html         Registration (student / teacher / parent tabs)
