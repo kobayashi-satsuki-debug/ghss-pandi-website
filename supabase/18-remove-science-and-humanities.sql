@@ -5,6 +5,27 @@
 -- sitting in it; if somebody is, the file says who and leaves that class alone,
 -- so nothing is ever deleted silently with children inside.
 
+-- ---------- 0. is there anything to do? ----------
+do $$
+declare
+  v_found integer;
+begin
+  if to_regclass('public.class_rooms') is null then
+    raise notice 'public.class_rooms does not exist yet: run supabase/01-schema.sql first.';
+    return;
+  end if;
+
+  select count(*) into v_found
+    from public.class_rooms
+   where id ilike '%science%' or id ilike '%humanities%';
+
+  if v_found = 0 then
+    raise notice 'Nothing to remove: this database has no Plus One / Plus Two Science or Humanities class.';
+  else
+    raise notice 'Found % class(es) to remove.', v_found;
+  end if;
+end $$;
+
 -- ---------- 1. what is there now ----------
 select c.id, c.name,
        (select count(*) from public.students s where s.class = c.id) as students
