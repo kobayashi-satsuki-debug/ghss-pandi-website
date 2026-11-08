@@ -150,8 +150,10 @@
 
   function profileById(id) { return db.profiles.find(p => p.id === id) || null; }
   function requireRole(roles, id) {
-    const p = profileById(id || sessionId());
-    if (!p) throw new Error('err.session');
+    const sid = id || sessionId();
+    if (!sid) throw new Error('err.session');
+    const p = profileById(sid);
+    if (!p) { setSession(null); throw new Error('err.session'); }
     if (p.status !== 'active') throw new Error('auth.disabled');
     if (roles && roles.indexOf(p.role) === -1) throw new Error('err.noperm');
     return p;

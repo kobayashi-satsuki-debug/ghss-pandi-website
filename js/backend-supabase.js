@@ -21,7 +21,16 @@
     const s = session || (await client().auth.getSession()).data.session;
     if (!s) { cachedProfile = null; return null; }
     const { data, error } = await client().rpc('get_my_profile');
-    if (error) throw error;
+    if (error) {
+      const m = String(error.message || '');
+      const c = String(error.code || '');
+      if (c === 'PGRST202' || c === '42883' || /could not find the function|function .* does not exist|schema cache/i.test(m)) {
+        throw new Error('err.dbSetup');
+      }
+      // A dead or refreshed token is a real signed-out state; anything else is not.
+      if (c === '401' || /jwt|token .*expired|invalid claim/i.test(m)) { cachedProfile = null; return null; }
+      fail(error);
+    }
     cachedProfile = data && data.profile ? data : null;
     return cachedProfile;
   }
@@ -131,7 +140,7 @@
        before the person is let near a dashboard. */
     async settleSession() {
       const p = await profile();
-      if (!p) throw new Error('err.session');
+      if (!p) throw new Error('err.noProfile');
       if (p.profile.status === 'pending') {
         await client().auth.signOut();
         cachedProfile = null;
@@ -244,14 +253,10 @@
     async session() {
       const { data } = await client().auth.getSession();
       if (!data.session) return null;
-      try {
-        const p = await profile(data.session);
-        if (!p) return null;
-        if (p.profile.status !== 'active') return null;
-        return p;
-      } catch (e) {
-        return null;
-      }
+      const p = await profile(data.session);
+      if (!p) return null;
+      if (p.profile.status !== 'active') return null;
+      return p;
     },
 
     /* Password recovery by emailed code, no link. The email template must

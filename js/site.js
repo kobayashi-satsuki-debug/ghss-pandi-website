@@ -125,8 +125,15 @@
   }
 
   let sessionPromise = null;
+  const SESSION_ERROR_KEY = 'ghss_session_error';
   function session(force) {
-    if (!sessionPromise || force) sessionPromise = API.session().catch(() => null);
+    if (!sessionPromise || force) {
+      sessionPromise = API.session().catch(e => {
+        // Keep the reason so the login page can explain it instead of a bare "sign in again".
+        try { sessionStorage.setItem(SESSION_ERROR_KEY, API.errorText(e)); } catch (err) {}
+        return null;
+      });
+    }
     return sessionPromise;
   }
 
@@ -176,5 +183,13 @@
     location.href = 'index.html';
   }
 
-  window.Site = { mount, session, requireRole, logout, page };
+  function takeSessionError() {
+    try {
+      const v = sessionStorage.getItem(SESSION_ERROR_KEY) || '';
+      sessionStorage.removeItem(SESSION_ERROR_KEY);
+      return v;
+    } catch (e) { return ''; }
+  }
+
+  window.Site = { mount, session, requireRole, logout, page, takeSessionError };
 })();

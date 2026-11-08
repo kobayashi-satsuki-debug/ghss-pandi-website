@@ -14,7 +14,13 @@
     UI.showMsg(msg, I18NS.t('auth.confirmed'), 'success');
     API.cleanAuthUrl();
   }
-  if (/[?&]timeout=1/.test(location.search) && msg) {
+  const carried = Site.takeSessionError ? Site.takeSessionError() : '';
+  if (carried && msg && !linkStatus.error) {
+    UI.showMsg(msg, carried, 'error');
+  } else if (/[?&]next=/.test(location.search) && msg && !linkStatus.error) {
+    UI.showMsg(msg, I18NS.pick('That page needs a signed-in account. Sign in to continue.', 'ആ പേജിന് അക്കൗണ്ട് ആവശ്യമാണ്. തുടരാൻ പ്രവേശിക്കുക.'), 'info');
+  }
+  if (!carried && /[?&]timeout=1/.test(location.search) && msg) {
     UI.showMsg(msg, I18NS.pick('You were signed out after 30 minutes of inactivity. Please sign in again.', '30 മിനിറ്റ് നിഷ്ക്രിയത്വത്തിന് ശേഷം പുറത്തായി. വീണ്ടും പ്രവേശിക്കുക.'), 'info');
   }
   const email = document.getElementById('login-email');

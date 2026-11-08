@@ -104,3 +104,15 @@ select * from public.signup_report();   -- expect zero rows
 - [ ] Parent registers, then waits for verification in the dashboard
 - [ ] Forgot password sends a code and the new password works
 - [ ] A PDF uploaded by a teacher opens for a student and is refused for a parent
+
+## 10. When the site says "Please sign in again."
+
+That message now appears only when there really is no session. Two other cases have their own wording:
+
+| What you see | What it means | What to do |
+| --- | --- | --- |
+| **"You are signed in, but this account has no school profile yet."** | The login itself worked, but no row in `public.profiles` matches this user, so the app has no role or status to work with. | Confirm the sign-up trigger is installed (`supabase/11-signup-trigger-fix.sql`), then check `select * from public.signup_report();`. An account made before the trigger was installed needs its profile row created once. |
+| **"The school database is not set up yet, or a database update is missing."** | `get_my_profile` could not be found, so no page can load a role. | Run the SQL files in `supabase/` in order (see `docs/SETUP.md`), at minimum `01`–`03` and `13`. Then reload. |
+| The note appears once on the login page, then normal pages work | A page was opened without a session; the login page now says so. | Sign in. |
+
+The reason for a failed session check is carried to the login page once, so nobody has to guess.
