@@ -160,6 +160,11 @@ created, in preview mode and in live mode.
        `run_year_rollover()` function. Nothing moves until the office runs it
        from **Year rollover** in the dashboard, or on 1 June if you switch on
        the optional pg_cron line. See `docs/YEAR-ROLLOVER.md`.
+   17. `supabase/18-remove-science-and-humanities.sql` — only if an older run of
+       `04-seed.sql` left Plus One / Plus Two Science and Humanities in the class
+       list. The school offers the Commerce stream only. The file deletes a
+       class only when no student is still in it and names anybody it had to
+       leave; safe to run twice.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

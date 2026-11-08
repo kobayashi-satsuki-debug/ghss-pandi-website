@@ -130,6 +130,14 @@ run has none.
 6. Still refused with `password_matches = true` — check Authentication →
    Providers → Email is enabled and `banned_until` is empty.
 
+## 8b-ii. Only the Commerce stream
+
+The school runs Plus One Commerce and Plus Two Commerce, nothing else. If an
+older `04-seed.sql` created Plus One / Plus Two Science or Humanities, run
+`supabase/18-remove-science-and-humanities.sql`. It removes each class only when
+no student is still in it, clears their promotion rules and teacher assignments,
+and prints the class list it left behind.
+
 ## 8c. The June rollover
 
 - [ ] Ran `supabase/16-year-rollover.sql`
