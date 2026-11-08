@@ -53,7 +53,8 @@ js/backend-demo.js    Preview mode (data kept in this browser)
 js/backend-supabase.js Live mode (Supabase)
 js/api.js             Chooses preview or live backend
 supabase/*.sql        Database schema, security, functions, seed data
-docs/EMAIL-TEMPLATES.md  Code-only email templates to paste into Supabase
+docs/EMAIL-TEMPLATES.md  Email templates to paste into Supabase
+docs/RUNNING-24-7.md      Keeping the database awake around the clock
 assets/               School crest and gallery images
 ```
 
