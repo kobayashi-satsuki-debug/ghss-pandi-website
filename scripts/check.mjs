@@ -71,6 +71,26 @@ if (exists('sitemap.xml')) {
   problems.push('sitemap.xml is missing');
 }
 
+/* 4. the three email templates carry both a link and a code */
+const templates = ['magic-link', 'confirm-signup', 'reset-password'];
+for (const name of templates) {
+  const rel = `supabase/email-templates/${name}.html`;
+  if (!exists(rel)) { problems.push(`${rel}: missing`); continue; }
+  const body = read(rel);
+  if (!body.includes('{{ .ConfirmationURL }}')) problems.push(`${rel}: no {{ .ConfirmationURL }} — the email would have no working link`);
+  if (!body.includes('{{ .Token }}')) problems.push(`${rel}: no {{ .Token }} — the email would have no six-digit code`);
+  if (!/14101ghsspandi@gmail\.com/.test(body)) problems.push(`${rel}: school email address missing`);
+  if (!/9446553567/.test(body)) problems.push(`${rel}: school phone number missing`);
+  if (/\{\{[^}]*[Ss]ite[Uu]rl/.test(body)) problems.push(`${rel}: uses a placeholder Supabase does not fill in this template`);
+  if (!/^<!--/.test(body.trim())) problems.push(`${rel}: no note saying which Supabase screen it belongs to`);
+}
+if (exists('docs/EMAIL-TEMPLATES.md')) {
+  const doc = read('docs/EMAIL-TEMPLATES.md');
+  for (const name of templates) {
+    if (!doc.includes(`supabase/email-templates/${name}.html`)) problems.push(`docs/EMAIL-TEMPLATES.md: does not point at ${name}.html`);
+  }
+}
+
 for (const p of problems) console.error('FAIL ' + p);
 console.log(`checked ${htmlFiles.length} pages and ${jsFiles.length} scripts — ${problems.length ? problems.length + ' problem(s)' : 'all good'}`);
 process.exit(problems.length ? 1 : 0);

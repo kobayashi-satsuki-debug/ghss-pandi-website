@@ -10,17 +10,48 @@ the session from the address, and the dashboard opens. A link that has expired
 
 The templates below must be changed, once, in the Supabase dashboard.
 
-## 1. Authentication → Emails → Confirm signup
+## Where the three templates are
 
-Replace the whole subject and body with this.
+The text is kept as files, so nothing has to be retyped:
 
-**Subject**
+| Supabase screen | File | Subject |
+| --- | --- | --- |
+| Authentication → Emails → **Confirm signup** | `supabase/email-templates/confirm-signup.html` | `Confirm your G H S S Pandi account` |
+| Authentication → Emails → **Magic Link** | `supabase/email-templates/magic-link.html` | `Your G H S S Pandi sign-in link` |
+| Authentication → Emails → **Reset password** | `supabase/email-templates/reset-password.html` | `Reset your G H S S Pandi password` |
 
+Open the file, copy everything, paste it into the **Message body (HTML)** box for
+that screen, put the subject in, and press Save. Do the same for all three; the
+site offers all three paths — signing in by link, verifying a new account, and
+resetting a forgotten password.
+
+## 1. Confirm signup
+
+`supabase/email-templates/confirm-signup.html`
+
+```html
+<h2>G H S S Pandi</h2>
+<p>Welcome to the school portal. Open this link and your new account is confirmed
+and signed in — no password to type:</p>
+<p><a href="{{ .ConfirmationURL }}"
+      style="display:inline-block;padding:12px 20px;background:#0f5132;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">
+   Confirm my account</a></p>
+<p>Or type this 6-digit code on the website instead:</p>
+<p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
+<p>The code can be used once and expires after 10 minutes.</p>
+<p>If you did not create this account, you can ignore this email.</p>
+<p>— Government Higher Secondary School, Pandi, Adoor, Kasaragod, Kerala<br>
+14101ghsspandi@gmail.com · 9446553567</p>
 ```
-Your G H S S Pandi verification code
-```
 
-**Message body (HTML)**
+## 2. Magic Link — the one-time sign-in link and code
+
+`supabase/email-templates/magic-link.html`
+
+This is the email the **Send a one-time sign-in link or one-time password**
+button on `login.html` produces. One template serves both: the button carries
+the link, and the same message shows the six digits for anyone who would rather
+type them.
 
 ```html
 <h2>G H S S Pandi</h2>
@@ -36,39 +67,43 @@ Your G H S S Pandi verification code
 14101ghsspandi@gmail.com · 9446553567</p>
 ```
 
-In the Supabase editor, the placeholder is written `{{ .Token }}`. So the line
-above becomes:
+## 3. Reset password
 
-```html
-<p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
-```
-
-Do **not** keep `{{ .ConfirmationURL }}` in this template. If it is still there,
-the email shows a button instead of the code.
-
-## 2. Authentication → Emails → Reset password
-
-**Subject**
-
-```
-Your G H S S Pandi password reset code
-```
-
-**Message body (HTML)**
+`supabase/email-templates/reset-password.html`
 
 ```html
 <h2>G H S S Pandi</h2>
-<p>Your password reset code is:</p>
+<p>Someone asked to reset the password for this address. Open this link and you
+are signed in, ready to choose a new password:</p>
+<p><a href="{{ .ConfirmationURL }}"
+      style="display:inline-block;padding:12px 20px;background:#0f5132;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">
+   Choose a new password</a></p>
+<p>Or type this 6-digit code on the website instead:</p>
 <p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
-<p>Type this 6-digit code on the password reset page, then choose a new
-password. It can be used once and expires after 10 minutes.</p>
-<p>If you did not ask to reset your password, ignore this email and your
-password stays the same.</p>
+<p>The code can be used once and expires after 10 minutes.</p>
+<p>If you did not ask to reset your password, ignore this email and your password
+stays the same.</p>
 <p>— Government Higher Secondary School, Pandi, Adoor, Kasaragod, Kerala<br>
 14101ghsspandi@gmail.com · 9446553567</p>
 ```
 
-## 2a. The address list that makes the link work
+## The two placeholders, and what they do
+
+Both go in the same template — they do not conflict:
+
+| Placeholder | What Supabase puts there | Where the person uses it |
+| --- | --- | --- |
+| `{{ .ConfirmationURL }}` | the full one-time address, already carrying the token | clicking it lands on `login.html` and signs in |
+| `{{ .Token }}` | the six digits, nothing else | typing them into the code box on `login.html`, `register.html` or `reset.html` |
+
+Spelling matters: `{{ .Token }}` with the dots and spaces exactly as shown. An
+email that arrives with the words `{{ .Token }}` left visible means the template
+was saved in the plain-text box instead of the HTML box.
+
+Both are single-use and expire after 10 minutes (**Authentication → Providers →
+Email → Email OTP Expiration = 600**, **Email OTP Length = 6**).
+
+## 4. The address list that makes the link work
 
 The link returns to the website, so Supabase must be told that the website is
 allowed. **Authentication → URL Configuration**:
@@ -81,7 +116,7 @@ On your own domain, add both addresses there instead. If a link reports
 "redirect_uri_mismatch" or lands on the home page with nothing happening, this
 list is the reason.
 
-## 3. Settings to check
+## 5. Settings to check
 
 | Where | Setting | Value |
 | --- | --- | --- |
@@ -91,7 +126,7 @@ list is the reason.
 | Authentication → Providers → Email | Email OTP Length | `6` |
 | Authentication → Rate limits | Emails sent per hour | raise it if a whole class registers together (e.g. `100`) |
 
-## 4. How the site uses the code
+## 6. How the site uses the code
 
 * **Registration** (`register.html`) — `signUp` sends the email, the page shows a
   "6-digit code" box, and it calls `verifyOtp({ type: 'signup' })`.
@@ -101,17 +136,21 @@ list is the reason.
 * Wrong or expired codes show "the code is wrong or has expired" and are tried
   at most five times before the code is thrown away.
 
-## 5. Checking it works
+## 7. Checking it works
 
-1. Register with a real address. The email should contain six digits and no
-   button or link.
-2. Type the code — the account should become active (teachers stay pending).
+1. Register with a real address. The email should arrive within a minute with a
+   green **Confirm my account** button *and* six digits below it.
+2. Press the button: it should land on `login.html` and sign the person in.
+3. Sign out, register another address, and this time type the six digits — the
+   account should become active (teachers stay pending).
 3. Sign out, open `reset.html`, ask for a code, and set a new password.
 4. Sign in with the new password.
 
-If the email still contains a link, the template in step 1 or 2 was not saved.
+If the email has only a link and no digits, the `{{ .Token }}` line is missing
+   from the template; if it has only digits and no button, `{{ .ConfirmationURL }}
+   is missing. Both belong in the same message.
 
-## 6. When confirmation fails
+## 8. When confirmation fails
 
 The website now explains each of these in English, Malayalam and Kannada
 instead of showing Supabase's raw text, but the cause is always on the
@@ -119,12 +158,12 @@ Supabase side. Check them in this order.
 
 | What the person sees | Cause | Fix |
 | --- | --- | --- |
-| "That confirmation link has expired or was already used" | The email still holds a link, or the same link was opened twice | Put `{{ .Token }}` in the Confirm signup template and save |
+| "That confirmation link has expired or was already used" | The link was opened twice, or it is older than 10 minutes | Ask for a new link, or type the six digits from the same email |
 | "This email address is not confirmed yet" on sign-in | The account exists but no code was ever entered | Register again with the same address and press Resend code |
 | "This email already has an account" | Supabase hides duplicates by returning a user with no identities | Sign in, or use Forgot password |
 | "The address this site is opened from is not allowed" | The page was opened from `file://` or a host that is not in the allow-list | Add the host under Authentication → URL Configuration → Redirect URLs |
 | "New sign-ups are turned off" | Sign-ups are disabled on the project | Authentication → Providers → Email → Enable sign-ups |
-| "Error sending confirmation email" | Supabase could not hand the message to a mail server: the built-in mailer hit its hourly cap, or the SMTP password / sender address is wrong | See §6a below |
+| "Error sending confirmation email" | Supabase could not hand the message to a mail server: the built-in mailer hit its hourly cap, or the SMTP password / sender address is wrong | See §8a below |
 
 Also check, on the same Authentication page:
 
@@ -135,7 +174,7 @@ Also check, on the same Authentication page:
    `https://www.ghsspandi.org.in` to Redirect URLs, plus your preview address
    while you are still testing.
 
-## 6a. "Error sending confirmation email"
+## 8a. "Error sending confirmation email"
 
 This message comes from the mail server, never from the website, and the account
 **is still created** — Supabase stores the user first and only then tries to send.
@@ -151,7 +190,7 @@ So do not register again; it will answer "already registered". Instead:
 | `535 Authentication failed` / `Invalid login` | Wrong SMTP username or password | Gmail needs an **app password**, not the normal one; regenerate it and paste it again |
 | `553` / `sender address rejected` | The From address is not allowed by the mail provider | Verify the sender domain at Brevo / Resend / Zoho, and use exactly that address in the sender field |
 | `connection timed out`, `ENOTFOUND` | Wrong host or port | Use port 587 with STARTTLS (or 465 with TLS) and the host your provider lists |
-| `Email template not found` | The template was cleared | Paste the templates from §1 and §2 again |
+| `Email template not found` | The template was cleared | Paste the templates from §1, §2 and §3 again |
 
 3. After any SMTP change, send one test code and confirm it arrives inside a
    minute. Gmail's SMTP also has a daily cap of roughly 500 recipients, so a
@@ -186,7 +225,7 @@ Two things this proves, both worth knowing:
 A `429` or "email rate limit exceeded" is the opposite case — the account is
 kept, and only the message is missing.
 
-## 6b. Running without email at all
+## 8b. Running without email at all
 
 If SMTP cannot be fixed today and classes are waiting to register, confirmation
 can be switched off so no mail is needed:
@@ -210,7 +249,7 @@ password still needs email**. Until then, the office can remove the account in
 Turn confirmation back on once SMTP delivers a test code — the code page and the
 templates above keep working unchanged.
 
-## 7. Completing verification on its own page
+## 9. Completing verification on its own page
 
 `confirm-email.html` takes an email address plus the 6-digit code and calls
 `verifyOtp({ type: 'signup' })`. Link to it as `confirm-email.html?email=…` from
@@ -219,7 +258,7 @@ the page offers a resend button with a 60-second cool-down. After a successful
 check it points the visitor at `login.html`. Teacher accounts still show the
 "waiting for school approval" notice instead of promising access.
 
-## 8. Students sign in with a password, or a six-digit code
+## 10. Students sign in with a password, or a six-digit code
 
 A student chooses their own password at registration (12 characters or more,
 with the same policy every other role follows) and signs in with email +
@@ -261,7 +300,7 @@ A safe Confirm signup body:
 <p>Or type this code on the site: <strong>{{ .Token }}</strong></p>
 ```
 
-## 9. Parents: the confirmation email
+## 11. Parents: the confirmation email
 
 Parents register with their own password, so unlike students they finish by
 clicking a link. After submitting, the register page shows a **Check your email**

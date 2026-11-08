@@ -83,9 +83,11 @@ created, in preview mode and in live mode.
 
 * **Preview mode** shows the code on the screen (for showing the site offline).
 * **Live mode** uses Supabase's email OTP. In Supabase → Authentication → Email
-  Templates → **Confirm signup**, keep `{{ .Token }}` in the message body, so the
-  six digits are sent instead of a magic link. Templates that only contain
-  `{{ .ConfirmationURL }}` cannot be typed into the code box.
+  Templates → **Confirm signup**, keep `{{ .Token }}` in the message body so the
+  six digits are sent, and `{{ .ConfirmationURL }}` for the button that signs the
+  person in with one click. Paste `supabase/email-templates/confirm-signup.html`
+  to get both at once; `magic-link.html` and `reset-password.html` do the same for
+  the sign-in link and the password reset.
 * Keep **Confirm email** enabled (Authentication → Providers → Email). If it is
   turned off, Supabase returns a session immediately and the code step is
   skipped — accounts then exist without a verified email address.

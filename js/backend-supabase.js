@@ -191,7 +191,7 @@
       const addr = (email || '').trim().toLowerCase();
       const { error } = await client().auth.signInWithOtp({
         email: addr,
-        options: { shouldCreateUser: false, emailRedirectTo: redirectUrl('login.html') || undefined }
+        options: { shouldCreateUser: false, emailRedirectTo: redirectUrl('login.html?link=1') || undefined }
       });
       if (error) {
         const m = error.message || '';

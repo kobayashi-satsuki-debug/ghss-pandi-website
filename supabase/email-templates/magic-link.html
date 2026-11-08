@@ -1,0 +1,13 @@
+<!-- Supabase → Authentication → Emails → Magic Link
+     Subject: Your G H S S Pandi sign-in link -->
+<h2>G H S S Pandi</h2>
+<p>Welcome. Open this link and you are signed in — no password to type:</p>
+<p><a href="{{ .ConfirmationURL }}"
+      style="display:inline-block;padding:12px 20px;background:#0f5132;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">
+   Sign in to G H S S Pandi</a></p>
+<p>Or type this 6-digit code on the website instead:</p>
+<p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
+<p>The code can be used once and expires after 10 minutes.</p>
+<p>If you did not ask for this, you can ignore this email.</p>
+<p>— Government Higher Secondary School, Pandi, Adoor, Kasaragod, Kerala<br>
+14101ghsspandi@gmail.com · 9446553567</p>
