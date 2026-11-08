@@ -1,29 +1,37 @@
 -- 12-set-admin-password.sql — give the two office accounts a password so they
--- can sign in while email is broken. This sets a password only; it changes no
--- one's role.
+-- can sign in while email is broken. It sets a password only; no role changes.
 --
--- ================== HOW TO RUN IT ==================
+-- ############################################################
+-- #  THIS FILE REFUSES TO RUN UNTIL YOU CHANGE ONE WORD.     #
+-- #  Find:  PASTE-YOUR-NEW-PASSWORD-HERE                     #
+-- #  Replace it with your own password of 12+ characters,     #
+-- #  keep the two quotes around it, then Run.                #
+-- #  That word is the only thing to change; nothing else.    #
+-- ############################################################
+--
+-- FASTEST PATH (one statement, no editing of the block below):
 -- 1. Supabase → SQL Editor → New query
--- 2. Paste this file
--- 3. Change ONLY the text between the quotes on the marked line below.
---    It must be at least 12 characters and used nowhere else.
--- 4. Run.
--- ---------------------------------------------------
-
+-- 2. Paste this single line, with your own password between the quotes:
+--
+--    update auth.users set encrypted_password = extensions.crypt('PASTE-YOUR-NEW-PASSWORD-HERE', extensions.gen_salt('bf')), email_confirmed_at = coalesce(email_confirmed_at, now()) where lower(email) in ('14101ghsspandi@gmail.com','ziyadahmad778@gmail.com');
+--
+-- 3. Run.
+--
+-- THE FULL VERSION (checks the password, reports what changed):
 do $$
 declare
-  v_password text := 'CHANGE-ME-12-chars-min';   -- <<< EDIT THIS LINE
+  v_password text := 'PASTE-YOUR-NEW-PASSWORD-HERE';   -- <<< THE ONE LINE TO EDIT
   v_emails   text[] := array[
     '14101ghsspandi@gmail.com',
     'ziyadahmad778@gmail.com'
   ];
   v_hit integer;
 begin
-  if v_password = 'CHANGE-ME-12-chars-min' then
+  if v_password = 'PASTE-YOUR-NEW-PASSWORD-HERE' then
     raise exception using
-      message = 'Stop: the marked line still holds the placeholder password.',
-      detail  = 'This message is the file protecting you, not a fault. Replace CHANGE-ME-12-chars-min on the marked line with a real password of 12 or more characters (keep the quotes), then Run again.',
-      hint    = 'If every account received the placeholder, that password would be public — this file is published on GitHub — so it refuses until you choose a real one.';
+      message = 'This is the file protecting you, not an error in Supabase: the password is still the placeholder.',
+      detail  = 'Change PASTE-YOUR-NEW-PASSWORD-HERE to your own password of 12 or more characters, keep the two quotes around it, then press Run again. Example: v_password text := ''Pandi@Office2026'';',
+      hint    = 'That placeholder is written in this file, which is published on GitHub, so every admin would share a public password. The script refuses until you choose a real one.';
   end if;
 
   if length(v_password) < 12 then
