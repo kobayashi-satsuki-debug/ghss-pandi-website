@@ -77,6 +77,16 @@ the rollover. A teacher or student who calls the function from the browser gets
 - Parents of leaving students lose that child's results in the portal; approved
   parent links go with the student row.
 
+## If the SQL complains
+
+**`class_promotions_from_class_fkey` … Key (from_class)=(1) is not present in
+table class_rooms** — the class list was empty, because `04-seed.sql` had not
+been run. Re-running `16-year-rollover.sql` is now enough: if `class_rooms` is
+empty it adds the standard classes first, and it only writes a rule for a class
+that really exists. If your classes are named differently, those rows are added
+as "stay" with a note, and the file prints a notice naming any next class that
+is missing so you can add it and run it again.
+
 ## If something looks wrong
 
 `select * from public.rollover_history();` shows each year that ran.

@@ -19,23 +19,77 @@ create table if not exists public.class_promotions (
   note           text not null default ''
 );
 
-insert into public.class_promotions (from_class, next_class, purge_accounts, note) values
-  ('1', '2', false, ''),
-  ('2', '3', false, ''),
-  ('3', '4', false, ''),
-  ('4', '5', false, ''),
-  ('5', '6', false, ''),
-  ('6', '7', false, ''),
-  ('7', '8 A', false, 'Class 7 splits into 8 A and 8 B; change next_class to 8 B for the other half.'),
-  ('8 A', '9 A', false, ''),
-  ('8 B', '9 B', false, ''),
-  ('9 A', '10 A', false, ''),
-  ('9 B', '10 B', false, ''),
-  ('Plus One Commerce', 'Plus Two Commerce', false, ''),
-  ('10 A', null, true, 'SSLC done: the account and its email are removed.'),
-  ('10 B', null, true, 'SSLC done: the account and its email are removed.'),
-  ('Plus Two Commerce', null, true, 'Plus Two done: the account and its email are removed.')
+-- If the class list is empty (04-seed.sql was never run), fill it, otherwise
+-- every promotion row below would have nothing to point at.
+do $$
+begin
+  if not exists (select 1 from public.class_rooms) then
+    insert into public.class_rooms (id, name) values
+      ('1','Class 1'), ('2','Class 2'), ('3','Class 3'), ('4','Class 4'),
+      ('5','Class 5'), ('6','Class 6'), ('7','Class 7'),
+      ('8 A','Class 8 A'), ('8 B','Class 8 B'),
+      ('9 A','Class 9 A'), ('9 B','Class 9 B'),
+      ('10 A','Class 10 A'), ('10 B','Class 10 B'),
+      ('Plus One Commerce','Plus One Commerce'),
+      ('Plus Two Commerce','Plus Two Commerce')
+    on conflict (id) do nothing;
+    raise notice 'The class list was empty, so the standard classes were added first.';
+  end if;
+end $$;
+
+-- Only rows whose class really exists are inserted, so a school that names its
+-- classes differently gets no error here; those classes are listed further down
+-- and can be pointed at the right class in the table itself.
+with wanted (from_class, next_class, purge_accounts, note) as (
+  values
+    ('1', '2', false, ''),
+    ('2', '3', false, ''),
+    ('3', '4', false, ''),
+    ('4', '5', false, ''),
+    ('5', '6', false, ''),
+    ('6', '7', false, ''),
+    ('7', '8 A', false, 'Class 7 splits into 8 A and 8 B; change next_class to 8 B for the other half.'),
+    ('8 A', '9 A', false, ''),
+    ('8 B', '9 B', false, ''),
+    ('9 A', '10 A', false, ''),
+    ('9 B', '10 B', false, ''),
+    ('Plus One Commerce', 'Plus Two Commerce', false, ''),
+    ('10 A', null, true, 'SSLC done: the account and its email are removed.'),
+    ('10 B', null, true, 'SSLC done: the account and its email are removed.'),
+    ('Plus Two Commerce', null, true, 'Plus Two done: the account and its email are removed.')
+)
+insert into public.class_promotions (from_class, next_class, purge_accounts, note)
+select w.from_class,
+       case when exists (select 1 from public.class_rooms c where c.id = w.next_class)
+            then w.next_class end,
+       w.purge_accounts,
+       w.note
+  from wanted w
+  join public.class_rooms cr on cr.id = w.from_class
 on conflict (from_class) do nothing;
+
+-- Any class not covered above is added as "stays put", so the dashboard shows
+-- it and the office can set its next class instead of it being invisible.
+insert into public.class_promotions (from_class, next_class, purge_accounts, note)
+select c.id, null, false, 'Not on the standard ladder: set the next class in this row.'
+  from public.class_rooms c
+ where not exists (select 1 from public.class_promotions p where p.from_class = c.id)
+on conflict (from_class) do nothing;
+
+-- Tell the office plainly if some target class is missing, instead of leaving
+-- a row silently saying "stay".
+do $$
+declare
+  v_missing text;
+begin
+  select string_agg(distinct t.next_class, ', ') into v_missing
+    from (values ('2'),('3'),('4'),('5'),('6'),('7'),('8 A'),
+                 ('9 A'),('9 B'),('10 A'),('10 B'),('Plus Two Commerce')) as t(next_class)
+   where not exists (select 1 from public.class_rooms c where c.id = t.next_class);
+  if v_missing is not null then
+    raise notice 'These classes do not exist yet, so their rows say "stay": %. Add them to class_rooms or the Classes tab, then run this file again.', v_missing;
+  end if;
+end $$;
 
 -- ---------- where old examination results go ----------
 create table if not exists public.results_archive (
@@ -105,10 +159,11 @@ as $$
             join public.profiles pr on pr.id = s.profile_id
            where s.class = c.id),
          case when p.purge_accounts then 'remove account'
+              when p.from_class is null then 'no rule yet'
               when p.next_class is null then 'stay'
               else 'promote to ' || p.next_class end
   from public.class_rooms c
-  join public.class_promotions p on p.from_class = c.id
+  left join public.class_promotions p on p.from_class = c.id
   order by c.id;
 $$;
 
