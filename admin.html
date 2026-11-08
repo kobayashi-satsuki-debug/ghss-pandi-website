@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administrator sign in | G H S S Pandi</title>
+<meta name="description" content="Administrator sign-in for the G H S S Pandi school website.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#7d1024">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://ljpwzkmniocjpcijuuoq.supabase.co wss://ljpwzkmniocjpcijuuoq.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; script-src-attr 'none'; worker-src 'none'; manifest-src 'self'; media-src 'self'; child-src 'none';">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header" class="site-header"></header>
+<main id="main">
+<section class="section auth-section">
+  <div class="container auth-shell">
+    <div class="auth-aside">
+      <span class="eyebrow" data-en="School administration">School administration</span>
+      <h1 data-en="Administrator sign-in" data-ml="അഡ്മിനിസ്ട്രേറ്റർ പ്രവേശനം">Administrator sign-in</h1>
+      <p data-en="For the two office administrator accounts. From here the school approves teachers, verifies parents, publishes notices and manages accounts and content." data-ml="ഓഫീസിലെ രണ്ട് അഡ്മിനിസ്ട്രേറ്റർ അക്കൗണ്ടുകൾക്കുള്ള പ്രവേശനം. ഇവിടെ നിന്ന് അധ്യാപകരെ അംഗീകരിക്കുകയും രക്ഷിതാക്കളെ സ്ഥിരീകരിക്കുകയും അറിയിപ്പുകൾ പ്രസിദ്ധീകരിക്കുകയും അക്കൗണ്ടുകളും ഉള്ളടക്കവും കൈകാര്യം ചെയ്യുകയും ചെയ്യുന്നു.">For the two office administrator accounts.</p>
+      <ul class="check-list">
+        <li data-en="Administrator accounts are created by the school office" data-ml="അഡ്മിനിസ്ട്രേറ്റർ അക്കൗണ്ടുകൾ ഓഫീസ് നൽകുന്നതാണ്">Administrator accounts are created by the school office</li>
+        <li data-en="There is no administrator registration page" data-ml="അഡ്മിനിസ്ട്രേറ്റർ രജിസ്ട്രേഷൻ പേജ് ഇല്ല">There is no administrator registration page</li>
+        <li data-en="Every administrator action is written to the audit log" data-ml="ഓരോ അഡ്മിനിസ്ട്രേറ്റർ നടപടിയും ഓഡിറ്റ് ലോഗിൽ">Every action is written to the audit log</li>
+      </ul>
+    </div>
+
+    <div class="card auth-card">
+      <h2 data-en="Administrator sign in" data-ml="അഡ്മിനിസ്ട്രേറ്റർ പ്രവേശനം">Administrator sign in</h2>
+      <form id="admin-form" novalidate>
+        <div class="form-field"><label for="admin-email" data-en="Administrator email" data-ml="അഡ്മിനിസ്ട്രേറ്റർ ഇമെയിൽ">Administrator email</label>
+          <input id="admin-email" name="email" type="email" autocomplete="username" spellcheck="false" required></div>
+        <div class="form-field"><label for="admin-password" data-en="Password" data-ml="പാസ്‌വേഡ്">Password</label>
+          <div class="pw-wrap"><input id="admin-password" name="password" type="password" autocomplete="current-password" required>
+          <button class="pw-toggle" type="button" data-target="admin-password">SHOW</button></div></div>
+        <div class="form-msg" id="admin-msg" role="alert"></div>
+        <button class="btn btn-primary" type="submit" data-en="Sign in to the admin dashboard" data-ml="അഡ്മിൻ ഡാഷ്ബോർഡിൽ പ്രവേശിക്കുക">Sign in to the admin dashboard</button>
+      </form>
+      <p class="small muted" data-en="Only an account with the administrator role can open this page. A teacher or student signing in here is refused and signed out again." data-ml="അഡ്മിനിസ്ട്രേറ്റർ റോളുള്ള അക്കൗണ്ടിന് മാത്രം ഈ പേജ് തുറക്കാം. അധ്യാപകനോ വിദ്യാർത്ഥിയോ ഇവിടെ പ്രവേശിച്ചാൽ നിരസിക്കപ്പെടും.">Only an administrator account can open this page.</p>
+      <div class="auth-links">
+        <a href="reset.html" data-en="Forgot password?" data-ml="പാസ്‌വേഡ് മറന്നോ?">Forgot password?</a>
+        <a href="staff.html" data-en="Teacher / staff sign-in" data-ml="അധ്യാപക / സ്റ്റാഫ് ലോഗിൻ">Teacher / staff sign-in</a>
+        <a href="login.html" data-en="Student / parent sign-in" data-ml="വിദ്യാർത്ഥി / രക്ഷിതാവ് ലോഗിൻ">Student / parent sign-in</a>
+      </div>
+      <div class="demo-note" id="admin-demo" hidden>
+        <strong data-en="Preview account" data-ml="മാതൃകാ അക്കൗണ്ട്">Preview account</strong>
+        <span>principal@ghsspandi.in</span>
+        <span data-en="Password: pandi2026" data-ml="പാസ്‌വേഡ്: pandi2026">Password: pandi2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="site-footer" class="site-footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/lang-kn.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/backend-demo.js"></script>
+<script src="js/backend-supabase.js"></script>
+<script src="js/api.js"></script>
+<script src="js/security.js"></script>
+<script src="js/site.js"></script>
+<script src="js/pages/admin.js"></script>
+</body>
+</html>

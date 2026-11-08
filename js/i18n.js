@@ -177,6 +177,7 @@
     'err.invalidMarks': ['That mark is not a number between 0 and the maximum.', 'മാർക്ക് 0-നും പരമാവധിക്കും ഇടയിലുള്ള സംഖ്യയായിരിക്കണം.'],
     'err.classNotMine': ['You are not assigned to that class.', 'ആ ക്ലാസിൽ നിങ്ങൾക്ക് ചുമതലയില്ല.'],
     'err.session': ['Please sign in again.', 'വീണ്ടും പ്രവേശിക്കുക.'],
+    'err.noSelfAdmin': ['Administrator accounts cannot be created by registration. The school office sets them up.', 'രജിസ്ട്രേഷനിലൂടെ അഡ്മിനിസ്ട്രേറ്റർ അക്കൗണ്ട് ഉണ്ടാക്കാനാവില്ല. അവ ഓഫീസ് നൽകുന്നതാണ്.'],
     'err.noProfile': ['You are signed in, but this account has no school profile yet. The office must create it, or re-run the database setup in supabase/ — see docs/SETUP.md.', 'നിങ്ങൾ പ്രവേശിച്ചിട്ടുണ്ട്, പക്ഷേ ഈ അക്കൗണ്ടിന് സ്കൂൾ പ്രൊഫൈൽ ഇല്ല. ഓഫീസ് അത് ഉണ്ടാക്കണം, അല്ലെങ്കിൽ supabase/ ലെ ഡാറ്റാബേസ് സെറ്റപ്പ് വീണ്ടും ഓടിക്കണം — docs/SETUP.md കാണുക.'],
     'err.dbSetup': ['The school database is not set up yet, or a database update is missing. The office must run the SQL files in supabase/ — see docs/SETUP.md.', 'സ്കൂൾ ഡാറ്റാബേസ് ക്രമീകരിച്ചിട്ടില്ല, അല്ലെങ്കിൽ ഒരു അപ്ഡേറ്റ് ബാക്കിയുണ്ട്. ഓഫീസ് supabase/ ലെ SQL ഫയലുകൾ ഓടിക്കണം — docs/SETUP.md കാണുക.'],
     'err.demo': ['Demo mode: data is stored only in this browser. Connect Supabase to go live.', 'ഡെമോ മോഡ്: ഡാറ്റ ഈ ബ്രൗസറിൽ മാത്രം. ലൈവ് ആകാൻ Supabase ബന്ധിപ്പിക്കുക.'],

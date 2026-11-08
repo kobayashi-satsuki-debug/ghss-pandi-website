@@ -210,6 +210,7 @@
     mode: 'demo',
     async signUp({ email, password, role, full_name, phone, extra }) {
       email = (email || '').trim().toLowerCase();
+      if (['student', 'teacher', 'parent'].indexOf(role) === -1) throw new Error('err.noSelfAdmin');
       if (!email) throw new Error('err.required');
       if (password && password.length < 8) throw new Error('err.passwordShort');
       if (db.profiles.some(p => p.email === email)) throw new Error('err.emailTaken');

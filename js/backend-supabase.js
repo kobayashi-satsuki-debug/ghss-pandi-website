@@ -70,6 +70,7 @@
     mode: 'supabase',
 
     async signUp({ email, password, role, full_name, phone, extra }) {
+      if (['student', 'teacher', 'parent'].indexOf(role) === -1) throw new Error('err.noSelfAdmin');
       const meta = { full_name, role, phone: phone || '', extra: extra || {} };
       const options = { data: meta };
       const back = redirectUrl('login.html?confirmed=1');

@@ -136,6 +136,15 @@ created, in preview mode and in live mode.
        it, and the two office accounts can sign in without email (the address is
        marked confirmed at the same time). Refuses to run on the placeholder or
        on fewer than 12 characters; safe to re-run to change the password.
+   14. `supabase/15-admin-allowlist.sql` — locks the administrator role to the
+       listed office addresses (`14101ghsspandi@gmail.com`,
+       `ziyadahmad778@gmail.com`). Registration can never create an admin and
+       no other address can be given the role. It also defines
+       `public.list_admins()` so the office can confirm the two accounts. Safe
+       to re-run; add a new address to the array at the top if a third
+       administrator is ever appointed.
+       Administrators sign in at **admin.html** — there is no administrator
+       registration page by design.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

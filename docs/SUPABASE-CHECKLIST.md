@@ -93,6 +93,16 @@ select public.make_admin('14101ghsspandi@gmail.com');
 
 - [ ] `js/config.js` → `demoFallback: false`
 
+## 8b. The two administrator accounts
+
+- [ ] Run `supabase/15-admin-allowlist.sql` (locks `role = 'admin'` to the
+      listed office addresses)
+- [ ] `select * from public.list_admins();` shows exactly the two accounts
+- [ ] Both accounts can sign in at **admin.html** and land on the dashboard
+- [ ] A teacher or student who tries **admin.html** is refused and signed out
+- [ ] `register.html` offers no administrator option, and a sign-up asking for
+      the admin role is rejected
+
 ## 9. Prove it works
 
 ```sql
