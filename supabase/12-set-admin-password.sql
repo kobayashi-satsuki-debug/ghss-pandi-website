@@ -9,13 +9,26 @@
 -- #  That word is the only thing to change; nothing else.    #
 -- ############################################################
 --
--- FASTEST PATH (one statement, no editing of the block below):
+-- EASIEST PATH — nothing to edit. It invents the password and prints it:
 -- 1. Supabase → SQL Editor → New query
--- 2. Paste this single line, with your own password between the quotes:
+-- 2. Paste this whole statement and press Run:
 --
---    update auth.users set encrypted_password = extensions.crypt('PASTE-YOUR-NEW-PASSWORD-HERE', extensions.gen_salt('bf')), email_confirmed_at = coalesce(email_confirmed_at, now()) where lower(email) in ('14101ghsspandi@gmail.com','ziyadahmad778@gmail.com');
+--    with newpw as (select 'Ghss-' || substr(md5(random()::text), 1, 10) || '-26' as p)
+--    update auth.users u
+--       set encrypted_password = extensions.crypt(n.p, extensions.gen_salt('bf')),
+--           email_confirmed_at = coalesce(u.email_confirmed_at, now())
+--      from newpw n
+--     where lower(u.email) in ('14101ghsspandi@gmail.com','ziyadahmad778@gmail.com')
+--    returning u.email as account, n.p as new_password;
 --
--- 3. Run.
+-- 3. The result grid shows one row per account with the new password in
+--    `new_password`. Copy it, sign in, and give it to the second admin by
+--    phone or in person. Run it again any time to mint a fresh password.
+--
+-- If they should also be full administrators (not only people who can sign in):
+--
+--    update public.profiles set role = 'admin', status = 'active'
+--     where lower(email) in ('14101ghsspandi@gmail.com','ziyadahmad778@gmail.com');
 --
 -- THE FULL VERSION (checks the password, reports what changed):
 do $$
