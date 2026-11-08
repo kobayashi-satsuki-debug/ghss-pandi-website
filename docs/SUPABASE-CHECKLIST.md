@@ -103,6 +103,21 @@ select public.make_admin('14101ghsspandi@gmail.com');
 - [ ] `register.html` offers no administrator option, and a sign-up asking for
       the admin role is rejected
 
+### "Incorrect email or password" at admin.html
+
+1. Run `supabase/17-why-cant-i-sign-in.sql` and read its four grids.
+2. `password_matches = false` — the password is stale. Run
+   `supabase/12-set-admin-password.sql` and copy from the **last** grid; each
+   run mints new passwords.
+3. `identities = 0` — run `12-set-admin-password.sql` again; it adds the email
+   identity row.
+4. `role` is not `admin`, or `status` is not `active` — section 4 of
+   `12-set-admin-password.sql`.
+5. `has_password = false` or an empty grid — the account is missing; create it
+   in Authentication → Users with "Auto confirm user".
+6. Still refused with `password_matches = true` — check Authentication →
+   Providers → Email is enabled and `banned_until` is empty.
+
 ## 8c. The June rollover
 
 - [ ] Ran `supabase/16-year-rollover.sql`

@@ -54,7 +54,12 @@
           return;
         }
       }
-      UI.showMsg(msg, API.errorText(err), 'error');
+      const text = API.errorText(err);
+      const hint = /incorrect/i.test(text)
+        ? ' ' + L('If the office reset the password, use the newest one printed by 12-set-admin-password.sql.',
+                   'ഓഫീസ് പാസ്‌വേഡ് പുതുക്കിയെങ്കിൽ, 12-set-admin-password.sql അവസാനം കാണിച്ച പുതിയ പാസ്‌വേഡ് ഉപയോഗിക്കുക.')
+        : '';
+      UI.showMsg(msg, text + hint, 'error');
       UI.busy(btn, false);
     }
   });

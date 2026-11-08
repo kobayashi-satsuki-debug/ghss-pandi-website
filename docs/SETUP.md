@@ -134,11 +134,12 @@ created, in preview mode and in live mode.
        class, roll number, email and role stay office-only. Safe to re-run.
    13. `supabase/12-set-admin-password.sql` — paste it and press Run; there is
        nothing to edit. It invents a separate 18-character password for each
-       office account, marks both addresses confirmed, and prints the two
-       passwords in the result grid, so students can sign in without email
-       working. Copy them out and pass them on by phone or in person. Safe to
-       re-run whenever you want fresh ones. If you would rather choose the
-       password yourself, section 4 of the file holds a commented block for
+       office account, marks both addresses confirmed, makes sure each account
+       has its email identity row, and prints the two passwords in the **last**
+       result grid, so the office can sign in without email working. Copy them
+       out and pass them on by phone or in person. Every run invents new
+       passwords, so always use the newest grid. If you would rather choose the
+       password yourself, section 5 of the file holds a commented block for
        that — keep it out of the repository.
    14. `supabase/15-admin-allowlist.sql` — locks the administrator role to the
        listed office addresses (`14101ghsspandi@gmail.com`,
@@ -149,7 +150,12 @@ created, in preview mode and in live mode.
        administrator is ever appointed.
        Administrators sign in at **admin.html** — there is no administrator
        registration page by design.
-   15. `supabase/16-year-rollover.sql` — the June rollover. Creates the
+   15. `supabase/17-why-cant-i-sign-in.sql` — read-only diagnostics for the two
+       office accounts: does the account exist, is it confirmed, does it have
+       its email identity, what role has it, and does the password you typed
+       match the stored one. Run it whenever the site says "Incorrect email or
+       password".
+   16. `supabase/16-year-rollover.sql` — the June rollover. Creates the
        promotion table (`class_promotions`), the results archive and the
        `run_year_rollover()` function. Nothing moves until the office runs it
        from **Year rollover** in the dashboard, or on 1 June if you switch on
