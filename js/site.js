@@ -4,6 +4,20 @@
 (function () {
   const C = window.SCHOOL_CONFIG;
 
+  /* A click-to-sign-in link arrives as #access_token=... on whichever page the
+     project's Site URL points at. Send it to the one page that knows how to
+     finish the sign-in and then open the dashboard. */
+  const signingIn = /(?:^#|&)access_token=/.test(location.hash || '');
+  let linkForwarded = false;
+  const here = location.pathname.split('/').pop() || 'index.html';
+  const linkPages = ['login.html', 'reset-password.html', 'confirm-email.html', 'dashboard.html'];
+  if (signingIn && linkPages.indexOf(here) === -1) {
+    // The page is on its way out; Site is still defined so the page's own
+    // script does not fail while the browser navigates.
+    location.replace('login.html?link=1' + location.hash);
+    linkForwarded = true;
+  }
+
   const NAV = [
     ['index.html', 'nav.home', 'Home', 'ഹോം'],
     ['about.html', 'nav.about', 'About', 'സ്കൂളിനെക്കുറിച്ച്'],

@@ -192,8 +192,8 @@
     otpInput.value = '';
     UI.hideMsg(msg);
     otpHint.textContent = I18NS.pick(
-      'We sent a 6-digit code to ' + email + '. Enter it below — there is no link to click.',
-      email + ' എന്ന വിലാസത്തിലേക്ക് 6 അക്ക കോഡ് അയച്ചു. താഴെ നൽകുക — ലിങ്ക് ക്ലിക്ക് ചെയ്യേണ്ടതില്ല.'
+      'We sent an email to ' + email + '. Click the link in it and you are signed in — or type the 6-digit code below.',
+      email + ' എന്ന വിലാസത്തിലേക്ക് ഇമെയിൽ അയച്ചു. അതിലെ ലിങ്ക് ക്ലിക്ക് ചെയ്താൽ നേരിട്ട് പ്രവേശിക്കാം — അല്ലെങ്കിൽ താഴെ 6 അക്ക കോഡ് നൽകുക.'
     ) + (devCode ? ' ' + I18NS.pick('Preview mode — your code is ' + devCode, 'പ്രിവ്യൂ മോഡ് — നിങ്ങളുടെ കോഡ് ' + devCode) : '');
     otpInput.focus();
     if (devCode) UI.showMsg(otpMsg, I18NS.pick('Preview mode: use code ' + devCode, 'പ്രിവ്യൂ മോഡ്: കോഡ് ' + devCode), 'info');

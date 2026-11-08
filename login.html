@@ -43,13 +43,13 @@
       </div>
       <p class="small muted" id="login-role-note"></p>
       <form id="login-code-form" novalidate hidden>
-        <p class="small muted" data-en="No password needed — we email a six-digit code you type here." data-ml="പാസ്‌വേഡ് വേണ്ട — ആറ് അക്ക കോഡ് ഇമെയിലിൽ അയയ്ക്കും, അത് ഇവിടെ നൽകുക.">No password needed — we email a six-digit code you type here.</p>
+        <p class="small muted" data-en="No password needed. We email a link that signs you in — just click it. A six-digit code is in the same email if you would rather type it." data-ml="പാസ്‌വേഡ് വേണ്ട. സൈൻ ഇൻ ചെയ്യാൻ ഒരു ലിങ്ക് ഇമെയിൽ ചെയ്യും — അത് ക്ലിക്ക് ചെയ്താൽ മതി. അതേ ഇമെയിലിൽ ആറ് അക്ക കോഡും ഉണ്ട്.">No password needed. We email a link that signs you in — just click it.</p>
         <div class="form-field"><label for="code-email" data-en="Email address" data-ml="ഇമെയിൽ വിലാസം">Email address</label>
           <input id="code-email" name="email" type="email" autocomplete="username" required></div>
         <div class="form-field" id="code-step" hidden><label for="code-input" data-en="Six-digit code" data-ml="ആറ് അക്ക കോഡ്">Six-digit code</label>
           <input id="code-input" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"></div>
         <div class="form-msg" id="code-msg" role="alert"></div>
-        <button class="btn btn-primary" type="submit" id="code-submit" data-en="Send me a code" data-ml="കോഡ് അയയ്ക്കുക">Send me a code</button>
+        <button class="btn btn-primary" type="submit" id="code-submit" data-en="Email me a sign-in link" data-ml="സൈൻ ഇൻ ലിങ്ക് ഇമെയിൽ ചെയ്യുക">Send me a code</button>
         <button class="btn btn-ghost" type="button" id="code-resend" hidden data-en="Send a new code" data-ml="പുതിയ കോഡ് അയയ്ക്കുക">Send a new code</button>
         <p class="small muted"><a href="#" id="code-to-password" data-en="Use a password instead" data-ml="പാസ്‌വേഡ് ഉപയോഗിക്കുക">Use a password instead</a></p>
       </form>
@@ -61,7 +61,7 @@
           <button class="pw-toggle" type="button" data-target="login-password">SHOW</button></div></div>
         <div class="form-msg" id="login-msg" role="alert"></div>
         <button class="btn btn-primary" type="submit" data-en="Sign in" data-ml="പ്രവേശിക്കുക">Sign in</button>
-        <p class="small muted"><a href="#" id="password-to-code" data-en="Sign in with a six-digit code instead" data-ml="പകരം ആറ് അക്ക കോഡ് ഉപയോഗിച്ച് പ്രവേശിക്കുക">Sign in with a six-digit code instead</a></p>
+        <p class="small muted"><a href="#" id="password-to-code" data-en="Email me a sign-in link instead" data-ml="പകരം സൈൻ ഇൻ ലിങ്ക് ഇമെയിൽ ചെയ്യുക">Sign in with a six-digit code instead</a></p>
       </form>
       <div class="auth-links">
         <a href="confirm-email.html" id="verify-link" data-en="Verify a new account" data-ml="പുതിയ അക്കൗണ്ട് സ്ഥിരീകരിക്കുക">Verify a new account</a>

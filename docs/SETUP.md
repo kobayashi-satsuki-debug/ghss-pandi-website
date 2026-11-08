@@ -185,12 +185,13 @@ created, in preview mode and in live mode.
    `/ghss-pandi-website/` folder, which is why the wildcard is written after the
    folder and not after the host. Use the full origin with scheme — a bare
    hostname is rejected — and watch for stray spaces when pasting.
-4. In **Authentication → Emails** replace the *Confirm signup* and *Reset
-   password* templates so they send `{{ .Token }}` (a 6-digit code) instead of
-   `{{ .ConfirmationURL }}`. Copy the ready-made templates from
+4. In **Authentication → Emails** replace the *Confirm signup*, *Magic Link*
+   and *Reset password* templates so each carries **both** `{{ .ConfirmationURL }}`
+   and `{{ .Token }}`. Copy the ready-made templates from
    [EMAIL-TEMPLATES.md](EMAIL-TEMPLATES.md), and set Email OTP Expiration to
-   `600` seconds and Email OTP Length to `6`. Registration and password reset
-   then work by typing the code — no links at all.
+   `600` seconds and Email OTP Length to `6`. Clicking the link signs the person
+   in and opens the dashboard; the six-digit code is there for anyone who would
+   rather type it. Both work from the same email.
 5. In **Storage** confirm the bucket `resources` is **private** (the SQL creates
    it that way). Students get ten-minute signed links, so a copied URL stops
    working.

@@ -1,6 +1,21 @@
 (async function () {
+  // A click-to-sign-in link lands here with the session in the URL. Give the
+  // Supabase client a moment to read it before deciding nobody is signed in.
+  if (/(?:^#|&)access_token=/.test(location.hash || '')) {
+    for (let i = 0; i < 16; i++) {
+      let open = null;
+      try { open = await API.session(); } catch (e) { open = null; }
+      if (open && open.profile) break;
+      await new Promise(r => setTimeout(r, 250));
+    }
+  }
+
   const session = await Site.mount();
-  if (session) { location.replace('dashboard.html'); return; }
+  if (session) {
+    const target = session.profile && session.profile.role === 'parent' ? 'dashboard.html#children' : 'dashboard.html';
+    location.replace(target);
+    return;
+  }
 
   const form = document.getElementById('login-form');
   const msg = document.getElementById('login-msg');
@@ -94,7 +109,7 @@
     codeResend.hidden = !on;
     codeSubmit.textContent = on
       ? I18NS.pick('Sign in', 'പ്രവേശിക്കുക')
-      : I18NS.pick('Send me a code', 'കോഡ് അയയ്ക്കുക');
+      : I18NS.pick('Email me a sign-in link', 'സൈൻ ഇൻ ലിങ്ക് ഇമെയിൽ ചെയ്യുക');
     if (on) codeInput.focus();
   }
 
@@ -128,7 +143,8 @@
       awaitingCode(true);
       UI.showMsg(codeMsg, (res && res.devCode)
         ? I18NS.pick('Preview mode: your code is ' + res.devCode, 'പ്രിവ്യൂ മോഡ്: കോഡ് ' + res.devCode)
-        : I18NS.pick('A six-digit code is on its way to ' + addr + '. Type it above.', addr + ' എന്ന വിലാസത്തിലേക്ക് ആറ് അക്ക കോഡ് അയച്ചു.'),
+        : I18NS.pick('Sent to ' + addr + '. Just click the link in that email and you are signed in; the six-digit code above works too.',
+                     addr + ' എന്ന വിലാസത്തിലേക്ക് അയച്ചു. ഇമെയിലിലെ ലിങ്ക് ക്ലിക്ക് ചെയ്താൽ നേരിട്ട് പ്രവേശിക്കാം; മുകളിലെ ആറ് അക്ക കോഡും ഉപയോഗിക്കാം.'),
         (res && res.devCode) ? 'info' : 'success');
       startCodeCountdown();
     } catch (err) {

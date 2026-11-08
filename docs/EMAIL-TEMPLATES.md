@@ -1,10 +1,14 @@
-# Email templates — 6-digit codes, no links
+# Email templates — a one-click link, and a 6-digit code
 
-The site never asks anyone to click a link to verify an email. Every email
-Supabase sends carries a **6-digit code**, and the student, teacher or parent
-types that code into the page they are already on.
+Every email Supabase sends carries **both**: a link that signs the person in
+when it is clicked, and a six-digit code for anyone who would rather type it.
+Nothing to remember, no password to type after clicking.
 
-Two templates must be changed, once, in the Supabase dashboard.
+Clicking the link is the whole sign-in. It lands on `login.html`, the site reads
+the session from the address, and the dashboard opens. A link that has expired
+(or was already used) says so and offers the code instead.
+
+The templates below must be changed, once, in the Supabase dashboard.
 
 ## 1. Authentication → Emails → Confirm signup
 
@@ -20,11 +24,14 @@ Your G H S S Pandi verification code
 
 ```html
 <h2>G H S S Pandi</h2>
-<p>Your verification code is:</p>
-<p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">code</p>
-<p>Type this 6-digit code on the website to finish creating your account.
-It can be used once and expires after 10 minutes.</p>
-<p>If you did not ask for this code, you can ignore this email.</p>
+<p>Welcome. Open this link and you are signed in — no password to type:</p>
+<p><a href="{{ .ConfirmationURL }}"
+      style="display:inline-block;padding:12px 20px;background:#0f5132;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">
+   Sign in to G H S S Pandi</a></p>
+<p>Or type this 6-digit code on the website instead:</p>
+<p style="font-size:28px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
+<p>The code can be used once and expires after 10 minutes.</p>
+<p>If you did not ask for this, you can ignore this email.</p>
 <p>— Government Higher Secondary School, Pandi, Adoor, Kasaragod, Kerala<br>
 14101ghsspandi@gmail.com · 9446553567</p>
 ```
@@ -60,6 +67,19 @@ password stays the same.</p>
 <p>— Government Higher Secondary School, Pandi, Adoor, Kasaragod, Kerala<br>
 14101ghsspandi@gmail.com · 9446553567</p>
 ```
+
+## 2a. The address list that makes the link work
+
+The link returns to the website, so Supabase must be told that the website is
+allowed. **Authentication → URL Configuration**:
+
+- Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
+- Redirect URLs: the same address, and
+  `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/login.html`
+
+On your own domain, add both addresses there instead. If a link reports
+"redirect_uri_mismatch" or lands on the home page with nothing happening, this
+list is the reason.
 
 ## 3. Settings to check
 
@@ -217,14 +237,14 @@ students sign in with a code, or use *Forgot password* once to set a real one.
 Nothing breaks if you leave them as they are.
 
 **Which template carries that code:** not *Confirm signup*. A returning student's
-code comes from the **Magic Link** template, because the site calls
-`signInWithOtp`. So both templates need the token:
+code and link come from the **Magic Link** template, because the site calls
+`signInWithOtp`. So both templates need both pieces:
 
 | Template | Must contain |
 | --- | --- |
 | Confirm signup | `{{ .ConfirmationURL }}` **and** `{{ .Token }}` |
-| Magic Link | `{{ .Token }}` |
-| Reset password | `{{ .Token }}` |
+| Magic Link | `{{ .ConfirmationURL }}` **and** `{{ .Token }}` |
+| Reset password | `{{ .Token }}` **and** `{{ .ConfirmationURL }}` |
 
 **Confirm signup needs both on purpose.** Students use the six digits; parents
 read the same email and click the link instead. If the template only has
@@ -236,7 +256,8 @@ A safe Confirm signup body:
 
 ```html
 <h2>Confirm your GHSS Pandi account</h2>
-<p>Open this link to confirm: <a href="{{ .ConfirmationURL }}">confirm my account</a></p>
+<p>Open this link and you are signed in:
+   <a href="{{ .ConfirmationURL }}">sign in to G H S S Pandi</a></p>
 <p>Or type this code on the site: <strong>{{ .Token }}</strong></p>
 ```
 

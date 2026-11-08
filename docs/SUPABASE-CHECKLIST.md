@@ -43,7 +43,7 @@ https://www.ghsspandi.org.in/**
 
 ## 3. Authentication → Emails
 
-- [ ] **Confirm signup** template sends `{{ .Token }}`, not `{{ .ConfirmationURL }}`
+- [ ] **Confirm signup** and **Magic Link** templates carry both `{{ .ConfirmationURL }}` (click to sign in) and `{{ .Token }}` (the 6-digit code)
 - [ ] **Reset password** template sends `{{ .Token }}` too
 
 Ready-made templates: `docs/EMAIL-TEMPLATES.md` §1 and §2.

@@ -27,8 +27,8 @@
     restart.hidden = !!fromLink;
     if (email) {
       sentTo.textContent = I18NS.pick(
-        'A 6-digit code was emailed to ' + email + '. Enter it below — there is no link to click.',
-        email + ' എന്ന വിലാസത്തിലേക്ക് 6 അക്ക കോഡ് അയച്ചു. താഴെ നൽകുക — ലിങ്ക് ക്ലിക്ക് ചെയ്യേണ്ടതില്ല.'
+        'We emailed ' + email + '. Click the link in it to set a new password, or type the six-digit code below.',
+        email + ' എന്ന വിലാസത്തിലേക്ക് ഇമെയിൽ അയച്ചു. പുതിയ പാസ്‌വേഡ് നൽകാൻ ലിങ്ക് ക്ലിക്ക് ചെയ്യുക, അല്ലെങ്കിൽ താഴെ ആറ് അക്ക കോഡ് നൽകുക.'
       );
     }
     if (devCode) {
