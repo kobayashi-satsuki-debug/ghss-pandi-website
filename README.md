@@ -89,6 +89,11 @@ Full instructions, security notes and the custom-domain checklist:
 enforced: [docs/SECURITY.md](docs/SECURITY.md). What each account can do about
 its own password, sessions and history: [docs/APP-SECURITY.md](docs/APP-SECURITY.md).
 
+The Android app is published from
+[kobayashi-satsuki-debug/GHSS-PANDI-app](https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app);
+`app.html` reads its newest release, so a new version shows up on the site with
+no edit here.
+
 Dashboard work in one tick-list — Site URL, redirect URLs, email templates,
 SMTP, the SQL files and the first administrator:
 [docs/SUPABASE-CHECKLIST.md](docs/SUPABASE-CHECKLIST.md).

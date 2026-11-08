@@ -16,6 +16,7 @@
     'nav.faculty': ['Faculty', 'അധ്യാപകർ'],
     'nav.notices': ['Notices', 'അറിയിപ്പുകൾ'],
     'nav.resources': ['Resources', 'പഠന സാമഗ്രികൾ'],
+    'nav.app': ['App', 'ആപ്പ്'],
     'nav.results': ['Results', 'ഫലങ്ങൾ'],
     'nav.login': ['Login', 'ലോഗിൻ'],
     'nav.dashboard': ['Dashboard', 'ഡാഷ്ബോർഡ്'],

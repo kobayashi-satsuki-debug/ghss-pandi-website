@@ -1,0 +1,76 @@
+/* Download page — reads the latest published build from the app repository.
+   Nothing is hard-coded, so a new release appears here on its own. */
+(async function () {
+  const REPO = 'kobayashi-satsuki-debug/GHSS-PANDI-app';
+  const box = document.getElementById('app-release');
+  const btn = document.getElementById('app-download');
+  const source = document.getElementById('app-source');
+  if (!box || !btn) return;
+
+  const L = (en, ml) => '<span data-en="' + en + '" data-ml="' + ml + '">' + en + '</span>';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const size = b => (b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
+  const day = d => { try { return new Date(d).toLocaleDateString(); } catch (e) { return ''; } };
+
+  function paint(html) {
+    box.innerHTML = html;
+    if (window.I18NS) window.I18NS.apply();
+  }
+
+  function noBuild() {
+    paint('<p class="small muted">' + L('No build has been published yet. The buttons open the repository, where the download will appear.', 'ഇതുവരെ ബിൽഡ് പ്രസിദ്ധീകരിച്ചിട്ടില്ല. ബട്ടണുകൾ റിപോസിറ്ററി തുറക്കും; ഡൗൺലോഡ് അവിടെ പ്രത്യക്ഷപ്പെടും.') + '</p>');
+  }
+
+  async function load() {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 8000);
+    let res;
+    try {
+      res = await fetch('https://api.github.com/repos/' + REPO + '/releases/latest', {
+        headers: { Accept: 'application/vnd.github+json' },
+        signal: ctl.signal,
+        cache: 'no-store'
+      });
+    } catch (e) {
+      clearTimeout(timer);
+      paint('<p class="small muted">' + L('The school server could not be reached. Use the buttons below to open the download page directly.', 'സ്കൂൾ സെർവറിൽ എത്താനായില്ല. താഴെയുള്ള ബട്ടണുകൾ ഉപയോഗിച്ച് ഡൗൺലോഡ് പേജ് നേരിട്ട് തുറക്കുക.') + '</p>');
+      return;
+    }
+    clearTimeout(timer);
+    if (res.status === 404) { noBuild(); return; }
+    if (!res.ok) { noBuild(); return; }
+
+    let rel;
+    try { rel = await res.json(); } catch (e) { noBuild(); return; }
+    const assets = Array.isArray(rel.assets) ? rel.assets : [];
+    const apk = assets.filter(a => /\.apk$/i.test(a.name || ''))
+      .sort((a, b) => (b.size || 0) - (a.size || 0))[0];
+
+    if (apk && apk.browser_download_url) {
+      btn.href = apk.browser_download_url;
+      btn.setAttribute('download', apk.name);
+    } else if (rel.html_url) {
+      btn.href = rel.html_url;
+    }
+
+    const when = day(rel.published_at || rel.created_at);
+    const rows = [
+      [L('Version', 'പതിപ്പ്'), esc(rel.tag_name || rel.name || '—')],
+      [L('Published', 'പ്രസിദ്ധീകരിച്ചത്'), esc(when)],
+      [L('File', 'ഫയൽ'), apk ? esc(apk.name) + ' · ' + size(apk.size || 0) : L('see the release page', 'റിലീസ് പേജ് കാണുക')]
+    ];
+    paint(
+      '<div class="app-release-facts">' +
+      rows.map(r => '<div><span class="small muted">' + r[0] + '</span><strong>' + r[1] + '</strong></div>').join('') +
+      '</div>' +
+      (apk
+        ? '<p class="small muted">' + L('This is the newest published build. Installing it over an older one keeps your sign-in.', 'ഇതാണ് ഏറ്റവും പുതിയ ബിൽഡ്. പഴയതിന് മുകളിൽ ഇൻസ്റ്റാൾ ചെയ്താലും സൈൻ ഇൻ നിലനിൽക്കും.') + '</p>'
+        : '<p class="small muted">' + L('This release has no .apk attached yet — open it and check the assets.', 'ഈ റിലീസിൽ .apk ചേർത്തിട്ടില്ല — തുറന്ന് assets പരിശോധിക്കുക.') + '</p>')
+    );
+  }
+
+  if (source) source.href = 'https://github.com/' + REPO;
+  await load();
+  if (window.Site) await window.Site.mount();
+  if (window.I18NS) window.I18NS.apply();
+})();

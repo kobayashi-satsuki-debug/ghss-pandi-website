@@ -30,6 +30,8 @@ creative.html         Creative corner — tailoring, electrical, plumbing and cr
 achievements.html     Student achievements
 faculty.html          Teachers and office staff
 notices.html          Notice board
+app.html              Download page for the Android app (reads the latest
+                      GitHub release of kobayashi-satsuki-debug/GHSS-PANDI-app)
 results.html          Result lookup (students, parents, teachers)
 login.html            Sign in (student / teacher / parent tabs)
 register.html         Registration (student / teacher / parent tabs)
@@ -46,6 +48,7 @@ js/ai.js              AI study buddy answers (study-note knowledge base)
 js/pages/ai.js        AI study buddy page logic
 js/pages/resources.js PDF notes viewer logic
 js/pages/upload.js    PDF notes upload page logic
+js/pages/app.js       Download page: latest release, APK link and size
 js/pages/staff.js     Staff sign-in page logic
 js/i18n.js            English / Malayalam dictionary and language switching
 js/lang-kn.js          Kannada dictionary (keyed by the English string)
