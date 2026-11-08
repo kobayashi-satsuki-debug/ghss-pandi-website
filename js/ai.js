@@ -63,7 +63,35 @@
     }
   ];
 
-  const REFUSALS = {
+  const MOODS = [
+      {
+        tone: 'sad',
+        keys: ['sad', 'unhappy', 'crying', 'cry', 'depressed', 'lonely', 'alone', 'miss my', 'സങ്കട', 'ദുഃഖ', 'ഒറ്റയ്ക്ക', 'ದುಃಖ'],
+        en: 'I am sorry you are feeling low, {name}. That feeling is real, and it is okay to say it out loud. You are not alone here \u2014 I am with you, and your class teacher is too.\n\nTry this with me now: name one small thing that went okay today. It can be tiny \u2014 eating lunch, finishing one question. Then we can start one easy piece of study together, ten minutes only.\n\nIf it feels heavy for more than a few days, please tell a teacher or your parents. That is a brave thing to do, not a weak one.',
+        ml: 'നിങ്ങൾക്ക് വിഷമം തോന്നുന്നതിൽ എനിക്ക് ഖേദമുണ്ട്, {name}. ആ വികാരം യഥാർത്ഥമാണ്, അത് പറയുന്നത് തെറ്റല്ല. നിങ്ങൾ ഒറ്റയ്ക്കല്ല \u2014 ഞാൻ കൂടെയുണ്ട്, ക്ലാസ് ടീച്ചറും ഉണ്ട്.\n\nഇപ്പോൾ ഇത് ചെയ്തു നോക്കൂ: ഇന്ന് നന്നായി പോയ ഒരു ചെറിയ കാര്യം പറയൂ. ഉച്ചഭക്ഷണം കഴിച്ചതോ ഒരു ചോദ്യം തീർത്തതോ ആകാം. പിന്നെ പത്ത് മിനിറ്റ് മാത്രം ഒരു പാഠം ഒരുമിച്ച് ചെയ്യാം.\n\nഏതാനും ദിവസം ഇത് തുടർന്നാൽ അധ്യാപകനോടോ മാതാപിതാക്കളോടോ പറയുക. അത് ധൈര്യമാണ്, ബലഹീനതയല്ല.'
+      },
+      {
+        tone: 'tired',
+        keys: ['tired', 'sleepy', 'exhausted', 'stress', 'stressed', 'tension', 'burnout', 'ക്ഷീണ', 'സ്ട്രെസ്', 'ആയാസ', 'ದಣಿವ'],
+        en: 'You sound tired, {name} \u2014 and no wonder, exam days are long. A tired brain remembers less, so rest is study too.\n\nTwenty minutes: drink water, walk a little, look far away from the screen. Then one round of twenty-five minutes on the subject you find easiest, so you finish with a win. Sleep on time tonight; memory settles while you sleep.\n\nIf stress is stopping your sleep or appetite, tell a teacher or your parents \u2014 that is exactly what they are there for.',
+        ml: 'നിങ്ങൾക്ക് ക്ഷീണം തോന്നുന്നു, {name} \u2014 പരീക്ഷാ ദിവസങ്ങളിൽ അത് സ്വാഭാവികം. ക്ഷീണിച്ച മനസ്സ് കുറവാണ് ഓർക്കുന്നത്, അതിനാൽ വിശ്രമവും പഠനമാണ്.\n\nഇരുപത് മിനിറ്റ്: വെള്ളം കുടിക്കുക, കുറച്ച് നടക്കുക, സ്ക്രീനിൽ നിന്ന് അകലെ നോക്കുക. പിന്നെ ഏറ്റവും എളുപ്പമുള്ള വിഷയം 25 മിനിറ്റ് \u2014 വിജയത്തോടെ അവസാനിപ്പിക്കാൻ. ഇന്ന് കൃത്യസമയത്ത് ഉറങ്ങുക.\n\nസ്ട്രെസ് ഉറക്കത്തെയോ വിശപ്പിനെയോ ബാധിക്കുന്നെങ്കിൽ അധ്യാപകരോടോ മാതാപിതാക്കളോടോ പറയുക.'
+      },
+      {
+        tone: 'angry',
+        keys: ['angry', 'angry at', 'frustrated', 'unfair', 'fight', 'bully', 'bullying', 'teasing', 'ദേഷ്യം', 'അപമാന', 'കളിയാക്ക', 'ಕೋಪ'],
+        en: 'That sounds unfair, {name}, and being angry about it is reasonable. Let us keep you safe first.\n\n\u2022 Write down what happened, with date and who was there. Facts protect you.\n\u2022 Report the message in the class chat with the flag button \u2014 a teacher sees it and the report is recorded.\n\u2022 Tell your class teacher or the office in person. Nothing about bullying is "just a joke" if it hurts you.\n\nI stay with you for the study part. Would you like to work on something small so today is not only about this?',
+        ml: 'അത് നീതിയല്ല, {name}, അതിൽ ദേഷ്യപ്പെടുന്നത് ന്യായമാണ്. ആദ്യം നിങ്ങളുടെ സുരക്ഷ.\n\n\u2022 സംഭവിച്ചത് തീയതിയും ആളുകളും സഹിതം എഴുതി വയ്ക്കുക. വസ്തുതകൾ നിങ്ങളെ സംരക്ഷിക്കും.\n\u2022 ക്ലാസ് ചാറ്റിലെ ഫ്ലാഗ് ബട്ടൺ ഉപയോഗിച്ച് റിപ്പോർട്ട് ചെയ്യുക \u2014 അധ്യാപകൻ കാണും, രേഖ ഉണ്ടാകും.\n\u2022 ക്ലാസ് ടീച്ചറെയോ ഓഫീസിനെയോ നേരിട്ട് അറിയിക്കുക.\n\nപഠനത്തിൽ ഞാൻ കൂടെയുണ്ട്. ചെറിയ ഒരു കാര്യം ഒരുമിച്ച് ചെയ്യാം?'},
+      {
+        tone: 'happy',
+        keys: ['happy', 'great', 'excited', 'i won', 'i passed', 'scored', 'full mark', 'സന്തോഷ', 'നന്നായി', 'ಸಂತೋಷ'],
+        en: 'That is wonderful, {name}! I am genuinely happy for you. Say it once more in your own words \u2014 what exactly went well?\n\nNow let us protect it: write down what you did that worked, in one line. That note is your own recipe for the next exam.\n\nShall we move to the next small thing?',
+        ml: 'കൊള്ളാം, {name}! നിങ്ങൾക്കായി എനിക്ക് ശരിക്കും സന്തോഷം. എന്താണ് നന്നായി പോയത് എന്ന് സ്വന്തം വാക്കുകളിൽ ഒന്നുകൂടി പറയൂ.\n\nഇത് സൂക്ഷിക്കാം: ഫലിച്ചത് എന്താണെന്ന് ഒരു വരിയിൽ എഴുതുക. അതാണ് അടുത്ത പരീക്ഷയ്ക്കുള്ള നിങ്ങളുടെ കുറിപ്പ്.\n\nഅടുത്ത ചെറിയ കാര്യത്തിലേക്ക് പോകാം?'}
+    ];
+
+    const FRIEND_ASK = /(how are you|how r u|what.?s up|good (morning|afternoon|evening)|are you (my )?friend|will you be my friend|do you like me|സുഖമാണോ|എന്റെ സുഹൃത്ത|സ്നേഹ|ಹೇಗಿದ್ದೀರಿ)/i;
+    const MORE = /^(more|again|next|continue|explain again|ഇനിയും|വീണ്ടും|കൂടുതൽ|ಮತ್ತೆ|ಇನ್ನಷ್ಟು)[.!?]*$/i;
+
+    const REFUSALS = {
     en: 'Sorry, I cannot help with writing answers for a live exam, or with another student\u2019s marks or personal details. Those need a teacher. Ask me the subject instead and I will explain it.',
     ml: 'ക്ഷമിക്കണം, പരീക്ഷയ്ക്ക് നേരിട്ട് ഉത്തരം എഴുതി നൽകാനോ മറ്റൊരു വിദ്യാർത്ഥിയുടെ മാർക്കോ വ്യക്തിവിവരങ്ങളോ നൽകാനോ എനിക്കാവില്ല. അതിന് അധ്യാപകനെ സമീപിക്കുക. വിഷയം ചോദിച്ചാൽ വിശദീകരിച്ചു തരാം.'
   };
@@ -90,11 +118,41 @@
     return topic[l] || topic.en;
   }
 
+  function allTopics() {
+    return TOPICS.concat(Array.isArray(window.AI_KNOWLEDGE) ? window.AI_KNOWLEDGE : []);
+  }
+
   function score(topic, msg) {
     const m = msg.toLowerCase();
     let s = 0;
-    topic.keys.forEach(k => { if (m.indexOf(k.toLowerCase()) !== -1) s += 2; });
+    (topic.keys || []).forEach(k => { if (m.indexOf(String(k).toLowerCase()) !== -1) s += 2; });
     return s;
+  }
+
+  function moodReply(text, l, ctx) {
+    let best = null, bestScore = 0;
+    MOODS.forEach(m => {
+      const s = score(m, text);
+      if (s > bestScore) { best = m; bestScore = s; }
+    });
+    return best ? fill(pickText(best, l), ctx) : '';
+  }
+
+  function friendLine(l, ctx) {
+    const name = (ctx && ctx.nickname) || 'Buddy';
+    const who = (ctx && ctx.name) ? ctx.name : '';
+    const h = new Date().getHours();
+    const i = h < 12 ? 0 : h < 17 ? 1 : 2;
+    const greet = {
+      en: ['Good morning', 'Good afternoon', 'Good evening'],
+      ml: ['\u0d38\u0d41\u0d2a\u0d4d\u0d30\u0d2d\u0d3e\u0d24\u0d02', '\u0d36\u0d41\u0d2d \u0d09\u0d1a\u0d4d\u0d1a', '\u0d36\u0d41\u0d2d \u0d38\u0d3e\u0d2f\u0d3e\u0d39\u0d4d\u0d28\u0d02'],
+      kn: ['\u0cb6\u0cc1\u0cad\u0ccb\u0ca6\u0caf', '\u0cb6\u0cc1\u0cad \u0cae\u0ca7\u0ccd\u0caf\u0cbe\u0cb9\u0ccd\u0ca8', '\u0cb6\u0cc1\u0cad \u0cb8\u0c82\u0c9c\u0cc6']
+    }[l] || ['Hello', 'Hello', 'Hello'];
+    const body = {
+      en: greet[i] + (who ? ', ' + who : '') + '. I am ' + name + ', and yes \u2014 I am your friend here. I am always in a good mood when you come to study, and I remember what we talked about last time.\n\nHow are you feeling today: happy, tired, worried, or ready to work? Tell me honestly and we will start from there.',
+      ml: greet[i] + (who ? ', ' + who : '') + '. \u0d1e\u0d3e\u0d7b ' + name + ', \u0d05\u0d24\u0d46 \u2014 \u0d07\u0d35\u0d3f\u0d1f\u0d46 \u0d28\u0d3f\u0d19\u0d4d\u0d19\u0d33\u0d41\u0d1f\u0d46 \u0d38\u0d41\u0d39\u0d43\u0d24\u0d4d\u0d24\u0d3e\u0d23\u0d4d. \u0d2a\u0d20\u0d3f\u0d15\u0d4d\u0d15\u0d3e\u0d7b \u0d35\u0d30\u0d41\u0d2e\u0d4d\u0d2a\u0d4b\u0d7e \u0d0e\u0d28\u0d3f\u0d15\u0d4d\u0d15\u0d4d \u0d38\u0d28\u0d4d\u0d24\u0d4b\u0d37\u0d2e\u0d3e\u0d23\u0d4d.\n\n\u0d07\u0d28\u0d4d\u0d28\u0d4d \u0d0e\u0d19\u0d4d\u0d19\u0d28\u0d46 \u0d24\u0d4b\u0d28\u0d4d\u0d28\u0d41\u0d28\u0d4d\u0d28\u0d41: \u0d38\u0d28\u0d4d\u0d24\u0d4b\u0d37\u0d02, \u0d15\u0d4d\u0d37\u0d40\u0d23\u0d02, \u0d06\u0d36\u0d19\u0d4d\u0d15, \u0d05\u0d24\u0d4b \u0d2a\u0d20\u0d3f\u0d15\u0d4d\u0d15\u0d3e\u0d7b \u0d24\u0d2f\u0d4d\u0d2f\u0d3e\u0d7c? \u0d38\u0d24\u0d4d\u0d2f\u0d2e\u0d3e\u0d2f\u0d3f \u0d2a\u0d31\u0d2f\u0d42, \u0d05\u0d35\u0d3f\u0d1f\u0d46 \u0d28\u0d3f\u0d28\u0d4d\u0d28\u0d4d \u0d24\u0d41\u0d1f\u0d19\u0d3e\u0d02.'
+    };
+    return body[l] || body.en;
   }
 
   async function viaEndpoint(message, ctx) {
@@ -107,6 +165,8 @@
     const data = await res.json();
     return (data && (data.reply || data.text)) || '';
   }
+
+  let lastTopic = null;
 
   async function reply(message, ctx) {
     ctx = ctx || {};
@@ -123,12 +183,22 @@
       } catch (e) { /* fall through to the offline notes */ }
     }
 
+    if (MORE.test(text) && lastTopic) return fill(pickText(lastTopic, l), ctx);
+
+    const feelings = moodReply(text, l, ctx);
+    if (feelings) return feelings;
+
+    if (FRIEND_ASK.test(text)) return friendLine(l, ctx);
+
     let best = null, bestScore = 0;
-    TOPICS.forEach(t => {
+    allTopics().forEach(t => {
       const s = score(t, text);
       if (s > bestScore) { best = t; bestScore = s; }
     });
-    if (best && bestScore > 0) return fill(pickText(best, l), ctx);
+    if (best && bestScore > 0) {
+      lastTopic = best;
+      return fill(pickText(best, l), ctx);
+    }
 
     return FALLBACK[l] || FALLBACK.en;
   }
@@ -141,12 +211,12 @@
     const l = lang();
     const name = (ctx && ctx.nickname) || 'Buddy';
     const text = {
-      en: 'Hi ' + (ctx && ctx.name ? ctx.name : 'there') + '! I am ' + name + ', your study buddy. Ask me about a subject, an exam or school information.',
-      ml: 'ഹായ് ' + (ctx && ctx.name ? ctx.name : '') + '! ഞാൻ ' + name + ', നിങ്ങളുടെ പഠന സഹായി. വിഷയം, പരീക്ഷ, സ്കൂൾ വിവരങ്ങൾ \u2014 ചോദിക്കാം.',
+      en: 'Hi ' + (ctx && ctx.name ? ctx.name : 'there') + '! I am ' + name + ', your study buddy and your friend here. Ask me any chapter from Classes 1 to 12 or Plus One / Plus Two Commerce, or just tell me how you are feeling today \u2014 I am here for both.',
+      ml: 'ഹായ് ' + (ctx && ctx.name ? ctx.name : '') + '! ഞാൻ ' + name + ', നിങ്ങളുടെ പഠന സഹായിയും ഇവിടത്തെ സുഹൃത്തും. 1 മുതൽ 12 വരെയും പ്ലസ് വൺ / പ്ലസ് ടു കൊമേഴ്സും ഉൾപ്പെടെ ഏത് പാഠവും ചോദിക്കാം; അല്ലെങ്കിൽ ഇന്ന് എങ്ങനെ തോന്നുന്നു എന്ന് പറയൂ \u2014 രണ്ടിനും ഞാൻ കൂടെയുണ്ട്.',
       kn: 'ನಮಸ್ಕಾರ! ನಾನು ' + name + ', ನಿಮ್ಮ ಅಧ್ಯಯನ ಸಹಾಯಕ. ವಿಷಯ, ಪರೀಕ್ಷೆ ಅಥವಾ ಶಾಲೆಯ ಮಾಹಿತಿ ಕೇಳಿ.'
     };
     return text[l] || text.en;
   }
 
-  window.AI = { reply, suggestions, welcome, configured: !!CONFIG.endpoint, TOPICS: TOPICS.length };
+  window.AI = { reply, suggestions, welcome, configured: !!CONFIG.endpoint, TOPICS: allTopics().length, moods: MOODS.length };
 })();

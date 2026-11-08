@@ -37,13 +37,21 @@
   function chatHtml(history) {
     return '<div class="ai-chat-wrap" id="ai-chat">' +
       head(state.nickname || L('Your assistant', 'നിങ്ങളുടെ സഹായി'),
-        L('Study helper · bot replies, not a teacher', 'പഠന സഹായി · ബോട്ട് മറുപടി, അധ്യാപകനല്ല')) +
+        L('Study helper and friend · bot replies, not a teacher', 'പഠന സഹായിയും സുഹൃത്തും · ബോട്ട് മറുപടി, അധ്യാപകനല്ല')) +
       '<div class="ai-log" id="ai-log" aria-live="polite">' +
       (history.length ? history.map(m => bubble(m.role, m.content)).join('')
         : bubble('assistant', window.AI.welcome(state))) +
       '</div>' +
       '<div class="ai-chips" id="ai-suggest">' + window.AI.suggestions().map(s =>
         '<button type="button" class="chip" data-say="' + UI.esc(s) + '">' + UI.esc(s) + '</button>').join('') + '</div>' +
+      '<div class="ai-chips ai-mood" id="ai-mood">' +
+      '<span class="small muted ai-mood-label">' + L('How do you feel today?', 'ഇന്ന് എങ്ങനെ തോന്നുന്നു?') + '</span>' +
+      [['😊', 'I feel happy', 'എനിക്ക് സന്തോഷമാണ്'],
+       ['😴', 'I am tired', 'എനിക്ക് ക്ഷീണമാണ്'],
+       ['😟', 'I feel sad', 'എനിക്ക് സങ്കടമാണ്'],
+       ['🔥', 'I am ready to study', 'ഞാൻ പഠിക്കാൻ തയ്യാർ']].map(m =>
+        '<button type="button" class="chip" data-say="' + UI.esc(L(m[1], m[2])) + '">' + m[0] + ' ' +
+        UI.esc(L(m[1], m[2])) + '</button>').join('') + '</div>' +
       '<form class="ai-form" id="ai-form"><input id="ai-input" maxlength="600" autocomplete="off" placeholder="' +
       L('Ask about a subject, exam or school…', 'വിഷയം, പരീക്ഷ അല്ലെങ്കിൽ സ്കൂളിനെക്കുറിച്ച് ചോദിക്കുക…') + '">' +
       '<button class="btn btn-primary" type="submit">' + L('Send', 'അയക്കുക') + '</button></form>' +
@@ -113,13 +121,14 @@
       send(v);
     });
 
-    const suggest = document.getElementById('ai-suggest');
-    if (suggest) {
-      suggest.addEventListener('click', e => {
+    ['ai-suggest', 'ai-mood'].forEach(id => {
+      const row = document.getElementById(id);
+      if (!row) return;
+      row.addEventListener('click', e => {
         const b = e.target.closest('[data-say]');
         if (b) send(b.dataset.say);
       });
-    }
+    });
 
     const edit = document.getElementById('ai-nick-edit');
     if (edit) {
