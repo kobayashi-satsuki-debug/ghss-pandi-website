@@ -112,7 +112,7 @@
         { id: uid(), title_en: 'State Athletics Meet — 800 m Silver', title_ml: 'സംസ്ഥാന അത്ലറ്റിക്സ് — 800 മീ വെള്ളി', student_name: 'Rahul P. Kumar', class_name: '10 A', category: 'sports', level: 'State', description_en: 'Silver medal in the under-17 boys 800 m at the Kerala State School Athletics Meet.', description_ml: 'കേരള സ്കൂൾ അത്ലറ്റിക്സ് മീറ്റിൽ അണ്ടർ-17 ആൺകുട്ടികളുടെ 800 മീറ്ററിൽ വെള്ളി മെഡൽ.', event_date: iso(30), icon: '🏅' },
         { id: uid(), title_en: 'Full A+ in SSLC Examination', title_ml: 'എസ്.എസ്.എൽ.സി പരീക്ഷയിൽ ഫുൾ എ+', student_name: '28 students, Class of 2026', class_name: 'SSLC 2026', category: 'academic', level: 'State', description_en: 'Twenty-eight students secured full A+ grades in the SSLC examination, a school record.', description_ml: 'എസ്.എസ്.എൽ.സി പരീക്ഷയിൽ ഇരുപത്തിയെട്ട് വിദ്യാർത്ഥികൾ ഫുൾ എ+ നേടി — സ്കൂൾ റെക്കോർഡ്.', event_date: iso(140), icon: '🎓' },
         { id: uid(), title_en: 'Kerala School Kalolsavam — Group Dance', title_ml: 'കേരള സ്കൂൾ കലോത്സവം — ഗ്രൂപ്പ് ഡാൻസ്', student_name: 'School Dance Troupe', class_name: 'Classes 8–12', category: 'arts', level: 'State', description_en: 'Our group dance team secured third place at the state school kalolsavam.', description_ml: 'സംസ്ഥാന സ്കൂൾ കലോത്സവത്തിൽ ഗ്രൂപ്പ് ഡാൻസിൽ മൂന്നാം സ്ഥാനം.', event_date: iso(95), icon: '💃' },
-        { id: uid(), title_en: 'NSS Best Unit Award', title_ml: 'എൻ.എസ്.എസ് മികച്ച യൂണിറ്റ്', student_name: 'NSS Unit, GHSS Pandi', class_name: 'Plus One & Plus Two', category: 'service', level: 'District', description_en: 'Recognised for the community health and cleanliness drive in Pandi panchayat.', description_ml: 'പാണ്ടി പഞ്ചായത്തിലെ ആരോഗ്യ-ശുചിത്വ യജ്ഞത്തിന് അംഗീകാരം.', event_date: iso(75), icon: '🤝' }
+        { id: uid(), title_en: 'JRC Best Unit Award', title_ml: 'ജെ.ആർ.സി മികച്ച യൂണിറ്റ്', student_name: 'JRC Unit (Junior Red Cross), GHSS Pandi', class_name: 'Plus One & Plus Two', category: 'service', level: 'District', description_en: 'Recognised for the community health, first-aid and cleanliness drive in Pandi panchayat.', description_ml: 'പാണ്ടി പഞ്ചായത്തിലെ ആരോഗ്യ-പ്രഥമശുശ്രൂഷ-ശുചിത്വ യജ്ഞത്തിന് അംഗീകാരം.', event_date: iso(75), icon: '🤝' }
       ],
       gallery: [
         { id: uid(), title_en: 'School main block and courtyard', title_ml: 'സ്കൂൾ പ്രധാന കെട്ടിടവും മുറ്റവും', category: 'campus', src: 'assets/gallery/campus-01.svg' },
@@ -122,7 +122,7 @@
         { id: uid(), title_en: 'Arts festival stage performance', title_ml: 'കലോത്സവ വേദി', category: 'arts', src: 'assets/gallery/arts-01.svg' },
         { id: uid(), title_en: 'Independence Day parade', title_ml: 'സ്വാതന്ത്ര്യദിന പരേഡ്', category: 'events', src: 'assets/gallery/events-01.svg' },
         { id: uid(), title_en: 'Classroom learning', title_ml: 'ക്ലാസ് മുറി പഠനം', category: 'campus', src: 'assets/gallery/class-01.svg' },
-        { id: uid(), title_en: 'NSS community service', title_ml: 'എൻ.എസ്.എസ് സേവനം', category: 'events', src: 'assets/gallery/nss-01.svg' },
+        { id: uid(), title_en: 'JRC community service', title_ml: 'ജെ.ആർ.സി സേവനം', category: 'events', src: 'assets/gallery/jrc-01.svg' },
         { id: uid(), title_en: 'Science exhibition', title_ml: 'ശാസ്ത്ര പ്രദർശനം', category: 'events', src: 'assets/gallery/science-01.svg' },
         { id: uid(), title_en: 'Basketball court', title_ml: 'ബാസ്കറ്റ്ബോൾ കോർട്ട്', category: 'sports', src: 'assets/gallery/sports-02.svg' }
       ],

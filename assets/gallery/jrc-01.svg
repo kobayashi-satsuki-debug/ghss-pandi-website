@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="NSS community service">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="JRC (Junior Red Cross) community service">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
       <stop offset="0%" stop-color="#3d1f0f"/><stop offset="100%" stop-color="#9c4a1a"/>
@@ -19,5 +19,5 @@
     <circle cx="470" cy="270" r="22"/><path d="M435 400 q35 -80 70 0"/>
   </g>
   <path d="M250 420 q150 -50 300 0" fill="none" stroke="#ffd9a0" stroke-width="8" opacity=".4"/>
-  <text x="40" y="560" font-family="Georgia, serif" font-size="22" fill="#ffffff" opacity=".8" letter-spacing="1">NSS community service</text>
+  <text x="40" y="560" font-family="Georgia, serif" font-size="22" fill="#ffffff" opacity=".8" letter-spacing="1">JRC community service</text>
 </svg>

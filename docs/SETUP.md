@@ -192,6 +192,10 @@ created, in preview mode and in live mode.
        makes. Nobody can write the table directly and nobody can read another
        account's rows; students and parents only ever see their own. Safe to run
        twice. See `docs/APP-SECURITY.md`.
+   21. `supabase/22-rename-nss-to-jrc.sql` — renames the old NSS entries in the
+       gallery and achievements tables to **JRC (Junior Red Cross)** and points
+       the gallery row at the new `assets/gallery/jrc-01.svg`. Only needed on a
+       database that was seeded before the rename; safe to run twice.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

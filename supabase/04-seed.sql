@@ -51,7 +51,7 @@ insert into public.gallery_items (title_en, title_ml, category, src) values
  ('Arts festival stage performance','കലോത്സവ വേദി','arts','assets/gallery/arts-01.svg'),
  ('Independence Day parade','സ്വാതന്ത്ര്യദിന പരേഡ്','events','assets/gallery/events-01.svg'),
  ('Classroom learning','ക്ലാസ് മുറി പഠനം','campus','assets/gallery/class-01.svg'),
- ('NSS community service','എൻ.എസ്.എസ് സേവനം','events','assets/gallery/nss-01.svg'),
+ ('JRC community service','ജെ.ആർ.സി സേവനം','events','assets/gallery/jrc-01.svg'),
  ('Science exhibition','ശാസ്ത്ര പ്രദർശനം','events','assets/gallery/science-01.svg'),
  ('Basketball court','ബാസ്കറ്റ്ബോൾ കോർട്ട്','sports','assets/gallery/sports-02.svg')
 on conflict do nothing;
@@ -79,10 +79,10 @@ select * from (values
   'Our group dance team secured third place at the state school kalolsavam.',
   'സംസ്ഥാന സ്കൂൾ കലോത്സവത്തിൽ ഗ്രൂപ്പ് ഡാൻസിൽ മൂന്നാം സ്ഥാനം.',
   'School Dance Troupe','Classes 8–12','arts','State', current_date - 95, '💃'),
- ('NSS Best Unit Award','എൻ.എസ്.എസ് മികച്ച യൂണിറ്റ്',
+ ('JRC Best Unit Award','ജെ.ആർ.സി മികച്ച യൂണിറ്റ്',
   'Recognised for the community health and cleanliness drive in Pandi panchayat.',
   'പാണ്ടി പഞ്ചായത്തിലെ ആരോഗ്യ-ശുചിത്വ യജ്ഞത്തിന് അംഗീകാരം.',
-  'NSS Unit, GHSS Pandi','Plus One & Plus Two','service','District', current_date - 75, '🤝')
+  'JRC Unit (Junior Red Cross), GHSS Pandi','Plus One & Plus Two','service','District', current_date - 75, '🤝')
 ) as v
 where not exists (select 1 from public.achievements);
 
