@@ -777,3 +777,20 @@ html[data-lang="ml"] .site-footer h4 { font-family: var(--font-ml); }
   .res-actions { align-self: flex-start; }
   .res-row { flex-direction: column; align-items: flex-start; }
 }
+
+/* ---- class teachers, Classes 1 to 12 ---- */
+.class-teacher-board { align-items: stretch; }
+.class-teacher-card { text-align: left; padding: 1.1rem 1.15rem; }
+.class-teacher-card h3 { margin: 0 0 .6rem; font-size: 1rem; }
+.class-teacher-line { display: flex; gap: .6rem; align-items: flex-start; margin-bottom: .55rem; }
+.class-teacher-line strong { display: block; font-size: .94rem; }
+.class-teacher-card .person-meta { margin: .1rem 0 0; }
+.avatar.sm { width: 34px; height: 34px; font-size: .8rem; flex: 0 0 auto; }
+.badge-green {
+  display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .02em;
+  color: #14603b; background: #e4f5ea; border: 1px solid #bfe6cf;
+  border-radius: 999px; padding: .05rem .45rem; vertical-align: middle;
+}
+@media (prefers-color-scheme: dark) {
+  .badge-green { color: #bdf0d0; background: rgba(24,120,74,.28); border-color: rgba(90,200,140,.35); }
+}

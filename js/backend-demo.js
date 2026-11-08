@@ -51,7 +51,7 @@
         { id: 'st-5-1', profile_id: null, full_name: 'Devika Menon', class: '5', roll_no: '14', admission_no: '2021012', status: 'active' }
       ],
       teachers: [
-        { id: t1, profile_id: t1, full_name: 'Sunitha Varma', employee_no: 'GHSS-1024', subject: 'English', designation: 'HSA English', status: 'approved', classes: ['10 A'] },
+        { id: t1, profile_id: t1, full_name: 'Sunitha Varma', employee_no: 'GHSS-1024', subject: 'English', designation: 'HSA English', status: 'approved', classes: ['6', '10 A'] },
         { id: t3, profile_id: t3, full_name: 'Joshy Mathew', employee_no: 'GHSS-1011', subject: 'Mathematics', designation: 'HSA Maths', status: 'approved', classes: ['10 A', '10 B'] },
         { id: t2, profile_id: t2, full_name: 'Anoop K. Menon', employee_no: 'GHSS-1099', subject: 'Science', designation: 'HSA Science', status: 'pending', classes: [] }
       ],
@@ -62,9 +62,21 @@
         { id: uid(), parent_id: p1, student_id: s1, relationship: 'Mother', status: 'approved', verified_by: 'admin-1', verified_at: iso(120), created_at: iso(148) }
       ],
       classes: [
+        { id: '1', name: 'Class 1', teacher_ids: [] },
+        { id: '2', name: 'Class 2', teacher_ids: [] },
+        { id: '3', name: 'Class 3', teacher_ids: [] },
+        { id: '4', name: 'Class 4', teacher_ids: [] },
+        { id: '5', name: 'Class 5', teacher_ids: [] },
+        { id: '6', name: 'Class 6', teacher_ids: [t1] },
+        { id: '7', name: 'Class 7', teacher_ids: [] },
+        { id: '8 A', name: 'Class 8 A', teacher_ids: [] },
+        { id: '8 B', name: 'Class 8 B', teacher_ids: [] },
+        { id: '9 A', name: 'Class 9 A', teacher_ids: [] },
+        { id: '9 B', name: 'Class 9 B', teacher_ids: [] },
         { id: '10 A', name: 'Class 10 A', teacher_ids: [t1, t3] },
         { id: '10 B', name: 'Class 10 B', teacher_ids: [t3] },
-        { id: '9 A', name: 'Class 9 A', teacher_ids: [] }
+        { id: 'Plus One Commerce', name: 'Plus One Commerce', teacher_ids: [] },
+        { id: 'Plus Two Commerce', name: 'Plus Two Commerce', teacher_ids: [] }
       ],
       notices: [
         { id: uid(), title_en: 'Half-yearly examination timetable published', title_ml: 'അർദ്ധവാർഷിക പരീക്ഷാ സമയക്രമം പ്രസിദ്ധീകരിച്ചു', body_en: 'The timetable for the half-yearly examinations (Classes 8–12) is now available at the school office and in the student portal.', body_ml: 'എട്ട് മുതൽ പന്ത്രണ്ട് വരെയുള്ള ക്ലാസുകളുടെ അർദ്ധവാർഷിക പരീക്ഷാ സമയക്രമം സ്കൂൾ ഓഫീസിലും വിദ്യാർത്ഥി പോർട്ടലിലും ലഭ്യമാണ്.', category: 'exam', is_published: true, is_pinned: true, author: 'Dr. K. Ramesh Kumar', created_at: iso(1, 9) },
