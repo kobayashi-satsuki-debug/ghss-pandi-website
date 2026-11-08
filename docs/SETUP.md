@@ -166,7 +166,13 @@ created, in preview mode and in live mode.
        list. The school offers the Commerce stream only. The file deletes a
        class only when no student is still in it and names anybody it had to
        leave; safe to run twice.
-   18. `supabase/19-self-healing-profile.sql` — the fix for *"You are signed in,
+   18. `supabase/20-fix-profile-now.sql` — run this first when *"You are signed in,
+       but this account has no school profile yet"* still appears. It changes no
+       password: it prints what the database holds for both office addresses, then
+       creates the missing profile as administrator (or moves a leftover one onto
+       the real account) and repairs every other account stuck the same way. Read
+       the last grid — both rows must say `admin`, `active`, `1`.
+   19. `supabase/19-self-healing-profile.sql` — the fix for *"You are signed in,
        but this account has no school profile yet"*. Adds `ensure_my_profile()`,
        which the site calls by itself the moment a signed-in account has no
        profile row, so the account repairs instead of waiting for the office. It
