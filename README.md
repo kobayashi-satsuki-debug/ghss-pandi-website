@@ -93,8 +93,10 @@ how to add a chapter: [docs/AI-BUDDY.md](docs/AI-BUDDY.md).
 
 The Android app is published from
 [kobayashi-satsuki-debug/GHSS-PANDI-app](https://github.com/kobayashi-satsuki-debug/GHSS-PANDI-app);
-`app.html` reads its newest release, so a new version shows up on the site with
-no edit here.
+`app.html` is the APK download page: it finds the newest release that has an
+`.apk` attached, links the button straight at that file, and shows the version,
+size, date and download count. A new release appears on the site with no edit
+here.
 
 Dashboard work in one tick-list — Site URL, redirect URLs, email templates,
 SMTP, the SQL files and the first administrator:

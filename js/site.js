@@ -29,7 +29,7 @@
     ['notices.html', 'nav.notices', 'Notices', 'അറിയിപ്പുകൾ'],
     ['results.html', 'nav.results', 'Results', 'ഫലങ്ങൾ'],
     ['resources.html', 'nav.resources', 'Resources', 'പഠന സാമഗ്രികൾ'],
-    ['app.html', 'nav.app', 'App', 'ആപ്പ്']
+    ['app.html', 'nav.app', 'Download APK', 'APK ഡൗൺലോഡ്']
   ];
 
   function page() {
@@ -109,7 +109,7 @@
             '<li><a href="register.html" data-en="Create an account" data-ml="അക്കൗണ്ട് ഉണ്ടാക്കുക">Create an account</a></li>' +
             '<li><a href="results.html" data-en="Exam results" data-ml="പരീക്ഷാ ഫലങ്ങൾ">Exam results</a></li>' +
             '<li><a href="resources.html" data-en="Notes and PDF resources" data-ml="കുറിപ്പുകളും PDF സാമഗ്രികളും">Notes and PDF resources</a></li>' +
-            '<li><a href="app.html" data-en="Download the app" data-ml="ആപ്പ് ഡൗൺലോഡ് ചെയ്യുക">Download the app</a></li>' +
+            '<li><a href="app.html" data-en="Download the APK" data-ml="APK ഡൗൺലോഡ് ചെയ്യുക">Download the APK</a></li>' +
             '<li><a href="staff.html" data-en="Headmaster / staff sign-in" data-ml="പ്രിൻസിപ്പൽ / സ്റ്റാഫ് ലോഗിൻ">Headmaster / staff sign-in</a></li>' +
             '<li><a href="admissions.html" data-en="Admissions" data-ml="പ്രവേശനം">Admissions</a></li>' +
           '</ul>' +

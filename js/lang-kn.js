@@ -1,6 +1,18 @@
 /* Kannada translations, keyed by the English string.
    Used by js/i18n.js when the site language is "kn". */
 window.KN_TEXT = {
+  'Download APK': 'APK ಡೌನ್‌ಲೋಡ್',
+  'Download the APK': 'APK ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ',
+  'All versions': 'ಎಲ್ಲಾ ಆವೃತ್ತಿಗಳು',
+  'Android APK': 'ಆಂಡ್ರಾಯ್ಡ್ APK',
+  'Download the GHSS PANDI APK': 'GHSS PANDI APK ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ',
+  'One tap gets the Android app file (.apk) — notices, exam results, study resources and the school chat. Free, published by the school itself.': 'ಒಂದೇ ಟ್ಯಾಪ್‌ನಲ್ಲಿ ಆಂಡ್ರಾಯ್ಡ್ ಆ್ಯಪ್ ಫೈಲ್ (.apk) — ಸೂಚನೆಗಳು, ಪರೀಕ್ಷಾ ಫಲಿತಾಂಶಗಳು, ಅಧ್ಯಯನ ಸಾಮಗ್ರಿ ಮತ್ತು ಶಾಲಾ ಚಾಟ್. ಉಚಿತ, ಶಾಲೆಯೇ ಪ್ರಕಟಿಸುತ್ತದೆ.',
+  'The APK is downloaded straight from the school\'s own GitHub releases — no ads, no in-app payments, no third-party store.': 'APK ಶಾಲೆಯ ಸ್ವಂತ GitHub ಬಿಡುಗಡೆಗಳಿಂದ ನೇರವಾಗಿ ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತದೆ — ಜಾಹೀರಾತು ಇಲ್ಲ, ಆ್ಯಪ್ ಒಳಗೆ ಪಾವತಿ ಇಲ್ಲ, ಮೂರನೇ ಪಕ್ಷದ ಸ್ಟೋರ್ ಇಲ್ಲ.',
+  'No account on GitHub is needed to download — the releases are public.': 'ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು GitHub ಖಾತೆ ಬೇಕಿಲ್ಲ — ಬಿಡುಗಡೆಗಳು ಸಾರ್ವಜನಿಕ.',
+  'Version': 'ಆವೃತ್ತಿ',
+  'Published': 'ಪ್ರಕಟಿಸಿದ್ದು',
+  'File': 'ಫೈಲ್',
+  'Downloaded': 'ಡೌನ್‌ಲೋಡ್‌ಗಳು',
   /* navigation and common */
   'Home': 'ಮುಖಪುಟ',
   'About': 'ನಮ್ಮ ಬಗ್ಗೆ',
