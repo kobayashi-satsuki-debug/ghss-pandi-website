@@ -132,10 +132,14 @@ created, in preview mode and in live mode.
    12. `supabase/14-profile-edit.sql` — lets a signed-in student, parent or
        teacher correct their own name and phone from **My profile**, while
        class, roll number, email and role stay office-only. Safe to re-run.
-   13. `supabase/12-set-admin-password.sql` — optional. Edit `v_password`, run
-       it, and the two office accounts can sign in without email (the address is
-       marked confirmed at the same time). Refuses to run on the placeholder or
-       on fewer than 12 characters; safe to re-run to change the password.
+   13. `supabase/12-set-admin-password.sql` — paste it and press Run; there is
+       nothing to edit. It invents a separate 18-character password for each
+       office account, marks both addresses confirmed, and prints the two
+       passwords in the result grid, so students can sign in without email
+       working. Copy them out and pass them on by phone or in person. Safe to
+       re-run whenever you want fresh ones. If you would rather choose the
+       password yourself, section 4 of the file holds a commented block for
+       that — keep it out of the repository.
    14. `supabase/15-admin-allowlist.sql` — locks the administrator role to the
        listed office addresses (`14101ghsspandi@gmail.com`,
        `ziyadahmad778@gmail.com`). Registration can never create an admin and
