@@ -164,6 +164,8 @@
     'err.nameLength': ['Please write your full name (2 to 80 characters).', 'പൂർണ്ണ പേര് നൽകുക (2 മുതൽ 80 അക്ഷരം വരെ).'],
     'err.phone': ['Enter a valid 10-digit mobile number.', 'ശരിയായ 10 അക്ക മൊബൈൽ നമ്പർ നൽകുക.'],
     'err.passwordShort': ['Password must be at least 12 characters.', 'പാസ്‌വേഡ് കുറഞ്ഞത് 12 അക്ഷരങ്ങൾ വേണം.'],
+    'err.wrongPassword': ['The current password is not correct.', 'ഇപ്പോഴത്തെ പാസ്‌വേഡ് ശരിയല്ല.'],
+    'err.samePassword': ['The new password must be different from the current one.', 'പുതിയ പാസ്‌വേഡ് ഇപ്പോഴത്തേതിൽ നിന്ന് വ്യത്യസ്തമായിരിക്കണം.'],
     'err.passwordCommon': ['That password is too easy to guess. Use a phrase only you would know.', 'ഈ പാസ്‌വേഡ് എളുപ്പം ഊഹിക്കാം. നിങ്ങൾക്ക് മാത്രം അറിയാവുന്ന ഒരു വാക്യം ഉപയോഗിക്കുക.'],
     'err.passwordPlain': ['Add a capital letter, a number or a symbol to the password.', 'പാസ്‌വേഡിൽ ഒരു വലിയ അക്ഷരമോ അക്കമോ ചിഹ്നമോ ചേർക്കുക.'],
     'err.tooManyTries': ['Too many wrong attempts. Wait {n} minute(s) and try again.', 'വളരെയധികം തെറ്റായ ശ്രമങ്ങൾ. {n} മിനിറ്റ് കാത്തിരുന്ന് വീണ്ടും ശ്രമിക്കുക.'],

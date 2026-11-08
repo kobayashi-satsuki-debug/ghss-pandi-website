@@ -12,18 +12,61 @@
 
   function bump() { lastActivity = Date.now(); }
 
+  const WARN_MINUTES = 2;
+  let warned = false;
+  let warnBar = null;
+
+  function hideWarning() {
+    warned = false;
+    if (warnBar && warnBar.parentNode) warnBar.parentNode.removeChild(warnBar);
+    warnBar = null;
+  }
+
+  function showWarning() {
+    if (warnBar) return;
+    warnBar = document.createElement('div');
+    warnBar.className = 'form-msg show error';
+    warnBar.setAttribute('role', 'alert');
+    warnBar.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border-radius:10px;text-align:center';
+    warnBar.innerHTML = '<span>' +
+      'You will be signed out in ' + WARN_MINUTES + ' minutes because this page has been idle. ' +
+      '/ ഈ പേജ് ഉപയോഗിക്കാത്തതിനാൽ ' + WARN_MINUTES + ' മിനിറ്റിൽ സൈൻ ഔട്ട് ചെയ്യും.</span> ' +
+      '<button type="button" class="btn btn-primary btn-sm" data-stay style="margin-left:.6rem">Stay signed in / തുടരുക</button>';
+    warnBar.querySelector('[data-stay]').addEventListener('click', function () { bump(); hideWarning(); });
+    document.body.appendChild(warnBar);
+  }
+
   function startIdleGuard() {
     if (timer) return;
     ['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(function (ev) {
       window.addEventListener(ev, bump, { passive: true });
     });
     timer = setInterval(function () {
-      if (Date.now() - lastActivity < IDLE_MINUTES * 60000) return;
+      const idleMin = (Date.now() - lastActivity) / 60000;
+      if (idleMin < IDLE_MINUTES) {
+        if (idleMin >= IDLE_MINUTES - WARN_MINUTES && !warned) { warned = true; showWarning(); }
+        else if (idleMin < IDLE_MINUTES - WARN_MINUTES && warned) hideWarning();
+        return;
+      }
       clearInterval(timer);
       timer = null;
+      hideWarning();
       try { if (window.API && API.signOut) API.signOut(); } catch (e) { /* ignore */ }
       location.replace(LOGIN_PAGE + '?timeout=1');
-    }, 30000);
+    }, 15000);
+  }
+
+  /* 0 weak … 4 strong, for the little bar under a new-password field */
+  function strength(pw) {
+    const v = String(pw || '');
+    if (!v) return { score: 0, label: 'empty' };
+    let score = 0;
+    if (v.length >= 12) score++;
+    if (v.length >= 16) score++;
+    if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v)) score++;
+    if (weakReason(v)) score = Math.min(score, 1);
+    return { score: Math.max(0, Math.min(4, score)), label: ['empty', 'weak', 'fair', 'good', 'strong'][Math.max(0, Math.min(4, score))] };
   }
 
   function guardFrame() {
@@ -160,6 +203,7 @@
     passwordMin: PASSWORD_MIN,
     randomPassword: randomPassword,
     checkPassword: checkPassword,
+    strength: strength,
     noteFailedSignIn: noteFailedSignIn,
     signInWaitMinutes: signInWaitMinutes,
     clearSignInTries: clearTries

@@ -86,7 +86,8 @@ Preview accounts (password `pandi2026`):
 
 Full instructions, security notes and the custom-domain checklist:
 [docs/SETUP.md](docs/SETUP.md). How roles, rate limits and headers are
-enforced: [docs/SECURITY.md](docs/SECURITY.md).
+enforced: [docs/SECURITY.md](docs/SECURITY.md). What each account can do about
+its own password, sessions and history: [docs/APP-SECURITY.md](docs/APP-SECURITY.md).
 
 Dashboard work in one tick-list — Site URL, redirect URLs, email templates,
 SMTP, the SQL files and the first administrator:

@@ -161,6 +161,125 @@
   };
 
   // ---------------- profile ----------------
+  // ================= app security (every signed-in person) =================
+  PANES.security = {
+    label: () => L('Security', 'സുരക്ഷ'),
+    async render() {
+      let events = [];
+      try { events = await API.securityEvents(30); } catch (e) { events = []; }
+      const kindLabel = k => ({
+        password_changed: L('Password changed', 'പാസ്‌വേഡ് മാറ്റി'),
+        signed_out_everywhere: L('Signed out everywhere', 'എല്ലായിടത്തുനിന്നും സൈൻ ഔട്ട്'),
+        signin_code: L('Signed in with a code', 'കോഡ് ഉപയോഗിച്ച് സൈൻ ഇൻ'),
+        office_change: L('Changed by the school office', 'സ്കൂൾ ഓഫീസ് മാറ്റിയത്')
+      })[k] || k;
+      const when = v => { try { return new Date(v).toLocaleString(); } catch (e) { return String(v || ''); } };
+      return head(L('Security', 'സുരക്ഷ'),
+        L('Your password, your sessions, and what has happened on this account.',
+          'നിങ്ങളുടെ പാസ്‌വേഡ്, സെഷനുകൾ, ഈ അക്കൗണ്ടിൽ നടന്നത്.')) +
+        '<div class="dash-card"><h3>' + L('Change your password', 'പാസ്‌വേഡ് മാറ്റുക') + '</h3>' +
+          '<form class="mini-form" id="sec-form" novalidate autocomplete="off">' +
+            '<div class="form-row">' +
+              '<div class="form-field"><label for="sec-current">' + L('Current password', 'ഇപ്പോഴത്തെ പാസ്‌വേഡ്') + '</label>' +
+                '<input id="sec-current" type="password" autocomplete="current-password" required></div>' +
+              '<div class="form-field"><label for="sec-new">' + L('New password', 'പുതിയ പാസ്‌വേഡ്') + '</label>' +
+                '<input id="sec-new" type="password" autocomplete="new-password" minlength="12" required>' +
+                '<div id="sec-strength" class="small muted" aria-live="polite"></div></div>' +
+              '<div class="form-field"><label for="sec-confirm">' + L('Repeat it', 'ആവർത്തിക്കുക') + '</label>' +
+                '<input id="sec-confirm" type="password" autocomplete="new-password" minlength="12" required></div>' +
+            '</div>' +
+            '<p class="small muted">' + L('At least 12 characters, with a capital letter, a number and a symbol. You stay signed in here.',
+              'കുറഞ്ഞത് 12 അക്ഷരങ്ങൾ, ഒരു വലിയക്ഷരം, ഒരു അക്കം, ഒരു ചിഹ്നം. ഇവിടെ സൈൻ ഇൻ ചെയ്തിരിക്കും.') + '</p>' +
+            '<div class="form-msg" id="sec-msg" role="alert"></div>' +
+            '<div><button class="btn btn-primary" type="submit" id="sec-save">' + L('Update password', 'പാസ്‌വേഡ് പുതുക്കുക') + '</button></div>' +
+          '</form></div>' +
+        '<div class="dash-card"><h3>' + L('Sessions', 'സെഷനുകൾ') + '</h3>' +
+          '<p class="small muted">' + L('This page signs itself out after 30 minutes idle. Signing out everywhere also ends any session left open on a phone or a shared computer.',
+            'ഈ പേജ് 30 മിനിറ്റ് ഉപയോഗിക്കാതെയിരുന്നാൽ സ്വയം സൈൻ ഔട്ട് ചെയ്യും. എല്ലായിടത്തുനിന്നും സൈൻ ഔട്ട് ചെയ്താൽ ഫോണിലും പങ്കിട്ട കമ്പ്യൂട്ടറിലും തുറന്നിരിക്കുന്ന സെഷനും അവസാനിക്കും.') + '</p>' +
+          '<button class="btn btn-ghost" type="button" id="sec-global">' + L('Sign out everywhere', 'എല്ലായിടത്തുനിന്നും സൈൻ ഔട്ട്') + '</button></div>' +
+        '<div class="dash-card"><h3>' + L('Recent activity', 'സമീപകാല പ്രവർത്തനങ്ങൾ') + '</h3>' +
+          (events.length
+            ? '<table class="tbl"><tbody>' + events.map(e =>
+                '<tr><th style="width:45%">' + UI.esc(kindLabel(e.kind)) + '</th><td>' + UI.esc(when(e.created_at)) +
+                (e.detail ? '<div class="small muted">' + UI.esc(e.detail) + '</div>' : '') + '</td></tr>').join('') + '</tbody></table>'
+            : '<p class="small muted">' + L('Nothing recorded yet. Password changes and sign-outs appear here.',
+                'ഇതുവരെ ഒന്നുമില്ല. പാസ്‌വേഡ് മാറ്റങ്ങളും സൈൻ ഔട്ടുകളും ഇവിടെ വരും.') + '</p>') +
+        '</div>';
+    },
+    async after() {
+      const form = document.getElementById('sec-form');
+      const msg = document.getElementById('sec-msg');
+      const meter = document.getElementById('sec-strength');
+      const next = document.getElementById('sec-new');
+      if (next && meter) {
+        next.addEventListener('input', function () {
+          const st = (window.Security && Security.strength) ? Security.strength(next.value) : { score: 0, label: '' };
+          meter.textContent = next.value
+            ? L('Strength: ' + st.label, 'ശക്തി: ' + ({ empty: 'ശൂന്യം', weak: 'ദുർബലം', fair: 'മിതം', good: 'നല്ലത്', strong: 'വളരെ നല്ലത്' }[st.label] || st.label))
+            : '';
+          meter.style.color = st.score >= 3 ? '#14603b' : st.score === 2 ? '#8a6d1d' : '#a3232f';
+        });
+      }
+      if (form) form.addEventListener('submit', async e => {
+        e.preventDefault();
+        UI.hideMsg(msg);
+        const cur = document.getElementById('sec-current').value;
+        const nw = document.getElementById('sec-new').value;
+        const again = document.getElementById('sec-confirm').value;
+        if (nw !== again) return UI.showMsg(msg, L('The two new passwords do not match.', 'പുതിയ പാസ്‌വേഡുകൾ തമ്മിൽ ഒത്തുപോകുന്നില്ല.'), 'error');
+        const check = window.Security ? Security.checkPassword(nw) : { ok: nw.length >= 12 };
+        if (!check.ok) return UI.showMsg(msg, L('Use at least 12 characters with a capital letter, a number and a symbol.',
+          'കുറഞ്ഞത് 12 അക്ഷരങ്ങൾ, ഒരു വലിയക്ഷരം, ഒരു അക്കം, ഒരു ചിഹ്നം ഉപയോഗിക്കുക.'), 'error');
+        const btn = document.getElementById('sec-save');
+        UI.busy(btn, true);
+        try {
+          await API.changePassword(cur, nw);
+          form.reset();
+          if (meter) meter.textContent = '';
+          UI.showMsg(msg, L('Password changed. Use the new one next time you sign in.', 'പാസ്‌വേഡ് മാറ്റി. അടുത്ത തവണ പുതിയത് ഉപയോഗിക്കുക.'), 'success');
+          renderPane('security');
+        } catch (err) {
+          UI.showMsg(msg, API.errorText(err), 'error');
+        } finally { UI.busy(btn, false); }
+      });
+      const out = document.getElementById('sec-global');
+      if (out) out.addEventListener('click', async () => {
+        if (!window.confirm(L('Sign out of every device, including this one?', 'ഈ ഉപകരണം ഉൾപ്പെടെ എല്ലായിടത്തുനിന്നും സൈൻ ഔട്ട് ചെയ്യണോ?'))) return;
+        UI.busy(out, true);
+        try { await API.signOutEverywhere(); } catch (e) { /* still leave */ }
+        Site.logout();
+      });
+    }
+  };
+
+  // ================= security audit (administrators only) =================
+  PANES.audit = {
+    label: () => L('Security log', 'സുരക്ഷാ രേഖ'),
+    async render() {
+      let rows = [];
+      let err = '';
+      try { rows = await API.adminSecurityEvents(200); } catch (e) { err = API.errorText(e); }
+      const kindLabel = k => ({ password_changed: L('Password changed', 'പാസ്‌വേഡ് മാറ്റി'),
+        signed_out_everywhere: L('Signed out everywhere', 'എല്ലായിടത്തുനിന്നും സൈൻ ഔട്ട്'),
+        signin_code: L('Signed in with a code', 'കോഡ് ഉപയോഗിച്ച് സൈൻ ഇൻ'),
+        office_change: L('Office changed an account', 'ഓഫീസ് അക്കൗണ്ട് മാറ്റി') })[k] || k;
+      const when = v => { try { return new Date(v).toLocaleString(); } catch (e) { return String(v || ''); } };
+      let body;
+      if (err) body = '<div class="empty"><span class="big">⚠️</span>' + UI.esc(err) + '</div>';
+      else if (!rows.length) body = none(L('Nothing recorded yet.', 'ഇതുവരെ ഒന്നുമില്ല.'));
+      else body = '<div class="dash-card"><table class="tbl"><thead><tr>' +
+        '<th>' + L('When', 'എപ്പോൾ') + '</th><th>' + L('Account', 'അക്കൗണ്ട്') + '</th>' +
+        '<th>' + L('What happened', 'എന്ത് സംഭവിച്ചു') + '</th><th>' + L('Address', 'വിലാസം') + '</th>' +
+        '</tr></thead><tbody>' + rows.map(r =>
+          '<tr><td>' + UI.esc(when(r.created_at)) + '</td><td>' + UI.esc(r.email || '—') + '</td><td>' +
+          UI.esc(kindLabel(r.kind)) + (r.detail ? '<div class="small muted">' + UI.esc(r.detail) + '</div>' : '') +
+          '</td><td class="small muted">' + UI.esc(r.ip || '—') + '</td></tr>').join('') + '</tbody></table></div>';
+      return head(L('Security log', 'സുരക്ഷാ രേഖ'),
+        L('Password changes, sign-outs and office changes across every account.',
+          'എല്ലാ അക്കൗണ്ടുകളിലെയും പാസ്‌വേഡ് മാറ്റങ്ങളും സൈൻ ഔട്ടുകളും ഓഫീസ് മാറ്റങ്ങളും.')) + body;
+    }
+  };
+
   PANES.profile = {
     label: () => L('My profile', 'എന്റെ പ്രൊഫൈൽ'),
     async render() {
@@ -1137,6 +1256,8 @@
   if (role === 'parent') MENU.push('children');
   if (isStaff) MENU.push('publish', 'resources', 'notices', 'moderation', 'students', 'content');
   if (isAdmin) MENU.push('registrations', 'parents', 'accounts', 'classes', 'enquiries', 'rollover', 'history');
+  MENU.push('security');
+  if (isAdmin) MENU.push('audit');
   MENU.push('profile');
   const visible = MENU.filter(k => PANES[k]);
   let current = 'overview';

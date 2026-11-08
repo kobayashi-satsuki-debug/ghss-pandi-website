@@ -182,6 +182,13 @@ created, in preview mode and in live mode.
        account, lists every account in that state, and repairs them all. Safe to
        run twice; needs no password. Run it immediately if anybody sees the
        message.
+   20. `supabase/21-app-security.sql` — the audit trail behind the **Security**
+       pane and the administrator's **Security log**. Creates
+       `security_events`, the `log_security_event()` writer, the two readers and
+       a trigger that records every role, status or class change the office
+       makes. Nobody can write the table directly and nobody can read another
+       account's rows; students and parents only ever see their own. Safe to run
+       twice. See `docs/APP-SECURITY.md`.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

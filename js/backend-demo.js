@@ -147,6 +147,20 @@
   }
   function emit() { listeners.forEach(fn => { try { fn(); } catch (e) {} }); }
 
+  function logSecurity(kind, detail) {
+    const id = sessionId();
+    const p = id ? profileById(id) : null;
+    db.security_events = db.security_events || [];
+    db.security_events.push({
+      id: 'se-' + Math.random().toString(36).slice(2, 10),
+      profile_id: p ? p.id : null,
+      email: p ? p.email : '',
+      kind: String(kind || '').slice(0, 40),
+      detail: String(detail || '').slice(0, 300),
+      created_at: now()
+    });
+  }
+
   let db = load();
   if (!db) { db = seed(); save(db); }
 
@@ -475,8 +489,44 @@
       const p = requireRole(null, sessionId());
       if ((pw || '').length < 8) throw new Error('err.passwordShort');
       p.password_hash = await hash(pw);
+      logSecurity('password_changed', 'self service');
       save(db);
       return true;
+    },
+
+    async changePassword(current, next) {
+      const p = requireRole(null, sessionId());
+      if (!current) throw new Error('err.required');
+      if ((next || '').length < 12) throw new Error('err.passwordShort');
+      if (current === next) throw new Error('err.samePassword');
+      const h = await hash(current);
+      if (p.password_hash && p.password_hash !== h) throw new Error('err.wrongPassword');
+      p.password_hash = await hash(next);
+      logSecurity('password_changed', 'self service');
+      save(db);
+      return true;
+    },
+
+    async signOutEverywhere() {
+      const p = requireRole(null, sessionId());
+      logSecurity('signed_out_everywhere', 'all devices');
+      save(db);
+      setSession(null);
+      return true;
+    },
+
+    async adminSecurityEvents(limit) {
+      requireRole(['admin']);
+      const all = (db.security_events || []).slice(-Math.max(1, Math.min(Number(limit) || 200, 500))).reverse();
+      return all.map(e => ({ email: e.email, kind: e.kind, detail: e.detail, ip: '', created_at: e.created_at }));
+    },
+
+    async securityEvents(limit) {
+      const p = sessionId() ? profileById(sessionId()) : null;
+      if (!p) return [];
+      const mine = (db.security_events || []).filter(e => e.profile_id === p.id);
+      return mine.slice(-Math.max(1, Math.min(Number(limit) || 50, 200))).reverse()
+        .map(e => ({ kind: e.kind, detail: e.detail, created_at: e.created_at }));
     },
 
     // ---- notices ----

@@ -217,6 +217,7 @@
         if (/invalid|incorrect|token/i.test(m)) throw mapErr('auth.otpWrong', error);
         fail(error);
       }
+      try { await client().rpc('log_security_event', { p_kind: 'signin_code', p_detail: 'six-digit code' }); } catch (e) { /* older database */ }
       return this.settleSession();
     },
 
@@ -526,6 +527,55 @@
       if (error) fail(error);
       cachedProfile = null;
       return data || {};
+    },
+
+    /* ---- app security: self-service password, global sign-out, audit trail ---- */
+    async changePassword(currentPassword, newPassword) {
+      const { data } = await client().auth.getSession();
+      const email = data && data.session && data.session.user && data.session.user.email;
+      if (!email) throw new Error('err.invalidlogin');
+      if (!currentPassword) throw new Error('err.required');
+      const { error: check } = await client().auth.signInWithPassword({
+        email, password: String(currentPassword)
+      });
+      if (check) throw mapErr('err.wrongPassword', check);
+      const { error } = await client().auth.updateUser({ password: String(newPassword) });
+      if (error) {
+        const m = error.message || '';
+        if (/weak|strength|characters|at least|short/i.test(m)) throw mapErr('err.passwordShort', error);
+        if (/same|should be different/i.test(m)) throw mapErr('err.samePassword', error);
+        fail(error);
+      }
+      try { await client().rpc('log_security_event', { p_kind: 'password_changed', p_detail: 'self service' }); } catch (e) { /* older database */ }
+      return true;
+    },
+
+    async signOutEverywhere() {
+      try { await client().rpc('log_security_event', { p_kind: 'signed_out_everywhere', p_detail: 'all devices' }); } catch (e) { /* older database */ }
+      try {
+        await client().auth.signOut({ scope: 'global' });
+      } catch (e) {
+        await client().auth.signOut();
+      }
+      cachedProfile = null;
+      try { localStorage.removeItem('ghss_signin_tries'); } catch (e) { /* storage off */ }
+      return true;
+    },
+
+    async adminSecurityEvents(limit) {
+      const { data, error } = await client().rpc('admin_security_events', { p_limit: Number(limit) || 200 });
+      if (error) fail(error);
+      return data || [];
+    },
+
+    async securityEvents(limit) {
+      const { data, error } = await client().rpc('my_security_events', { p_limit: Number(limit) || 50 });
+      if (error) {
+        const m = String(error.code || '') + ' ' + String(error.message || '');
+        if (/PGRST202|42883|does not exist|schema cache/i.test(m)) return [];
+        fail(error);
+      }
+      return data || [];
     },
 
     async previewYearRollover() {
