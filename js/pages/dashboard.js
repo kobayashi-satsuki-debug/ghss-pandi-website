@@ -539,13 +539,15 @@
             const sets = [];
             for (const c of (isAdmin ? classes : (session.classes || []))) {
               try {
-                const rows = await API.resultsForLookup(c, '\u0000__none__');
-                if (rows && rows.length) sets.push(rows);
+                const rows = await API.recentResults(c, 3);
+                if (rows && rows.length) sets.push(...rows);
               } catch (e) { /* class not permitted or empty */ }
             }
+            sets.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
             holder.innerHTML = sets.length
-              ? sets.slice(0, 2).map(rows => '<div class="list-row"><div class="grow"><strong>' + UI.esc(rows[0].exam) + ' · ' + UI.esc(rows[0].class) +
-                '</strong><div class="sub">' + rows.length + ' ' + L('subject rows', 'വിഷയ വരികൾ') + '</div></div></div>').join('')
+              ? sets.slice(0, 6).map(r => '<div class="list-row"><div class="grow"><strong>' + UI.esc(r.exam) + ' · ' + UI.esc(r.class) +
+                '</strong><div class="sub">' + L('Roll', 'റോൾ') + ' ' + UI.esc(r.roll_no) + ' · ' + r.count + ' ' +
+                L('subject rows', 'വിഷയ വരികൾ') + ' · ' + UI.formatDate(r.published_at) + '</div></div></div>').join('')
               : '<div class="empty">' + L('Nothing published from this dashboard yet.', 'ഇതുവരെ ഒന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.') + '</div>';
           } catch (e) { holder.innerHTML = '<div class="empty">' + API.errorText(e) + '</div>'; }
         }

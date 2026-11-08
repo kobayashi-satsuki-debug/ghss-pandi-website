@@ -323,6 +323,19 @@
       if (error) fail(error);
       return (data || []).map(r => ({ ...r, exam: r.exam_name }));
     },
+    async recentResults(className, limit) {
+      const { data, error } = await client().from('results')
+        .select('exam:exam_name, class, roll_no, published_at')
+        .eq('class', className).order('published_at', { ascending: false }).limit(200);
+      if (error) fail(error);
+      const seen = {};
+      (data || []).forEach(r => {
+        const k = r.exam + '|' + r.roll_no;
+        if (!seen[k]) seen[k] = { exam: r.exam, class: r.class, roll_no: r.roll_no, published_at: r.published_at, count: 0 };
+        seen[k].count += 1;
+      });
+      return Object.values(seen).slice(0, limit || 5);
+    },
     async resultsForStudent(studentId) {
       const { data, error } = await client().from('results').select('*').eq('student_id', studentId)
         .order('exam_name').order('subject');

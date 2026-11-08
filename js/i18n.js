@@ -174,6 +174,8 @@
     'res.toobig': ['That file is bigger than 20 MB.', 'ഫയൽ 20 MB-ൽ കൂടുതലാണ്.'],
     'res.readfail': ['That file could not be read. Try another PDF.', 'ഫയൽ വായിക്കാനായില്ല. മറ്റൊരു PDF ശ്രമിക്കുക.'],
     'err.noperm': ['You do not have permission to do that.', 'അതിന് നിങ്ങൾക്ക് അനുമതിയില്ല.'],
+    'err.invalidMarks': ['That mark is not a number between 0 and the maximum.', 'മാർക്ക് 0-നും പരമാവധിക്കും ഇടയിലുള്ള സംഖ്യയായിരിക്കണം.'],
+    'err.classNotMine': ['You are not assigned to that class.', 'ആ ക്ലാസിൽ നിങ്ങൾക്ക് ചുമതലയില്ല.'],
     'err.session': ['Please sign in again.', 'വീണ്ടും പ്രവേശിക്കുക.'],
     'err.demo': ['Demo mode: data is stored only in this browser. Connect Supabase to go live.', 'ഡെമോ മോഡ്: ഡാറ്റ ഈ ബ്രൗസറിൽ മാത്രം. ലൈവ് ആകാൻ Supabase ബന്ധിപ്പിക്കുക.'],
     'err.setup': ['Supabase is not configured yet. Add your project URL and anon key in js/config.js.', 'Supabase ഇതുവരെ ക്രമീകരിച്ചിട്ടില്ല. js/config.js ൽ വിവരങ്ങൾ ചേർക്കുക.'],

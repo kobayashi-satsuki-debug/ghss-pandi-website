@@ -160,11 +160,17 @@
 
 
   /* The last gate before a session is handed out. */
+  function publicProfile(p) {
+    const copy = { ...p };
+    delete copy.password_hash;
+    return copy;
+  }
+
   function openSession(p) {
     if (p.status === 'pending') throw new Error(p.role === 'teacher' ? 'auth.pendingTeacher' : 'auth.pendingStudent');
     if (p.status === 'disabled') throw new Error('auth.disabled');
     setSession(p.id);
-    return p;
+    return publicProfile(p);
   }
 
   async function createAccount(rec) {
@@ -390,7 +396,7 @@
         const links = db.links.filter(l => l.parent_id === (db.parents.find(x => x.profile_id === p.id) || {}).id);
         extra.children = links.map(l => ({ link: l, student: db.students.find(s => s.id === l.student_id) }));
       }
-      return { profile: p, ...extra };
+      return { profile: publicProfile(p), ...extra };
     },
 
     async requestResetOtp(email) {
@@ -474,7 +480,33 @@
       return db.results.filter(r => r.class === className && String(r.roll_no) === String(rollNo))
         .sort((a, b) => a.subject.localeCompare(b.subject));
     },
+    async recentResults(className, limit) {
+      const me = requireRole(['teacher', 'admin'], sessionId());
+      if (me.role === 'teacher') {
+        const t = teacherOf(me.id);
+        if (!t || t.classes.indexOf(className) === -1) throw new Error('err.classNotMine');
+      }
+      const rows = db.results.filter(r => r.class === className)
+        .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+      const seen = {};
+      rows.forEach(r => { const k = r.exam + '|' + r.roll_no; if (!seen[k]) seen[k] = { exam: r.exam, class: r.class, roll_no: r.roll_no, published_at: r.published_at, count: 0 }; seen[k].count += 1; });
+      return Object.values(seen).slice(0, limit || 5);
+    },
     async resultsForStudent(studentId) {
+      const me = requireRole(['student', 'teacher', 'parent', 'admin'], sessionId());
+      const st = db.students.find(s => s.id === studentId);
+      if (!st) return [];
+      let allowed = me.role === 'admin';
+      if (me.role === 'student') allowed = st.profile_id === me.id;
+      if (me.role === 'teacher') {
+        const t = teacherOf(me.id);
+        allowed = !!(t && t.classes.indexOf(st.class) !== -1);
+      }
+      if (me.role === 'parent') {
+        const parent = db.parents.find(x => x.profile_id === me.id);
+        allowed = !!(parent && db.links.some(l => l.parent_id === parent.id && l.student_id === st.id && l.status === 'approved'));
+      }
+      if (!allowed) throw new Error('err.noperm');
       return db.results.filter(r => r.student_id === studentId)
         .sort((a, b) => a.subject.localeCompare(b.subject));
     },
@@ -539,15 +571,24 @@
 
     async publishResults(rows) {
       const me = requireRole(['teacher', 'admin'], sessionId());
+      const mine = me.role === 'teacher' ? (teacherOf(me.id) || { classes: [] }).classes : null;
       rows.forEach(r => {
         if (!r.class || !r.roll_no || !r.subject) throw new Error('err.required');
+        if (mine && mine.indexOf(r.class) === -1) throw new Error('err.classNotMine');
+        const max = Number(r.max_marks) || 100;
+        const marks = Number(r.marks);
+        if (!(marks >= 0) || marks > max) throw new Error('err.invalidMarks');
         const student = db.students.find(s => s.class === r.class && String(s.roll_no) === String(r.roll_no));
-        db.results.push({
-          id: uid(), student_id: student ? student.id : null, class: r.class, roll_no: String(r.roll_no),
-          exam: r.exam, subject: r.subject, marks: r.marks, max_marks: r.max_marks || 100,
-          grade: r.grade || gradeFor(r.marks, r.max_marks || 100),
+        const existing = db.results.find(x => x.class === r.class && String(x.roll_no) === String(r.roll_no)
+          && x.exam === r.exam && x.subject === r.subject);
+        const row = {
+          student_id: student ? student.id : null, class: r.class, roll_no: String(r.roll_no),
+          exam: r.exam, subject: r.subject, marks, max_marks: max,
+          grade: r.grade || gradeFor(marks, max),
           published_at: now(), published_by: me.full_name
-        });
+        };
+        if (existing) Object.assign(existing, row);
+        else db.results.push({ id: uid(), ...row });
       });
       save(db); return true;
     },
@@ -690,8 +731,9 @@
       save(db); return true;
     },
     async findStudentForLink(className, rollNo) {
+      requireRole(['parent'], sessionId());
       const s = db.students.find(x => x.class === className && String(x.roll_no) === String(rollNo));
-      return s || null;
+      return s ? { id: s.id, full_name: s.full_name, class: s.class, roll_no: s.roll_no } : null;
     },
     async decideParentLink(linkId, approve) {
       const me = requireRole(['admin'], sessionId());
