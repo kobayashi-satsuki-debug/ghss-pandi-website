@@ -1055,6 +1055,68 @@
     };
 
     // ================= admin: moderation history =================
+    PANES.rollover = {
+      label: () => L('Year rollover', 'വാർഷിക പ്രൊമോഷൻ'),
+      async render() {
+        let rows = [], runs = [];
+        try { rows = await API.previewYearRollover(); } catch (e) { return head(L('Year rollover', 'വാർഷിക പ്രൊമോഷൻ'), '') + none(API.errorText(e)); }
+        try { runs = await API.rolloverHistory(); } catch (e) { runs = []; }
+        const year = new Date().getFullYear();
+        const leaving = rows.filter(r => /remove/i.test(r.action)).reduce((n, r) => n + Number(r.accounts || 0), 0);
+        const moving = rows.filter(r => /promote/i.test(r.action)).reduce((n, r) => n + Number(r.students || 0), 0);
+        return head(L('Year rollover', 'വാർഷിക പ്രൊമോഷൻ'),
+          L('On 1 June every class moves up one, and Class 10 and Plus Two leave with their accounts removed. Exam results of the finished year are archived first.',
+            'ജൂൺ 1-ന് എല്ലാ ക്ലാസുകളും അടുത്ത ക്ലാസിലേക്ക് പോകുന്നു; പത്താം ക്ലാസും പ്ലസ് ടു ക്ലാസും അക്കൗണ്ടോടെ ഒഴിവാകുന്നു. പഴയ വർഷത്തെ ഫലങ്ങൾ ആദ്യം ആർക്കൈവ് ചെയ്യും.')) +
+          '<div class="stat-row" style="margin-bottom:1rem">' +
+            '<div class="card"><strong>' + moving + '</strong><span>' + L('students to promote', 'പ്രൊമോട്ട് ചെയ്യേണ്ട വിദ്യാർത്ഥികൾ') + '</span></div>' +
+            '<div class="card"><strong>' + leaving + '</strong><span>' + L('accounts that will be removed', 'നീക്കം ചെയ്യുന്ന അക്കൗണ്ടുകൾ') + '</span></div>' +
+            '<div class="card"><strong>' + year + '</strong><span>' + L('this year\'s rollover', 'ഈ വർഷത്തെ പ്രൊമോഷൻ') + '</span></div>' +
+          '</div>' +
+          '<div class="list-card" style="overflow:auto"><table class="tbl"><thead><tr><th>' + L('Class', 'ക്ലാസ്') + '</th><th>' + L('Students', 'വിദ്യാർത്ഥികൾ') + '</th><th>' + L('With an account', 'അക്കൗണ്ട് ഉള്ളവർ') + '</th><th>' + L('On 1 June', 'ജൂൺ 1-ന്') + '</th></tr></thead><tbody>' +
+            rows.map(r => '<tr><td>' + UI.esc(r.class_name) + '</td><td>' + r.students + '</td><td>' + r.accounts + '</td><td>' +
+              (r.next_class ? '<span class="pill">' + L('Move to', 'പോകുന്നത്') + ' ' + UI.esc(r.next_class) + '</span>'
+                            : '<span class="pill danger">' + L('Account removed', 'അക്കൗണ്ട് നീക്കും') + '</span>') + '</td></tr>').join('') +
+            '</tbody></table></div>' +
+          '<div class="card" style="margin-top:1rem;border-color:#e6b7b7">' +
+            '<h3>' + L('Run the rollover', 'പ്രൊമോഷൻ നടത്തുക') + '</h3>' +
+            '<p class="sub">' + L('This archives every current result, clears the leaving classes\' chat, removes the leaving accounts and their email addresses, and moves every other class up. It cannot be undone. It runs once per year.',
+              'ഇത് നിലവിലെ എല്ലാ ഫലങ്ങളും ആർക്കൈവ് ചെയ്യും, ഒഴിവാകുന്ന ക്ലാസുകളുടെ ചാറ്റ് മായ്ക്കും, പോകുന്നവരുടെ അക്കൗണ്ടും ഇമെയിലും നീക്കും, ബാക്കിയുള്ളവരെ അടുത്ത ക്ലാസിലേക്ക് മാറ്റും. പിൻവലിക്കാനാവില്ല. വർഷത്തിൽ ഒരിക്കൽ മാത്രം.') + '</p>' +
+            '<div class="form-field"><label for="roll-year">' + L('Type ' + year + ' to confirm', year + ' എന്ന് ടൈപ്പ് ചെയ്ത് സ്ഥിരീകരിക്കുക') + '</label>' +
+            '<input id="roll-year" inputmode="numeric" placeholder="' + year + '" autocomplete="off"></div>' +
+            '<div class="form-msg" id="roll-msg" role="alert"></div>' +
+            '<button class="btn btn-primary" type="button" id="roll-run">' + L('Run the ' + year + ' rollover', year + ' പ്രൊമോഷൻ നടത്തുക') + '</button>' +
+          '</div>' +
+          (runs.length ? '<h3 style="margin-top:1.4rem">' + L('Past rollovers', 'കഴിഞ്ഞ പ്രൊമോഷനുകൾ') + '</h3><div class="list-card" style="overflow:auto"><table class="tbl"><thead><tr><th>' + L('Year', 'വർഷം') + '</th><th>' + L('When', 'സമയം') + '</th><th>' + L('Promoted', 'പ്രൊമോട്ട്') + '</th><th>' + L('Accounts removed', 'അക്കൗണ്ടുകൾ നീക്കി') + '</th><th>' + L('Results archived', 'ഫലങ്ങൾ ആർക്കൈവ്') + '</th></tr></thead><tbody>' +
+            runs.map(r => '<tr><td><strong>' + r.run_year + '</strong></td><td class="sub">' + UI.formatDate(r.run_at) + '</td><td>' + (r.promoted || 0) + '</td><td>' + (r.purged_accounts || 0) + '</td><td>' + (r.results_archived || 0) + '</td></tr>').join('') +
+            '</tbody></table></div>' : '');
+      },
+      async after() {
+        const btn = document.getElementById('roll-run');
+        const input = document.getElementById('roll-year');
+        const msg = document.getElementById('roll-msg');
+        if (!btn || !input) return;
+        btn.addEventListener('click', async () => {
+          UI.hideMsg(msg);
+          const typed = input.value.trim();
+          if (typed !== String(new Date().getFullYear())) {
+            UI.showMsg(msg, L('Type ' + new Date().getFullYear() + ' to confirm.', new Date().getFullYear() + ' എന്ന് ടൈപ്പ് ചെയ്യുക.'), 'error');
+            input.focus();
+            return;
+          }
+          UI.busy(btn, true);
+          try {
+            const r = await API.runYearRollover(typed);
+            UI.showMsg(msg, L('Done: ' + (r.promoted || 0) + ' promoted, ' + (r.accounts_removed || 0) + ' accounts removed, ' + (r.results_archived || 0) + ' results archived.',
+              'പൂർത്തിയായി: ' + (r.promoted || 0) + ' പ്രൊമോട്ട്, ' + (r.accounts_removed || 0) + ' അക്കൗണ്ടുകൾ നീക്കി, ' + (r.results_archived || 0) + ' ഫലങ്ങൾ ആർക്കൈവ്.'), 'success');
+            setTimeout(() => renderPane('rollover'), 1200);
+          } catch (err) {
+            UI.showMsg(msg, API.errorText(err), 'error');
+            UI.busy(btn, false);
+          }
+        });
+      }
+    };
+
     PANES.history = {
       label: () => L('Moderation history', 'മോഡറേഷൻ ചരിത്രം'),
       async render() {
@@ -1074,7 +1136,7 @@
   if (role === 'student') MENU.push('myresults', 'ai');
   if (role === 'parent') MENU.push('children');
   if (isStaff) MENU.push('publish', 'resources', 'notices', 'moderation', 'students', 'content');
-  if (isAdmin) MENU.push('registrations', 'parents', 'accounts', 'classes', 'enquiries', 'history');
+  if (isAdmin) MENU.push('registrations', 'parents', 'accounts', 'classes', 'enquiries', 'rollover', 'history');
   MENU.push('profile');
   const visible = MENU.filter(k => PANES[k]);
   let current = 'overview';

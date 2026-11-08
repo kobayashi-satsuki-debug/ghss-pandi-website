@@ -103,6 +103,16 @@ select public.make_admin('14101ghsspandi@gmail.com');
 - [ ] `register.html` offers no administrator option, and a sign-up asking for
       the admin role is rejected
 
+## 8c. The June rollover
+
+- [ ] Ran `supabase/16-year-rollover.sql`
+- [ ] **Year rollover** shows every class with its next class, and Class 10 /
+      Plus Two marked "Account removed"
+- [ ] A teacher signing in sees no Year rollover tab
+- [ ] Decided whether to switch on the pg_cron line, or to press the button by
+      hand on 1 June
+- [ ] Database backup taken before the first real run
+
 ## 9. Prove it works
 
 ```sql

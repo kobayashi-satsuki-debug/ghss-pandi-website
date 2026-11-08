@@ -145,6 +145,11 @@ created, in preview mode and in live mode.
        administrator is ever appointed.
        Administrators sign in at **admin.html** — there is no administrator
        registration page by design.
+   15. `supabase/16-year-rollover.sql` — the June rollover. Creates the
+       promotion table (`class_promotions`), the results archive and the
+       `run_year_rollover()` function. Nothing moves until the office runs it
+       from **Year rollover** in the dashboard, or on 1 June if you switch on
+       the optional pg_cron line. See `docs/YEAR-ROLLOVER.md`.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

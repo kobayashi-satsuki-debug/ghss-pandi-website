@@ -508,6 +508,33 @@
       return data || {};
     },
 
+    async previewYearRollover() {
+      const { data, error } = await client().rpc('preview_year_rollover');
+      if (error) fail(error);
+      return data || [];
+    },
+
+    async rolloverHistory() {
+      const { data, error } = await client().rpc('rollover_history');
+      if (error) fail(error);
+      return data || [];
+    },
+
+    /* June 1: every class moves up and the children who have left lose their
+       accounts. The database refuses anything but the exact year. */
+    async runYearRollover(confirmYear) {
+      const { data, error } = await client().rpc('run_year_rollover', { p_confirm: String(confirmYear || '').trim() });
+      if (error) {
+        const m = error.message || '';
+        if (/administrator/i.test(m)) throw mapErr('err.noperm', error);
+        if (/already been run/i.test(m)) throw mapErr('err.alreadyRolled', error);
+        if (/1 June/i.test(m)) throw mapErr('err.beforeJune', error);
+        if (/confirm/i.test(m)) throw mapErr('err.confirmYear', error);
+        fail(error);
+      }
+      return data || {};
+    },
+
     async setAccountStatus(profileId, status) {
       const { error } = await client().rpc('set_account_status', { p_profile: profileId, p_status: status });
       if (error) fail(error);

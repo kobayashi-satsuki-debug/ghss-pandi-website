@@ -45,7 +45,10 @@
         { id: s1, profile_id: s1, full_name: 'Anjali S. Nair', class: '10 A', roll_no: '101', admission_no: '2018345', status: 'active' },
         { id: s2, profile_id: s2, full_name: 'Rahul P. Kumar', class: '10 A', roll_no: '102', admission_no: '2018346', status: 'active' },
         { id: s3, profile_id: s3, full_name: 'Fathima Beevi', class: '10 A', roll_no: '103', admission_no: '2018347', status: 'active' },
-        { id: s4, profile_id: s4, full_name: 'Arjun Das', class: '10 B', roll_no: '118', admission_no: '2018348', status: 'pending' }
+        { id: s4, profile_id: s4, full_name: 'Arjun Das', class: '10 B', roll_no: '118', admission_no: '2018348', status: 'pending' },
+        { id: 'st-9a-1', profile_id: null, full_name: 'Meera Krishnan', class: '9 A', roll_no: '21', admission_no: '2020451', status: 'active' },
+        { id: 'st-9a-2', profile_id: null, full_name: 'Shahid Ali', class: '9 A', roll_no: '22', admission_no: '2020452', status: 'active' },
+        { id: 'st-5-1', profile_id: null, full_name: 'Devika Menon', class: '5', roll_no: '14', admission_no: '2021012', status: 'active' }
       ],
       teachers: [
         { id: t1, profile_id: t1, full_name: 'Sunitha Varma', employee_no: 'GHSS-1024', subject: 'English', designation: 'HSA English', status: 'approved', classes: ['10 A'] },
@@ -146,6 +149,28 @@
     const t = Date.now();
     db.pending_signups = (db.pending_signups || []).filter(p => p.expires_at > t);
     db.login_otps = (db.login_otps || []).filter(r => r.expires_at > t);
+  }
+
+  const DEFAULT_PROMOTIONS = [
+    { from_class: '1', next_class: '2', purge_accounts: false },
+    { from_class: '2', next_class: '3', purge_accounts: false },
+    { from_class: '3', next_class: '4', purge_accounts: false },
+    { from_class: '4', next_class: '5', purge_accounts: false },
+    { from_class: '5', next_class: '6', purge_accounts: false },
+    { from_class: '6', next_class: '7', purge_accounts: false },
+    { from_class: '7', next_class: '8 A', purge_accounts: false },
+    { from_class: '8 A', next_class: '9 A', purge_accounts: false },
+    { from_class: '8 B', next_class: '9 B', purge_accounts: false },
+    { from_class: '9 A', next_class: '10 A', purge_accounts: false },
+    { from_class: '9 B', next_class: '10 B', purge_accounts: false },
+    { from_class: 'Plus One Commerce', next_class: 'Plus Two Commerce', purge_accounts: false },
+    { from_class: '10 A', next_class: null, purge_accounts: true },
+    { from_class: '10 B', next_class: null, purge_accounts: true },
+    { from_class: 'Plus Two Commerce', next_class: null, purge_accounts: true }
+  ];
+  function promotions() {
+    if (!db.class_promotions) { db.class_promotions = DEFAULT_PROMOTIONS.map(r => ({ ...r })); save(db); }
+    return db.class_promotions;
   }
 
   function profileById(id) { return db.profiles.find(p => p.id === id) || null; }
@@ -494,6 +519,59 @@
       const seen = {};
       rows.forEach(r => { const k = r.exam + '|' + r.roll_no; if (!seen[k]) seen[k] = { exam: r.exam, class: r.class, roll_no: r.roll_no, published_at: r.published_at, count: 0 }; seen[k].count += 1; });
       return Object.values(seen).slice(0, limit || 5);
+    },
+    async previewYearRollover() {
+      requireRole(['admin'], sessionId());
+      return promotions().map(p => {
+        const here = db.students.filter(st => st.class === p.from_class);
+        return {
+          class_name: p.from_class,
+          next_class: p.next_class,
+          students: here.length,
+          accounts: here.filter(st => st.profile_id).length,
+          action: p.purge_accounts ? 'remove account' : (p.next_class ? 'promote to ' + p.next_class : 'stay')
+        };
+      });
+    },
+    async rolloverHistory() {
+      requireRole(['admin'], sessionId());
+      return (db.year_rollovers || []).slice().sort((a, b) => b.run_year - a.run_year);
+    },
+    async runYearRollover(confirmYear) {
+      requireRole(['admin'], sessionId());
+      const year = new Date().getFullYear();
+      if (String(confirmYear || '').trim() !== String(year)) throw new Error('err.confirmYear');
+      db.year_rollovers = db.year_rollovers || [];
+      if (db.year_rollovers.some(r => r.run_year === year)) throw new Error('err.alreadyRolled');
+
+      const purge = promotions().filter(p => p.purge_accounts).map(p => p.from_class);
+      const resultsArchived = (db.results || []).length;
+      db.results = [];
+      const messagesCleared = (db.chat_messages || []).filter(m => purge.indexOf(m.room) !== -1).length;
+      db.chat_messages = (db.chat_messages || []).filter(m => purge.indexOf(m.room) === -1);
+
+      const leaving = db.students.filter(st => purge.indexOf(st.class) !== -1);
+      const goProfiles = leaving.map(st => st.profile_id).filter(Boolean);
+      const accountsRemoved = goProfiles.length;
+      db.profiles = db.profiles.filter(p => goProfiles.indexOf(p.id) === -1);
+      db.students = db.students.filter(st => purge.indexOf(st.class) === -1);
+      if (db.parent_student_links) db.parent_student_links = db.parent_student_links.filter(l => db.students.some(st => st.id === l.student_id));
+      if (db.links) db.links = db.links.filter(l => db.students.some(st => st.id === l.student_id));
+
+      let promoted = 0;
+      promotions().filter(p => p.next_class && !p.purge_accounts)
+        .slice()
+        .sort((a, b) => String(b.from_class).localeCompare(String(a.from_class)))
+        .forEach(p => {
+          db.students.forEach(st => { if (st.class === p.from_class) { st.class = p.next_class; promoted += 1; } });
+        });
+
+      const summary = { run_year: year, run_at: new Date().toISOString(), promoted, purged_accounts: accountsRemoved, results_archived: resultsArchived, messages_cleared: messagesCleared };
+      db.year_rollovers.unshift(summary);
+      db.moderation_log = db.moderation_log || [];
+      db.moderation_log.unshift({ id: uid(), actor_id: sessionId(), actor_name: 'School Office', action: 'year rollover', target: String(year), details: promoted + ' promoted, ' + accountsRemoved + ' accounts removed, ' + resultsArchived + ' results archived', created_at: new Date().toISOString() });
+      save(db); emit();
+      return { year, promoted, accounts_removed: accountsRemoved, results_archived: resultsArchived, messages_cleared: messagesCleared };
     },
     async resultsForStudent(studentId) {
       const me = requireRole(['student', 'teacher', 'parent', 'admin'], sessionId());
