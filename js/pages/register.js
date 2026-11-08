@@ -30,7 +30,7 @@
     note.textContent = I18NS.pick(notes[r][0], notes[r][1]);
     // A student never types a password: the six-digit code is the whole sign-in.
     [document.getElementById('reg-password-field'),
-     document.getElementById('reg-password2-field')].forEach(el => { if (el) el.hidden = r === 'student'; });
+     document.getElementById('reg-password2-field')].forEach(el => { if (el) el.hidden = false; });
     const codeNote = document.getElementById('student-code-note');
     if (codeNote) codeNote.hidden = r !== 'student';
   }
@@ -58,15 +58,13 @@
     if (!name) return UI.showMsg(msg, I18NS.t('err.required'), 'error');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return UI.showMsg(msg, I18NS.t('err.email'), 'error');
     if (!/^[0-9]{10}$/.test(phone)) return UI.showMsg(msg, I18NS.t('err.phone'), 'error');
-    if (role !== 'student') {
-      const check = window.Security ? Security.checkPassword(pw) : { ok: pw.length >= 12, reason: 'short' };
-      if (!check.ok) {
-        const k = check.reason === 'common' ? 'err.passwordCommon'
-                : check.reason === 'plain' ? 'err.passwordPlain' : 'err.passwordShort';
-        return UI.showMsg(msg, I18NS.t(k), 'error');
-      }
-      if (pw !== pw2) return UI.showMsg(msg, I18NS.pick('Passwords do not match.', 'പാസ്‌വേഡുകൾ ഒത്തുപോകുന്നില്ല.'), 'error');
+    const check = window.Security ? Security.checkPassword(pw) : { ok: pw.length >= 12, reason: 'short' };
+    if (!check.ok) {
+      const k = check.reason === 'common' ? 'err.passwordCommon'
+              : check.reason === 'plain' ? 'err.passwordPlain' : 'err.passwordShort';
+      return UI.showMsg(msg, I18NS.t(k), 'error');
     }
+    if (pw !== pw2) return UI.showMsg(msg, I18NS.pick('Passwords do not match.', 'പാസ്‌വേഡുകൾ ഒത്തുപോകുന്നില്ല.'), 'error');
 
     const extra = {};
     if (role === 'student') {
@@ -85,12 +83,7 @@
     const btn = form.querySelector('button[type=submit]');
     UI.busy(btn, true);
     try {
-      // Supabase refuses an empty password ("Signup requires a valid password").
-      // Students never learn theirs; they sign in with emailed codes.
-      const secret = role === 'student'
-        ? (window.Security ? Security.randomPassword(32) : 'St' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2))
-        : pw;
-      const res = await API.signUp({ email, password: secret, role, full_name: name, phone, extra });
+      const res = await API.signUp({ email, password: pw, role, full_name: name, phone, extra });
       if (res && (res.needsOtp || res.needsEmailConfirm)) {
         if (role === 'parent') startMail(email); else startOtp(email, res.devCode);
       } else {

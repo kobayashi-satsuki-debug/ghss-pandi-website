@@ -24,7 +24,7 @@
   if (demo && !API.isLive) demo.hidden = false;
 
   const notes = {
-    student: ['Students sign in with the email used at registration.', 'രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഉപയോഗിച്ച് പ്രവേശിക്കുക.'],
+    student: ['Sign in with the email and password you used at registration. Forgotten it? Use the six-digit code link below.', 'രജിസ്ട്രേഷനിൽ ഉപയോഗിച്ച ഇമെയിലും പാസ്‌വേഡും നൽകി പ്രവേശിക്കുക. മറന്നോ? താഴെയുള്ള ആറ് അക്ക കോഡ് ഉപയോഗിക്കുക.'],
     teacher: ['Teacher accounts must be approved by the school administrator before first sign-in.', 'ആദ്യ പ്രവേശനത്തിന് മുൻപ് അഡ്മിനിസ്ട്രേറ്റർ അംഗീകരിക്കണം.'],
     parent: ['A parent account needs a school-verified link to a student before results are visible.', 'ഫലം കാണാൻ സ്കൂൾ സ്ഥിരീകരിച്ച കുട്ടിയുമായുള്ള ബന്ധം ആവശ്യം.']
   };
@@ -40,10 +40,10 @@
     });
     const pair = notes[role] || notes.student;
     note.textContent = I18NS.pick(pair[0], pair[1]);
-    // A student's only way in is the six-digit code; staff and parents keep a
-    // password, with the code form still one click away.
+    // Everyone signs in with a password; the six-digit code stays one click
+    // away for anyone who has forgotten it.
     currentRole = role;
-    if (codeReady) showCode(role === 'student');
+    if (codeReady) showCode(false);
   }
 
   tabs.addEventListener('click', e => {
@@ -164,7 +164,7 @@
   }
 
   codeReady = true;
-  showCode(currentRole === 'student');
+  showCode(false);
 
   if (/[?&]pending=teacher/.test(location.search) && msg) {
     UI.showMsg(msg, I18NS.t('auth.pendingTeacher'), 'info');

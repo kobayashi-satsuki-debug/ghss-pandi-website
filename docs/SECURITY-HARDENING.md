@@ -52,11 +52,12 @@ Used by the registration form and the password-reset form, with messages in
 English and Malayalam (`err.passwordShort`, `err.passwordCommon`,
 `err.passwordPlain`).
 
-`Security.randomPassword(32)` exists for one job: student accounts. Supabase
-will not create a user without a password, so the register page generates 32
-random characters, sends them with the sign-up and forgets them. Students sign
-in with emailed codes only; the random value is not shown to anyone, not stored
-by the site, and cannot be guessed.
+`Security.randomPassword(32)` is no longer used in the sign-up flow: students
+now choose their own password like every other role. The helper stays because
+Supabase will not accept an account without a password, and it remains a safe
+way to create one for a scripted account or a test. Accounts created before the
+change still hold an unknown random password; those students sign in with a
+six-digit code or set a new password through *Forgot password*.
 
 ## 3. Sign-in throttling
 

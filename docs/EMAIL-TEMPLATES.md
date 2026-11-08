@@ -199,17 +199,22 @@ the page offers a resend button with a 60-second cool-down. After a successful
 check it points the visitor at `login.html`. Teacher accounts still show the
 "waiting for school approval" notice instead of promising access.
 
-## 8. Students sign in with a six-digit code
+## 8. Students sign in with a password, or a six-digit code
 
-A student never types a password: they give an email address, receive six digits
-and type them, on registration and on every later sign-in.
+A student chooses their own password at registration (12 characters or more,
+with the same policy every other role follows) and signs in with email +
+password. The **six-digit code is still there as the way back in**: the
+"Sign in with a six-digit code instead" link opens the code form, so a student
+who forgets the password is never locked out and never needs the office.
 
-**The account still gets a password.** Supabase rejects a sign-up without one
-(`400 validation_failed — Signup requires a valid password`), so the register
-page generates 32 random characters in the browser (`Security.randomPassword`)
-and sends them once. Nobody sees or stores that value: students reach the
-account only through emailed codes. If you ever need to open a student account
-another way, use *Forgot password* with the student's address.
+Registration also emails a six-digit code, because Supabase confirms the address
+either way; the student types it on the register page before the account goes
+to the office for approval.
+
+**Older accounts.** Students registered before passwords were added have a
+password nobody knows (32 random characters, `Security.randomPassword`). Those
+students sign in with a code, or use *Forgot password* once to set a real one.
+Nothing breaks if you leave them as they are.
 
 **Which template carries that code:** not *Confirm signup*. A returning student's
 code comes from the **Magic Link** template, because the site calls
