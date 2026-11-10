@@ -1,6 +1,7 @@
 /* Kannada translations, keyed by the English string.
    Used by js/i18n.js when the site language is "kn". */
 window.KN_TEXT = {
+  'It was founded in 1929 and has served Pandi for nearly a hundred years.': 'ಇದು 1929ರಲ್ಲಿ ಸ್ಥಾಪನೆಯಾಗಿ ಸುಮಾರು ನೂರು ವರ್ಷಗಳಿಂದ ಪಾಂಡಿಗೆ ಸೇವೆ ಸಲ್ಲಿಸುತ್ತಿದೆ.',
   'Open in Google Drive': 'Google Drive ನಲ್ಲಿ ತೆರೆಯಿರಿ',
   'School Google Drive': 'ಶಾಲೆಯ Google Drive',
   'Android app (.apk)': 'ಆಂಡ್ರಾಯ್ಡ್ ಆ್ಯಪ್ (.apk)',
@@ -44,7 +45,7 @@ window.KN_TEXT = {
   'Language': 'ಭಾಷೆ',
 
   /* home page */
-  'Kerala Government · Est. 1948': 'ಕೇರಳ ಸರ್ಕಾರ · ಸ್ಥಾಪನೆ 1948',
+  'Kerala Government · Est. 1929': 'ಕೇರಳ ಸರ್ಕಾರ · ಸ್ಥಾಪನೆ 1929',
   'Join the G H S S Pandi family': 'ಜಿ.ಹೆಚ್.ಎಸ್.ಎಸ್. ಪಾಂಡಿ ಕುಟುಂಬಕ್ಕೆ ಸೇರಿ',
   'A public school with a long memory and a forward look': 'ದೀರ್ಘ ಪರಂಪರೆ ಮತ್ತು ಮುಂದಿನ ದೃಷ್ಟಿಯ ಸರ್ಕಾರಿ ಶಾಲೆ',
   'Government Higher Secondary School, Pandi — a public school in Kasaragod district shaping confident learners through strong academics, science, arts and community service.': 'ಸರ್ಕಾರಿ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆ, ಪಾಂಡಿ — ಕಾಸರಗೋಡು ಜಿಲ್ಲೆಯ ಸರ್ಕಾರಿ ಶಾಲೆ. ಬಲವಾದ ಅಧ್ಯಯನ, ವಿಜ್ಞಾನ, ಕಲೆ ಮತ್ತು ಸಮುದಾಯ ಸೇವೆಯ ಮೂಲಕ ಆತ್ಮವಿಶ್ವಾಸದ ವಿದ್ಯಾರ್ಥಿಗಳನ್ನು ರೂಪಿಸುತ್ತದೆ.',
@@ -66,7 +67,7 @@ window.KN_TEXT = {
   'Open gallery': 'ಚಿತ್ರಸಂಗ್ರಹ ತೆರೆಯಿರಿ',
   'Our students make us proud': 'ನಮ್ಮ ವಿದ್ಯಾರ್ಥಿಗಳು ನಮಗೆ ಹೆಮ್ಮೆ',
   'All achievements': 'ಎಲ್ಲಾ ಸಾಧನೆಗಳು',
-  'Since 1948': '1948ರಿಂದ',
+  'Since 1929': '1929ರಿಂದ',
   'At a glance': 'ಒಂದು ನೋಟದಲ್ಲಿ',
   'Years of service': 'ಸೇವಾ ವರ್ಷಗಳು',
   'Students': 'ವಿದ್ಯಾರ್ಥಿಗಳು',
@@ -111,7 +112,7 @@ window.KN_TEXT = {
   /* about */
   'Our school': 'ನಮ್ಮ ಶಾಲೆ',
   'A public school with a long memory': 'ದೀರ್ಘ ಪರಂಪರೆಯ ಸರ್ಕಾರಿ ಶಾಲೆ',
-  'Founded 1948': 'ಸ್ಥಾಪನೆ 1948',
+  'Founded 1929': 'ಸ್ಥಾಪನೆ 1929',
   'Government Higher Secondary School Pandi began as a village upper primary school and grew into a full higher secondary school serving Classes 8 to 12. Generations of families in Pandi, Adoor and the surrounding panchayats have studied here.': 'ಸರ್ಕಾರಿ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆ ಪಾಂಡಿ ಹಳ್ಳಿಯ ಮೇಲ್ಪ್ರಾಥಮಿಕ ಶಾಲೆಯಾಗಿ ಪ್ರಾರಂಭವಾಗಿ, 8ರಿಂದ 12ನೇ ತರಗತಿಗಳನ್ನು ನೀಡುವ ಪೂರ್ಣ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆಯಾಗಿ ಬೆಳೆದಿದೆ. ಪಾಂಡಿ, ಅಡೂರು ಮತ್ತು ಸುತ್ತಮುತ್ತಲ ಪಂಚಾಯತ್ಗಳ ಹಲವು ತಲೆಮಾರುಗಳು ಇಲ್ಲಿ ವ್ಯಾಸಂಗ ಮಾಡಿವೆ.',
   'The school follows the Kerala State syllabus under the Directorate of Higher Secondary Education and is part of the government school system, so tuition is free and midday meals are provided.': 'ಶಾಲೆ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಿಕ್ಷಣ ನಿರ್ದೇಶನಾಲಯದ ಅಡಿಯಲ್ಲಿ ಕೇರಳ ರಾಜ್ಯ ಪಠ್ಯಕ್ರಮವನ್ನು ಅನುಸರಿಸುತ್ತದೆ ಮತ್ತು ಸರ್ಕಾರಿ ಶಾಲಾ ವ್ಯವಸ್ಥೆಯ ಭಾಗವಾಗಿದೆ. ಹಾಗಾಗಿ ಶಿಕ್ಷಣ ಉಚಿತ ಮತ್ತು ಮಧ್ಯಾಹ್ನ ಊಟ ನೀಡಲಾಗುತ್ತದೆ.',
   'Bilingual learning support in Malayalam and English': 'ಮಲಯಾಳಂ ಮತ್ತು ಇಂಗ್ಲಿಷ್ನಲ್ಲಿ ದ್ವಿಭಾಷಾ ಕಲಿಕೆ ಬೆಂಬಲ',
@@ -469,7 +470,7 @@ window.KN_TEXT = {
   'JRC unit (Junior Red Cross), arts and sports clubs': 'ಜೆ.ಆರ್.ಸಿ. ಘಟಕ (ಜೂನಿಯರ್ ರೆಡ್ ಕ್ರಾಸ್), ಕಲೆ ಮತ್ತು ಕ್ರೀಡಾ ಕ್ಲಬ್ಗಳು',
   'The JRC unit (Junior Red Cross) runs health, first-aid, cleanliness and literacy drives in the panchayat every year.': 'ಜೆ.ಆರ್.ಸಿ. ಘಟಕ (ಜೂನಿಯರ್ ರೆಡ್ ಕ್ರಾಸ್) ಪ್ರತಿ ವರ್ಷ ಪಂಚಾಯತ್ನಲ್ಲಿ ಆರೋಗ್ಯ, ಪ್ರಥಮ ಚಿಕಿತ್ಸೆ, ಸ್ವಚ್ಛತೆ ಮತ್ತು ಸಾಕ್ಷರತಾ ಕಾರ್ಯಕ್ರಮಗಳನ್ನು ನಡೆಸುತ್ತದೆ.',
   'The school office handles admissions, transfer certificates, scholarships and student records. Contact the office for any document request.': 'ಶಾಲಾ ಕಚೇರಿ ಪ್ರವೇಶ, ವರ್ಗಾವಣೆ ಪ್ರಮಾಣಪತ್ರ, ವಿದ್ಯಾರ್ಥಿವೇತನ ಮತ್ತು ವಿದ್ಯಾರ್ಥಿ ದಾಖಲೆಗಳನ್ನು ನಿರ್ವಹಿಸುತ್ತದೆ. ಯಾವುದೇ ದಾಖಲೆ ಬೇಕಿದ್ದರೆ ಕಚೇರಿ ಸಂಪರ್ಕಿಸಿ.',
-  'More than seven decades of public education in Pandi.': 'ಪಾಂಡಿಯಲ್ಲಿ ಏಳು ದಶಕಗಳಿಗೂ ಹೆಚ್ಚು ಸಾರ್ವಜನಿಕ ಶಿಕ್ಷಣ.',
+  'Nearly a century of public education in Pandi.': 'ಪಾಂಡಿಯಲ್ಲಿ ಸುಮಾರು ಒಂದು ಶತಮಾನದ ಸಾರ್ವಜನಿಕ ಶಿಕ್ಷಣ.',
   'Learning rooted in': 'ಕಲಿಕೆಯ ಮೂಲ',
   'Academic': 'ಶೈಕ್ಷಣಿಕ',
   'Identity': 'ಗುರುತು',
@@ -567,7 +568,7 @@ window.KN_TEXT = {
   "Admissions are open from Class 1 to Plus One Commerce. Check eligibility, documents and apply.": "1ನೇ ತರಗತಿಯಿಂದ ಪ್ಲಸ್ ಒನ್ ವಾಣಿಜ್ಯದವರೆಗೆ ಪ್ರವೇಶ ತೆರೆದಿದೆ. ಅರ್ಹತೆ, ದಾಖಲೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.",
   "Admissions for the 2026–27 academic year are open for Classes 1 to 10 and Plus One Commerce. Talk to the school office or submit an online enquiry.": "2026–27 ಶೈಕ್ಷಣಿಕ ವರ್ಷದ 1ರಿಂದ 10ನೇ ತರಗತಿ ಮತ್ತು ಪ್ಲಸ್ ಒನ್ ವಾಣಿಜ್ಯಕ್ಕೆ ಪ್ರವೇಶ ತೆರೆದಿದೆ. ಶಾಲಾ ಕಚೇರಿ ಸಂಪರ್ಕಿಸಿ ಅಥವಾ ಆನ್‌ಲೈನ್ನಲ್ಲಿ ವಿಚಾರಣೆ ಸಲ್ಲಿಸಿ.",
   "SSLC details for Plus One Commerce admission": "ಪ್ಲಸ್ ಒನ್ ವಾಣಿಜ್ಯ ಪ್ರವೇಶಕ್ಕೆ ಎಸ್.ಎಸ್.ಎಲ್.ಸಿ. ವಿವರಗಳು",
-  "Established in 1948, Government Higher Secondary School Pandi has been the neighbourhood school of generations of families in Pandi and nearby villages of Kasaragod district. The school teaches Classes 1 to 10 and a Commerce stream at higher secondary level, supported by laboratories, a library, computer facilities, sports grounds and a thriving arts and Junior Red Cross culture.": "1948ರಲ್ಲಿ ಸ್ಥಾಪಿತವಾದ ಸರ್ಕಾರಿ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆ ಪಾಂಡಿ, ಪಾಂಡಿ ಮತ್ತು ಕಾಸರಗೋಡು ಜಿಲ್ಲೆಯ ಸುತ್ತಮುತ್ತಲ ಗ್ರಾಮಗಳ ಹಲವು ತಲೆಮಾರುಗಳ ಶಾಲೆಯಾಗಿದೆ. 1ರಿಂದ 10ನೇ ತರಗತಿ ಮತ್ತು ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಹಂತದಲ್ಲಿ ವಾಣಿಜ್ಯ ವಿಭಾಗವನ್ನು ಬೋಧಿಸುತ್ತದೆ; ಪ್ರಯೋಗಾಲಯ, ಗ್ರಂಥಾಲಯ, ಕಂಪ್ಯೂಟರ್ ಸೌಲಭ್ಯ, ಕ್ರೀಡಾಂಗಣ ಮತ್ತು ಕಲೆ ಹಾಗೂ ಜೂನಿಯರ್ ರೆಡ್ ಕ್ರಾಸ್ ಸಂಸ್ಕೃತಿ ಇದೆ.",
+  "Established in 1929, Government Higher Secondary School Pandi has been the neighbourhood school of generations of families in Pandi and nearby villages of Kasaragod district. The school teaches Classes 1 to 10 and a Commerce stream at higher secondary level, supported by laboratories, a library, computer facilities, sports grounds and a thriving arts and Junior Red Cross culture.": "1929ರಲ್ಲಿ ಸ್ಥಾಪಿತವಾದ ಸರ್ಕಾರಿ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆ ಪಾಂಡಿ, ಪಾಂಡಿ ಮತ್ತು ಕಾಸರಗೋಡು ಜಿಲ್ಲೆಯ ಸುತ್ತಮುತ್ತಲ ಗ್ರಾಮಗಳ ಹಲವು ತಲೆಮಾರುಗಳ ಶಾಲೆಯಾಗಿದೆ. 1ರಿಂದ 10ನೇ ತರಗತಿ ಮತ್ತು ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಹಂತದಲ್ಲಿ ವಾಣಿಜ್ಯ ವಿಭಾಗವನ್ನು ಬೋಧಿಸುತ್ತದೆ; ಪ್ರಯೋಗಾಲಯ, ಗ್ರಂಥಾಲಯ, ಕಂಪ್ಯೂಟರ್ ಸೌಲಭ್ಯ, ಕ್ರೀಡಾಂಗಣ ಮತ್ತು ಕಲೆ ಹಾಗೂ ಜೂನಿಯರ್ ರೆಡ್ ಕ್ರಾಸ್ ಸಂಸ್ಕೃತಿ ಇದೆ.",
   "Government Higher Secondary School Pandi began as a village upper primary school and grew into a full higher secondary school serving Classes 1 to 12. Generations of families in Pandi, Adoor and the surrounding panchayats have studied here.": "ಸರ್ಕಾರಿ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆ ಪಾಂಡಿ ಹಳ್ಳಿಯ ಮೇಲ್ಪ್ರಾಥಮಿಕ ಶಾಲೆಯಾಗಿ ಪ್ರಾರಂಭವಾಗಿ, 1ರಿಂದ 12ನೇ ತರಗತಿಗಳನ್ನು ನೀಡುವ ಪೂರ್ಣ ಉನ್ನತ ಮಾಧ್ಯಮಿಕ ಶಾಲೆಯಾಗಿ ಬೆಳೆದಿದೆ. ಪಾಂಡಿ, ಅಡೂರು ಮತ್ತು ಸುತ್ತಮುತ್ತಲ ಪಂಚಾಯತ್‌ಗಳ ಹಲವು ತಲೆಮಾರುಗಳು ಇಲ್ಲಿ ವ್ಯಾಸಂಗ ಮಾಡಿವೆ.",
   "That confirmation link has expired or was already used. Sign in with your password, or register again to get a fresh code.": "ಆ ದೃಢೀಕರಣ ಲಿಂಕ್ ಅವಧಿ ಮುಗಿದಿದೆ ಅಥವಾ ಈಗಾಗಲೇ ಬಳಸಲಾಗಿದೆ. ಪಾಸ್‌ವರ್ಡ್‌ನಿಂದ ಪ್ರವೇಶಿಸಿ ಅಥವಾ ಹೊಸ ಕೋಡ್‌ಗಾಗಿ ಮತ್ತೆ ನೋಂದಣಿ ಮಾಡಿ.",
   "This email address is not confirmed yet. Open the Register page, enter the same email and press Resend code, then type the new code.": "ಈ ಇಮೇಲ್ ಇನ್ನೂ ದೃಢೀಕರಿಸಲಾಗಿಲ್ಲ. ನೋಂದಣಿ ಪುಟ ತೆರೆದು ಅದೇ ಇಮೇಲ್ ನಮೂದಿಸಿ \"ಕೋಡ್ ಮತ್ತೆ ಕಳುಹಿಸಿ\" ಒತ್ತಿ, ನಂತರ ಹೊಸ ಕೋಡ್ ಬರೆಯಿರಿ.",
