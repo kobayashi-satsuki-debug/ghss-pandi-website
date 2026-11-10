@@ -5,8 +5,9 @@
 -- this database (21-app-security.sql had not been run, or it stopped early),
 -- while the website already tries to call it.
 --
--- This file creates the table and the three functions on their own, then asks
--- PostgREST to reload its schema cache. Safe to run twice.
+-- This file creates the table, the three functions and the two audit triggers
+-- on their own, then asks PostgREST to reload its schema cache. Safe to run
+-- twice. It never touches profiles.class_id (there is no such column).
 
 -- ---------- 1. the table the events go into ----------
 create table if not exists public.security_events (
@@ -110,6 +111,69 @@ revoke all on function public.admin_security_events(integer)  from public;
 grant execute on function public.log_security_event(text, text) to authenticated;
 grant execute on function public.my_security_events(integer)     to authenticated;
 grant execute on function public.admin_security_events(integer)  to authenticated;
+
+-- ---------- 4. the office's changes are recorded too ----------
+-- public.profiles has no class column: that is why 21-app-security.sql failed
+-- with «column "class_id" of relation "profiles" does not exist». Role and
+-- status are watched here, and class assignments through class_teachers.
+create or replace function public.audit_profile_change()
+returns trigger
+language plpgsql security definer set search_path = public as $$
+declare v_bits text[] := '{}';
+begin
+  if new.role is distinct from old.role then
+    v_bits := v_bits || ('role ' || old.role || ' -> ' || new.role);
+  end if;
+  if new.status is distinct from old.status then
+    v_bits := v_bits || ('status ' || old.status || ' -> ' || new.status);
+  end if;
+  if cardinality(v_bits) > 0 then
+    insert into public.security_events (profile_id, email, kind, detail)
+    values (new.id, lower(new.email), 'office_change', array_to_string(v_bits, '; '));
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists profiles_audit_change on public.profiles;
+create trigger profiles_audit_change
+  after update of role, status on public.profiles
+  for each row execute function public.audit_profile_change();
+
+create or replace function public.audit_class_teacher_change()
+returns trigger
+language plpgsql security definer set search_path = public as $$
+declare
+  v_teacher uuid;
+  v_class   text;
+  v_profile uuid;
+  v_email   text;
+begin
+  if tg_op = 'DELETE' then
+    v_teacher := old.teacher_id;
+    v_class   := old.class_id;
+  else
+    v_teacher := new.teacher_id;
+    v_class   := new.class_id;
+  end if;
+
+  select t.profile_id, lower(p.email)
+    into v_profile, v_email
+    from public.teachers t
+    left join public.profiles p on p.id = t.profile_id
+   where t.id = v_teacher;
+
+  insert into public.security_events (profile_id, email, kind, detail)
+  values (v_profile, v_email, 'office_change',
+          (case when tg_op = 'DELETE' then 'class teacher removed from '
+                else 'class teacher assigned to ' end)
+          || coalesce(v_class, '(unknown)'));
+  return null;
+end $$;
+
+drop trigger if exists class_teachers_audit on public.class_teachers;
+create trigger class_teachers_audit
+  after insert or delete on public.class_teachers
+  for each row execute function public.audit_class_teacher_change();
 
 -- ---------- 4. tell PostgREST to refresh, then prove it ----------
 notify pgrst, 'reload schema';

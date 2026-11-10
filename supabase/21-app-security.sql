@@ -116,6 +116,10 @@ grant execute on function public.my_security_events(integer)       to authentica
 grant execute on function public.admin_security_events(integer)    to authenticated;
 
 -- ---------- 4. the office's own changes are recorded too ----------
+-- public.profiles has no class column: a student's class lives in
+-- public.students.class, and a teacher's classes in public.class_teachers.
+-- So this trigger watches role and status, and a second trigger watches
+-- class assignments.
 create or replace function public.audit_profile_change()
 returns trigger
 language plpgsql security definer set search_path = public as $$
@@ -127,9 +131,6 @@ begin
   if new.status is distinct from old.status then
     v_bits := v_bits || ('status ' || old.status || ' -> ' || new.status);
   end if;
-  if coalesce(new.class_id, '') is distinct from coalesce(old.class_id, '') then
-    v_bits := v_bits || ('class ' || coalesce(old.class_id, '(none)') || ' -> ' || coalesce(new.class_id, '(none)'));
-  end if;
   if cardinality(v_bits) > 0 then
     insert into public.security_events (profile_id, email, kind, detail)
     values (new.id, lower(new.email), 'office_change', array_to_string(v_bits, '; '));
@@ -139,8 +140,44 @@ end $$;
 
 drop trigger if exists profiles_audit_change on public.profiles;
 create trigger profiles_audit_change
-  after update of role, status, class_id on public.profiles
+  after update of role, status on public.profiles
   for each row execute function public.audit_profile_change();
+
+create or replace function public.audit_class_teacher_change()
+returns trigger
+language plpgsql security definer set search_path = public as $$
+declare
+  v_teacher uuid;
+  v_class   text;
+  v_profile uuid;
+  v_email   text;
+begin
+  if tg_op = 'DELETE' then
+    v_teacher := old.teacher_id;
+    v_class   := old.class_id;
+  else
+    v_teacher := new.teacher_id;
+    v_class   := new.class_id;
+  end if;
+
+  select t.profile_id, lower(p.email)
+    into v_profile, v_email
+    from public.teachers t
+    left join public.profiles p on p.id = t.profile_id
+   where t.id = v_teacher;
+
+  insert into public.security_events (profile_id, email, kind, detail)
+  values (v_profile, v_email, 'office_change',
+          (case when tg_op = 'DELETE' then 'class teacher removed from '
+                else 'class teacher assigned to ' end)
+          || coalesce(v_class, '(unknown)'));
+  return null;
+end $$;
+
+drop trigger if exists class_teachers_audit on public.class_teachers;
+create trigger class_teachers_audit
+  after insert or delete on public.class_teachers
+  for each row execute function public.audit_class_teacher_change();
 
 -- ---------- 5. what is in there now ----------
 select e.email, e.kind, e.detail, e.created_at

@@ -34,8 +34,8 @@ A table of every recorded event for every account — when, which address, what
 happened, and the IP address Supabase saw. Two kinds matter most:
 
 - **Password changed** — the person changed their own password.
-- **Office changed an account** — a role, status or class was changed in the
-  dashboard. The detail reads like `role student -> teacher; status active -> pending`, so the office can see who did what.
+- **Office changed an account** — a role or status was changed in the dashboard,
+  or a teacher was assigned to / removed from a class. The detail reads like `role student -> teacher; status active -> pending`, so the office can see who did what.
 
 Students and parents never see this table, and the database itself refuses the
 call (`admin_security_events()` raises *administrators only*).
@@ -54,8 +54,15 @@ call (`admin_security_events()` raises *administrators only*).
   hour so a page cannot flood the table.
 - The event name must match `^[a-z_]{3,40}$`, so a caller cannot invent a kind
   that pretends to be something else.
-- The trigger `profiles_audit_change` records role, status and class changes
-  automatically — the office cannot change a role without leaving a trace.
+- Two triggers record office changes automatically — the office cannot change a
+  role or assign a class teacher without leaving a trace:
+  - `profiles_audit_change` on `public.profiles` (role, status).
+  - `class_teachers_audit` on `public.class_teachers` (insert and delete).
+
+  `profiles` has **no `class_id` column** — a student's class is
+  `students.class`, a teacher's classes are rows in `class_teachers` — which is
+  why the first version of this file failed with *column "class_id" of relation
+  "profiles" does not exist*.
 
 ## Settings worth turning on in Supabase
 
