@@ -564,7 +564,11 @@
 
     async adminSecurityEvents(limit) {
       const { data, error } = await client().rpc('admin_security_events', { p_limit: Number(limit) || 200 });
-      if (error) fail(error);
+      if (error) {
+        const m = String(error.code || '') + ' ' + String(error.message || '');
+        if (/PGRST202|42883|does not exist|schema cache/i.test(m)) return [];
+        fail(error);
+      }
       return data || [];
     },
 

@@ -197,6 +197,12 @@ created, in preview mode and in live mode.
        gallery and achievements tables to **JRC (Junior Red Cross)** and points
        the gallery row at the new `assets/gallery/jrc-01.svg`. Only needed on a
        database that was seeded before the rename; safe to run twice.
+   22. `supabase/23-security-audit-rpc.sql` — the repair for **"Could not find
+       the function public.admin_security_events(p_limit) in the schema cache"**.
+       Creates the security table and the three audit functions on their own,
+       ends with `notify pgrst, 'reload schema'`, and prints the functions it
+       found. Run it if step 20 was skipped or stopped early; safe to run
+       twice.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to
