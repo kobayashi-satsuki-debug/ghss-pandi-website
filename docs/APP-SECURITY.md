@@ -64,6 +64,37 @@ call (`admin_security_events()` raises *administrators only*).
   why the first version of this file failed with *column "class_id" of relation
   "profiles" does not exist*.
 
+## If you still see `column "class_id" of relation "profiles" does not exist`
+
+That message can only come from an **old copy** of the SQL. The current files
+never name `profiles.class_id`; search the text you are about to run for
+`class_id` — if your trigger line reads
+`after update of role, status, class_id on public.profiles`, the text is stale.
+
+Copy the current file instead of pasting an old one:
+
+```
+https://raw.githubusercontent.com/kobayashi-satsuki-debug/ghss-pandi-website/creative-corner-page/supabase/23-security-audit-rpc.sql
+```
+
+Or replace just that block with:
+
+```sql
+drop trigger if exists profiles_audit_change on public.profiles;
+create trigger profiles_audit_change
+  after update of role, status on public.profiles
+  for each row execute function public.audit_profile_change();
+```
+
+Then confirm the trigger exists:
+
+```sql
+select tgname, pg_get_triggerdef(oid)
+  from pg_trigger
+ where tgrelid = 'public.profiles'::regclass
+   and not tgisinternal;
+```
+
 ## Settings worth turning on in Supabase
 
 These are dashboard switches, not files in this repository:
