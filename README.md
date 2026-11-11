@@ -19,7 +19,7 @@ Class chat.
 - **Student** — own results, class chat, an AI study buddy with a nickname the
   student chooses, profile
 - **Teacher** — publish results for assigned classes, notices, chat moderation,
-  gallery and achievements (after admin approval)
+  gallery photos, and a full achievements editor (add, edit, delete) — after admin approval
 - **Parent** — results for school-verified children, child-link requests
 - **Admin** — teacher approvals, parent verification, accounts, classes,
   admissions inbox, moderation history, content

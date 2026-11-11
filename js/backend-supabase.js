@@ -651,6 +651,18 @@
       if (error) fail(error);
       return true;
     },
+    async updateAchievement(id, data) {
+      const patch = Object.assign({}, data);
+      delete patch.id;
+      const { error } = await client().from('achievements').update(patch).eq('id', id);
+      if (error) fail(error);
+      return true;
+    },
+    async deleteAchievement(id) {
+      const { error } = await client().from('achievements').delete().eq('id', id);
+      if (error) fail(error);
+      return true;
+    },
     async teachersPublic() {
       const { data, error } = await client().rpc('get_public_teachers');
       if (error) fail(error);

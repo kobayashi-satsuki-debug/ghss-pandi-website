@@ -249,7 +249,7 @@ approve teachers and verify parents from the dashboard.
 | Role | Can do |
 | --- | --- |
 | student | See own results, own class chat, own profile |
-| teacher | Publish results for assigned classes, manage notices, moderate chat, add gallery and achievements — only after admin approval |
+| teacher | Publish results for assigned classes, manage notices, moderate chat, add gallery photos and use the achievements editor (add, edit, delete) — only after admin approval |
 | parent | See results of children the school has verified; request a child link |
 | admin | Everything, plus teacher approvals, parent verification, accounts, classes, admissions inbox, moderation history |
 

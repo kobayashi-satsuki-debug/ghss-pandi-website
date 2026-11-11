@@ -934,6 +934,20 @@
       db.achievements.unshift({ id: uid(), event_date: now(), icon: '🏆', ...data });
       save(db); return true;
     },
+    async updateAchievement(id, data) {
+      requireRole(['teacher', 'admin'], sessionId());
+      const i = db.achievements.findIndex(a => a.id === id);
+      if (i === -1) throw new Error('not_found');
+      const patch = Object.assign({}, data);
+      delete patch.id;
+      db.achievements[i] = Object.assign({}, db.achievements[i], patch);
+      save(db); return true;
+    },
+    async deleteAchievement(id) {
+      requireRole(['teacher', 'admin'], sessionId());
+      db.achievements = db.achievements.filter(a => a.id !== id);
+      save(db); return true;
+    },
     async submitEnquiry(data) {
       if (!data || String(data.student_name || '').trim().length < 2) throw new Error('err.required');
       if (!/^[0-9]{10}$/.test(String(data.phone || ''))) throw new Error('err.phone');

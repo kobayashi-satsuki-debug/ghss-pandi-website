@@ -915,6 +915,140 @@
     };
   }
 
+  // ================= staff: achievements editor =================
+  if (isStaff) {
+    let achRows = [];
+    PANES.achievements = {
+      label: () => L('Achievements', 'നേട്ടങ്ങൾ'),
+      async render() {
+        try { achRows = await API.achievements(); } catch (e) {
+          return head(L('Achievements', 'നേട്ടങ്ങൾ'), '') + none(API.errorText(e));
+        }
+        const levels = ['School', 'District', 'State', 'National'];
+        const cats = ['academic', 'science', 'sports', 'arts', 'service'];
+        const opts = (list, sel) => list.map(v =>
+          '<option value="' + v + '"' + (v === sel ? ' selected' : '') + '>' + v + '</option>').join('');
+        const today = new Date().toISOString().slice(0, 10);
+        const rows = achRows;
+
+        return head(L('Student achievements editor', 'വിദ്യാർത്ഥി നേട്ടങ്ങൾ എഡിറ്റർ'),
+            L('Add, edit or remove the achievements shown on the website. Teachers and administrators only.',
+              'വെബ്സൈറ്റിൽ കാണിക്കുന്ന നേട്ടങ്ങൾ ചേർക്കാം, തിരുത്താം, നീക്കാം. അധ്യാപകർക്കും അഡ്മിൻമാർക്കും മാത്രം.')) +
+          '<div class="dash-card"><h3 id="ach-editor-title">' + L('Add an achievement', 'നേട്ടം ചേർക്കുക') + '</h3>' +
+          '<form class="mini-form" id="ach-edit-form" novalidate data-id="">' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Title (English)', 'തലക്കെട്ട് (ഇംഗ്ലീഷ്)') + '</label><input name="title_en" required maxlength="160"></div>' +
+            '<div class="form-field"><label>' + L('Title (Malayalam)', 'തലക്കെട്ട് (മലയാളം)') + '</label><input name="title_ml" maxlength="160"></div></div>' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Student / team', 'വിദ്യാർത്ഥി / ടീം') + '</label><input name="student_name" maxlength="120"></div>' +
+            '<div class="form-field"><label>' + L('Class', 'ക്ലാസ്') + '</label><input name="class_name" maxlength="40" placeholder="' + L('e.g. 9 A', 'ഉദാ: 9 A') + '"></div></div>' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Level', 'തലം') + '</label><select name="level">' + opts(levels, 'School') + '</select></div>' +
+            '<div class="form-field"><label>' + L('Category', 'വിഭാഗം') + '</label><select name="category">' + opts(cats, 'academic') + '</select></div></div>' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Date', 'തീയതി') + '</label><input type="date" name="event_date" value="' + today + '" required></div>' +
+            '<div class="form-field"><label>' + L('Icon', 'ഐക്കൺ') + '</label><input name="icon" maxlength="8" value="🏆"></div></div>' +
+            '<div class="form-field"><label>' + L('Description (English)', 'വിവരണം (ഇംഗ്ലീഷ്)') + '</label><textarea name="description_en" rows="2" maxlength="600"></textarea></div>' +
+            '<div class="form-field"><label>' + L('Description (Malayalam)', 'വിവരണം (മലയാളം)') + '</label><textarea name="description_ml" rows="2" maxlength="600"></textarea></div>' +
+            '<div class="form-msg" id="ach-edit-msg" role="alert"></div>' +
+            '<div class="row-actions"><button class="btn btn-primary" type="submit" id="ach-save">' + L('Save achievement', 'സേവ് ചെയ്യുക') + '</button>' +
+              '<button class="btn btn-ghost" type="button" id="ach-cancel" hidden>' + L('Cancel editing', 'തിരുത്തൽ റദ്ദാക്കുക') + '</button></div>' +
+          '</form></div>' +
+          '<div class="dash-card"><h3>' + L('Published achievements', 'പ്രസിദ്ധീകരിച്ച നേട്ടങ്ങൾ') + ' <span class="pill">' + rows.length + '</span></h3>' +
+          (rows.length
+            ? '<div class="list-card" style="overflow:auto"><table class="tbl"><thead><tr><th>' + L('Date', 'തീയതി') + '</th><th>' + L('Achievement', 'നേട്ടം') + '</th><th>' + L('Student', 'വിദ്യാർത്ഥി') + '</th><th>' + L('Level', 'തലം') + '</th><th></th></tr></thead><tbody>' +
+              rows.map(a => '<tr><td class="sub">' + UI.formatDate(a.event_date) + '</td>' +
+                '<td><strong>' + UI.esc(a.title_en) + '</strong>' + (a.title_ml ? '<div class="sub">' + UI.esc(a.title_ml) + '</div>' : '') + '</td>' +
+                '<td>' + UI.esc(a.student_name || '—') + (a.class_name ? '<div class="sub">' + UI.esc(a.class_name) + '</div>' : '') + '</td>' +
+                '<td><span class="pill">' + UI.esc(a.level || '') + '</span></td>' +
+                '<td><div class="row-actions">' +
+                  '<button class="btn btn-ghost btn-sm" type="button" data-edit-ach="' + a.id + '">' + L('Edit', 'തിരുത്തുക') + '</button>' +
+                  '<button class="btn btn-ghost btn-sm" type="button" data-del-ach="' + a.id + '">' + L('Delete', 'നീക്കുക') + '</button>' +
+                '</div></td></tr>').join('') +
+              '</tbody></table></div>'
+            : none(L('No achievements yet.', 'ഇതുവരെ നേട്ടങ്ങളില്ല.'))) + '</div>';
+      },
+      after: () => {
+        const form = document.getElementById('ach-edit-form');
+        const msg = document.getElementById('ach-edit-msg');
+        const title = document.getElementById('ach-editor-title');
+        const cancel = document.getElementById('ach-cancel');
+
+        const setMode = (row) => {
+          form.reset();
+          UI.hideMsg(msg);
+          form.dataset.id = row ? row.id : '';
+          title.textContent = row
+            ? L('Edit achievement', 'നേട്ടം തിരുത്തുക')
+            : L('Add an achievement', 'നേട്ടം ചേർക്കുക');
+          cancel.hidden = !row;
+          if (!row) { form.querySelector('[name=event_date]').value = new Date().toISOString().slice(0, 10); return; }
+          ['title_en', 'title_ml', 'student_name', 'class_name', 'level', 'category', 'event_date', 'icon', 'description_en', 'description_ml']
+            .forEach(k => {
+              const el = form.elements[k];
+              if (!el) return;
+              let v = row[k] == null ? '' : String(row[k]);
+              if (k === 'event_date') v = v.slice(0, 10);
+              el.value = v;
+            });
+          if (form.scrollIntoView) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        form.addEventListener('submit', async e => {
+          e.preventDefault();
+          UI.hideMsg(msg);
+          const d = Object.fromEntries(new FormData(form).entries());
+          if (!String(d.title_en || '').trim()) return UI.showMsg(msg, I18NS.t('err.required'), 'error');
+          const payload = {
+            title_en: String(d.title_en).trim(),
+            title_ml: String(d.title_ml || '').trim(),
+            student_name: String(d.student_name || '').trim(),
+            class_name: String(d.class_name || '').trim(),
+            level: d.level,
+            category: d.category,
+            event_date: d.event_date || new Date().toISOString().slice(0, 10),
+            icon: String(d.icon || '🏆').trim() || '🏆',
+            description_en: String(d.description_en || '').trim(),
+            description_ml: String(d.description_ml || '').trim()
+          };
+          const btn = document.getElementById('ach-save');
+          UI.busy(btn, true);
+          try {
+            if (form.dataset.id) {
+              await API.updateAchievement(form.dataset.id, payload);
+              UI.toast(L('Achievement updated.', 'നേട്ടം തിരുത്തി.'), 'success');
+            } else {
+              await API.addAchievement(payload);
+              UI.toast(L('Achievement added.', 'നേട്ടം ചേർത്തു.'), 'success');
+            }
+            renderPane('achievements');
+          } catch (err) {
+            UI.showMsg(msg, API.errorText(err), 'error');
+            UI.busy(btn, false);
+          }
+        });
+
+        cancel.addEventListener('click', () => setMode(null));
+
+        document.querySelectorAll('[data-edit-ach]').forEach(b => {
+          b.addEventListener('click', () => {
+            const row = achRows.find(a => String(a.id) === b.dataset.editAch);
+            if (row) setMode(row);
+          });
+        });
+
+        document.querySelectorAll('[data-del-ach]').forEach(b => {
+          b.addEventListener('click', async () => {
+            if (!(await UI.confirmDialog(
+              L('Delete this achievement?', 'ഈ നേട്ടം നീക്കണോ?'),
+              L('It will disappear from the website immediately.', 'ഇത് ഉടൻ വെബ്സൈറ്റിൽ നിന്ന് മാറും.')))) return;
+            try {
+              await API.deleteAchievement(b.dataset.delAch);
+              UI.toast(L('Achievement deleted.', 'നേട്ടം നീക്കി.'), 'success');
+              renderPane('achievements');
+            } catch (err) { UI.toast(API.errorText(err), 'error'); }
+          });
+        });
+      }
+    };
+  }
+
   // ================= staff: PDF notes / resources =================
   if (isStaff) {
     PANES.resources = {
@@ -1254,7 +1388,7 @@
   const MENU = ['overview'];
   if (role === 'student') MENU.push('myresults', 'ai');
   if (role === 'parent') MENU.push('children');
-  if (isStaff) MENU.push('publish', 'resources', 'notices', 'moderation', 'students', 'content');
+  if (isStaff) MENU.push('publish', 'resources', 'notices', 'achievements', 'moderation', 'students', 'content');
   if (isAdmin) MENU.push('registrations', 'parents', 'accounts', 'classes', 'enquiries', 'rollover', 'history');
   MENU.push('security');
   if (isAdmin) MENU.push('audit');
