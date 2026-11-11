@@ -193,11 +193,7 @@ created, in preview mode and in live mode.
        makes. Nobody can write the table directly and nobody can read another
        account's rows; students and parents only ever see their own. Safe to run
        twice. See `docs/APP-SECURITY.md`.
-   21. `supabase/22-rename-nss-to-jrc.sql` — renames the old NSS entries in the
-       gallery and achievements tables to **JRC (Junior Red Cross)** and points
-       the gallery row at the new `assets/gallery/jrc-01.svg`. Only needed on a
-       database that was seeded before the rename; safe to run twice.
-   22. `supabase/23-security-audit-rpc.sql` — the repair for **"Could not find
+   21. `supabase/23-security-audit-rpc.sql` — the repair for **"Could not find
        the function public.admin_security_events(p_limit) in the schema cache"**.
        Creates the security table and the three audit functions on their own,
        ends with `notify pgrst, 'reload schema'`, and prints the functions it
