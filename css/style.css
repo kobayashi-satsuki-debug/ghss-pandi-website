@@ -1363,3 +1363,15 @@ html[data-theme="dark"] .toast { background: #2a2124; color: var(--ink); border:
   .btn.btn-venom::before, .btn.btn-venom::after { display: none; }
   .btn.btn-venom { animation: none; box-shadow: none; }
 }
+
+/* Login lives in the top bar beside the logo, so it is reachable on phones
+   without opening the menu; the gold Apply CTA stays on wider screens. */
+.header-actions { flex: none; }
+.header-login { white-space: nowrap; }
+@media (max-width: 760px) {
+  .header-actions .header-apply { display: none; }
+  .header-actions { gap: .45rem; }
+}
+@media (max-width: 420px) {
+  .brand-sub { display: none; }
+}

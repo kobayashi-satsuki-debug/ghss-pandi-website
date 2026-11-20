@@ -43,8 +43,8 @@
       '<li><a href="' + href + '" data-en="' + en + '" data-ml="' + ml + '"' +
       (cur === href ? ' aria-current="page"' : '') + '>' + en + '</a></li>').join('');
     const account = session
-      ? '<li class="nav-login"><a class="btn btn-primary btn-sm" href="dashboard.html" data-en="Dashboard" data-ml="ഡാഷ്ബോർഡ്">Dashboard</a></li>'
-      : '<li class="nav-login"><a class="btn btn-primary btn-sm" href="login.html" data-en="Login" data-ml="ലോഗിൻ">Login</a></li>';
+      ? '<a class="btn btn-primary btn-sm header-login" href="dashboard.html" data-en="Dashboard" data-ml="ഡാഷ്ബോർഡ്">Dashboard</a>'
+      : '<a class="btn btn-primary btn-sm header-login" href="login.html" data-en="Login" data-ml="ലോഗിൻ">Login</a>';
 
     return '' +
       '<a class="skip-link" href="#main">Skip to content</a>' +
@@ -76,13 +76,14 @@
             '</span>' +
           '</a>' +
           '<div class="header-actions">' +
-            '<a class="btn btn-gold btn-sm btn-venom" href="admissions.html" data-en="Apply now" data-ml="അപേക്ഷിക്കുക">Apply now</a>' +
+            '<a class="btn btn-gold btn-sm btn-venom header-apply" href="admissions.html" data-en="Apply now" data-ml="അപേക്ഷിക്കുക">Apply now</a>' +
+            account +
             '<button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false">☰</button>' +
           '</div>' +
         '</div>' +
       '</div>' +
       '<nav class="site-nav" id="site-nav" aria-label="Main navigation"><div class="container">' +
-        '<ul>' + items + account + '</ul>' +
+        '<ul>' + items + '</ul>' +
       '</div></nav>';
   }
 
