@@ -11,9 +11,20 @@
       C.emptyState('🖼️', I18NS.t('misc.none'));
   }
 
+  // one card per picture, even if the same photo was added twice
+  function unique(list) {
+    const seen = new Set();
+    return list.filter(g => {
+      const key = String(g.title_en || '') + '\u0000' + String(g.src || '');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
   async function load() {
     try {
-      all = (await API.gallery()).filter(g => g.is_published !== false);
+      all = unique((await API.gallery()).filter(g => g.is_published !== false));
       const active = filters.querySelector('.filter-chip.active');
       render(active ? active.dataset.cat : 'all');
       C.initLightbox(grid);

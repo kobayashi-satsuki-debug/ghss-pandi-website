@@ -205,6 +205,12 @@ created, in preview mode and in live mode.
        and creates the public `gallery` storage bucket (JPG, PNG, WebP or AVIF,
        3 MB) with staff-only upload and delete. Run it before anybody presses
        **Add a photo**; safe to run twice.
+   23. `supabase/25-remove-duplicate-gallery-photos.sql` — cleans up the
+       duplicate gallery rows that repeated runs of `04-seed.sql` left behind
+       (118 rows for 10 pictures on the live project). It keeps the oldest copy
+       of each picture, deletes the rest, and adds the unique index that makes
+       the seed safe to run again. Safe to run twice. Teachers can also press
+       **Remove duplicate photos** in the gallery editor; both do the same job.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to

@@ -1052,6 +1052,23 @@
   // ================= staff: photo gallery editor =================
   if (isStaff) {
     let galRows = [];
+
+    // every copy of a picture after the oldest one
+    const galDuplicates = (list) => {
+      const groups = new Map();
+      (list || []).forEach(g => {
+        const key = String(g.title_en || '') + '\u0000' + String(g.src || '');
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(g);
+      });
+      const extra = [];
+      groups.forEach(same => {
+        const byAge = same.slice().sort((a, b) =>
+          String(a.created_at || '').localeCompare(String(b.created_at || '')));
+        extra.push.apply(extra, byAge.slice(1));
+      });
+      return extra;
+    };
     PANES.gallery = {
       label: () => L('Photo gallery', 'ചിത്രശാല'),
       async render() {
@@ -1063,6 +1080,7 @@
         const opts = sel => cats.map(c =>
           '<option value="' + c[0] + '"' + (c[0] === sel ? ' selected' : '') + '>' + c[1] + '</option>').join('');
         const rows = galRows;
+        const extras = galDuplicates(galRows);
 
         return head(L('Photo gallery editor', 'ചിത്രശാല എഡിറ്റർ'),
             L('Add, edit or remove the photos shown in the school gallery. Teachers and administrators only.',
@@ -1091,6 +1109,14 @@
             '<div class="row-actions"><button class="btn btn-primary" type="submit" id="gal-save">' + L('Save photo', 'സേവ് ചെയ്യുക') + '</button>' +
               '<button class="btn btn-ghost" type="button" id="gal-cancel" hidden>' + L('Cancel editing', 'തിരുത്തൽ റദ്ദാക്കുക') + '</button></div>' +
           '</form></div>' +
+          (extras.length
+            ? '<div class="dash-card"><h3>' + L('Duplicate photos', 'ആവർത്തിച്ച ഫോട്ടോകൾ') + '</h3>' +
+              '<p class="small muted">' + L('The same picture has been added more than once. Removing the duplicates keeps one copy of each picture and leaves your titles and categories as they are.',
+                'ഒരേ ഫോട്ടോ പലതവണ ചേർത്തിരിക്കുന്നു. ആവർത്തനങ്ങൾ നീക്കുമ്പോൾ ഓരോ ഫോട്ടോയുടെയും ഒരു പകർപ്പ് മാത്രം നിലനിൽക്കും; തലക്കെട്ടും വിഭാഗവും മാറില്ല.') + '</p>' +
+              '<div class="row-actions"><button class="btn btn-ghost" type="button" id="gal-dedupe">' +
+                L('Remove ' + extras.length + ' duplicate photos', extras.length + ' ആവർത്തിച്ച ഫോട്ടോകൾ നീക്കുക') + '</button></div>' +
+              '<div class="form-msg" id="gal-dedupe-msg" role="alert"></div></div>'
+            : '') +
           '<div class="dash-card"><h3>' + L('Photos in the gallery', 'ചിത്രശാലയിലെ ഫോട്ടോകൾ') + ' <span class="pill">' + rows.length + '</span></h3>' +
           (rows.length
             ? '<div class="list-card" style="overflow:auto"><table class="tbl"><thead><tr><th></th><th>' + L('Photo', 'ഫോട്ടോ') + '</th><th>' + L('Category', 'വിഭാഗം') + '</th><th>' + L('Status', 'നില') + '</th><th></th></tr></thead><tbody>' +
@@ -1217,6 +1243,25 @@
         });
 
         cancel.addEventListener('click', () => setMode(null));
+
+        const dedupe = document.getElementById('gal-dedupe');
+        if (dedupe) dedupe.addEventListener('click', async () => {
+          const list = galDuplicates(galRows);
+          const msgD = document.getElementById('gal-dedupe-msg');
+          if (!list.length) return;
+          if (!window.confirm(L('Remove ' + list.length + ' duplicate photos? One copy of each picture stays.',
+              list.length + ' ആവർത്തിച്ച ഫോട്ടോകൾ നീക്കണോ? ഓരോ ഫോട്ടോയുടെയും ഒരു പകർപ്പ് നിലനിൽക്കും.'))) return;
+          UI.busy(dedupe, true);
+          let gone = 0;
+          try {
+            for (const g of list) { await API.deleteGalleryItem(g.id); gone++; }
+            UI.toast(L('Removed ' + gone + ' duplicate photos.', gone + ' ആവർത്തിച്ച ഫോട്ടോകൾ നീക്കി.'), 'success');
+            renderPane('gallery');
+          } catch (err) {
+            UI.showMsg(msgD, API.errorText(err), 'error');
+            UI.busy(dedupe, false);
+          }
+        });
 
         document.querySelectorAll('[data-edit-gal]').forEach(b => {
           b.addEventListener('click', () => {

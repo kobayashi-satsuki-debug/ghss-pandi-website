@@ -43,7 +43,10 @@ select * from (values
 ) as v
 where not exists (select 1 from public.notices);
 
-insert into public.gallery_items (title_en, title_ml, category, src) values
+-- guarded so running this file again never adds the same picture twice
+insert into public.gallery_items (title_en, title_ml, category, src)
+select v.title_en, v.title_ml, v.category, v.src
+from (values
  ('School main block and courtyard','സ്കൂൾ പ്രധാന കെട്ടിടവും മുറ്റവും','campus','assets/gallery/campus-01.svg'),
  ('Science laboratory','സയൻസ് ലബോറട്ടറി','campus','assets/gallery/lab-01.svg'),
  ('Library reading hall','ലൈബ്രറി വായനശാല','campus','assets/gallery/library-01.svg'),
@@ -54,7 +57,11 @@ insert into public.gallery_items (title_en, title_ml, category, src) values
  ('JRC community service','ജെ.ആർ.സി സേവനം','events','assets/gallery/jrc-01.svg'),
  ('Science exhibition','ശാസ്ത്ര പ്രദർശനം','events','assets/gallery/science-01.svg'),
  ('Basketball court','ബാസ്കറ്റ്ബോൾ കോർട്ട്','sports','assets/gallery/sports-02.svg')
-on conflict do nothing;
+) as v(title_en, title_ml, category, src)
+where not exists (
+  select 1 from public.gallery_items g
+  where g.title_en = v.title_en and g.src = v.src
+);
 
 insert into public.achievements
  (title_en, title_ml, description_en, description_ml, student_name, class_name, category, level, event_date, icon)

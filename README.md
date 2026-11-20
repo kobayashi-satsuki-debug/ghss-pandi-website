@@ -80,7 +80,10 @@ Class chat.
   full achievements editor (add, edit, delete) — after admin approval.
   Only teachers and administrators ever see the gallery editor: students and
   parents have no such tab, and the database refuses their writes even if they
-  call the API by hand.
+  call the API by hand. A **Remove duplicate photos** button appears when the
+  same picture has been added more than once, and
+  `supabase/25-remove-duplicate-gallery-photos.sql` does the same cleanup in
+  the database.
 - **Parent** — results for school-verified children, child-link requests
 - **Admin** — teacher approvals, parent verification, accounts, classes,
   admissions inbox, moderation history, content
