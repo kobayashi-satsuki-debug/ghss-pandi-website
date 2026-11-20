@@ -43,8 +43,8 @@
     },
     {
       keys: ['admission', 'പ്രവേശന', 'ಪ್ರವೇಶ', 'join', 'seat', 'plus one', 'commerce', 'class 1'],
-      en: 'Admissions: Classes 1 to 10 and Plus One Commerce applications for 2026\u201327 are open. Submit the enquiry form on the Admissions page or visit the school office between 9:30 am and 3:30 pm with the student\u2019s birth certificate and the last report card. Phone: 94465 53567.',
-      ml: 'പ്രവേശനം: 2026\u201327 അധ്യയനവർഷത്തേക്ക് 8-ാം ക്ലാസ്, പ്ലസ് വൺ അപേക്ഷകൾ തുറന്നിരിക്കുന്നു. പ്രവേശന പേജിലെ ഫോം പൂരിപ്പിക്കുകയോ ജനന സർട്ടിഫിക്കറ്റും അവസാന റിപ്പോർട്ട് കാർഡും സഹിതം രാവിലെ 9:30 മുതൽ വൈകുന്നേരം 3:30 വരെ ഓഫീസിൽ വരികയോ ചെയ്യുക. ഫോൺ: 94465 53567.'
+      en: 'Admissions: Classes 1 to 10 and Plus One Commerce applications for 2026\u201327 are open. Submit the enquiry form on the Admissions page or visit the school office between 8:30 am and 5:00 pm with the student\u2019s birth certificate and the last report card. Phone: 94465 53567.',
+      ml: 'പ്രവേശനം: 2026\u201327 അധ്യയനവർഷത്തേക്ക് 8-ാം ക്ലാസ്, പ്ലസ് വൺ അപേക്ഷകൾ തുറന്നിരിക്കുന്നു. പ്രവേശന പേജിലെ ഫോം പൂരിപ്പിക്കുകയോ ജനന സർട്ടിഫിക്കറ്റും അവസാന റിപ്പോർട്ട് കാർഡും സഹിതം രാവിലെ 8:30 മുതൽ വൈകുന്നേരം 5:00 വരെ ഓഫീസിൽ വരികയോ ചെയ്യുക. ഫോൺ: 94465 53567.'
     },
     {
       keys: ['chat', 'group chat', 'ചാറ്റ്', 'ಚಾಟ್', 'report message'],

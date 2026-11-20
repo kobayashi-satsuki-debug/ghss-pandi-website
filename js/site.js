@@ -126,7 +126,7 @@
             '<li>📍 <span data-en="' + C.addressEn + '" data-ml="' + C.addressMl + '">' + C.addressEn + '</span></li>' +
             '<li>📞 <a href="tel:+91' + C.phone + '">+91 ' + C.phone + '</a></li>' +
             '<li>✉️ <a href="mailto:' + C.email + '">' + C.email + '</a></li>' +
-            '<li class="small">' + '<span data-en="Office hours: 9:30 am – 3:30 pm, Monday to Friday" data-ml="ഓഫീസ് സമയം: രാവിലെ 9:30 – വൈകുന്നേരം 3:30, തിങ്കൾ–വെള്ളി">Office hours: 9:30 am – 3:30 pm, Monday to Friday</span></li>' +
+            '<li class="small">' + '<span data-en="Office hours: 8:30 am – 5:00 pm, Monday to Friday" data-ml="ഓഫീസ് സമയം: രാവിലെ 8:30 – വൈകുന്നേരം 5:00, തിങ്കൾ–വെള്ളി">Office hours: 8:30 am – 5:00 pm, Monday to Friday</span></li>' +
           '</ul>' +
         '</div>' +
       '</div>' +
