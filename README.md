@@ -75,7 +75,12 @@ Class chat.
 - **Student** — own results, class chat, an AI study buddy with a nickname the
   student chooses, profile
 - **Teacher** — publish results for assigned classes, notices, chat moderation,
-  gallery photos, and a full achievements editor (add, edit, delete) — after admin approval
+  a full photo gallery editor (upload a photo or paste an address, bilingual
+  title, category, alt text, publish or keep as a draft, edit, delete) and a
+  full achievements editor (add, edit, delete) — after admin approval.
+  Only teachers and administrators ever see the gallery editor: students and
+  parents have no such tab, and the database refuses their writes even if they
+  call the API by hand.
 - **Parent** — results for school-verified children, child-link requests
 - **Admin** — teacher approvals, parent verification, accounts, classes,
   admissions inbox, moderation history, content

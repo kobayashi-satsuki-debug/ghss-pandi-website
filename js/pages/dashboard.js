@@ -1049,6 +1049,155 @@
     };
   }
 
+  // ================= staff: photo gallery editor =================
+  if (isStaff) {
+    let galRows = [];
+    PANES.gallery = {
+      label: () => L('Photo gallery', 'ചിത്രശാല'),
+      async render() {
+        try { galRows = await API.gallery(); } catch (e) {
+          return head(L('Photo gallery editor', 'ചിത്രശാല എഡിറ്റർ'), '') + none(API.errorText(e));
+        }
+        const cats = [['campus', L('Campus', 'ക്യാമ്പസ്')], ['events', L('Events', 'പരിപാടികൾ')],
+          ['sports', L('Sports', 'കായികം')], ['arts', L('Arts', 'കല')]];
+        const opts = sel => cats.map(c =>
+          '<option value="' + c[0] + '"' + (c[0] === sel ? ' selected' : '') + '>' + c[1] + '</option>').join('');
+        const rows = galRows;
+
+        return head(L('Photo gallery editor', 'ചിത്രശാല എഡിറ്റർ'),
+            L('Add, edit or remove the photos shown in the school gallery. Teachers and administrators only.',
+              'സ്കൂൾ ചിത്രശാലയിൽ കാണിക്കുന്ന ഫോട്ടോകൾ ചേർക്കാം, തിരുത്താം, നീക്കാം. അധ്യാപകർക്കും അഡ്മിൻമാർക്കും മാത്രം.')) +
+          '<div class="dash-card"><h3 id="gal-editor-title">' + L('Add a photo', 'ഫോട്ടോ ചേർക്കുക') + '</h3>' +
+          '<form class="mini-form" id="gal-edit-form" novalidate data-id="">' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Title (English)', 'തലക്കെട്ട് (ഇംഗ്ലീഷ്)') + '</label><input name="title_en" required maxlength="140" placeholder="' + L('e.g. Science exhibition 2026', 'ഉദാ: ശാസ്ത്ര പ്രദർശനം 2026') + '"></div>' +
+            '<div class="form-field"><label>' + L('Title (Malayalam)', 'തലക്കെട്ട് (മലയാളം)') + '</label><input name="title_ml" maxlength="140"></div></div>' +
+            '<div class="form-row"><div class="form-field"><label>' + L('Category', 'വിഭാഗം') + '</label><select name="category">' + opts('campus') + '</select></div>' +
+            '<div class="form-field"><label>' + L('Alt text (for screen readers)', 'ആൾട്ട് ടെക്സ്റ്റ്') + '</label><input name="alt_text" maxlength="160" placeholder="' + L('Short description of the photo', 'ഫോട്ടോയുടെ ചെറിയ വിവരണം') + '"></div></div>' +
+            '<div class="form-field"><label>' + L('Upload a photo (JPG, PNG, WebP or AVIF, up to 3 MB)', 'ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക (JPG, PNG, WebP, AVIF — 3 MB വരെ)') + '</label>' +
+              '<input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/avif"></div>' +
+            '<div class="form-field"><label>' + L('…or paste an image address', '…അല്ലെങ്കിൽ ചിത്രത്തിന്റെ വിലാസം നൽകുക') + '</label>' +
+              '<input name="src" maxlength="600" placeholder="assets/gallery/campus-01.svg"></div>' +
+            '<div class="form-field"><label class="check-inline"><input type="checkbox" name="is_published" checked> ' +
+              L('Show this photo on the website', 'ഈ ഫോട്ടോ വെബ്സൈറ്റിൽ കാണിക്കുക') + '</label></div>' +
+            '<div id="gal-preview-wrap" hidden><img id="gal-preview" alt="" style="max-width:260px;border-radius:12px;display:block"></div>' +
+            '<div class="form-msg" id="gal-edit-msg" role="alert"></div>' +
+            '<div class="row-actions"><button class="btn btn-primary" type="submit" id="gal-save">' + L('Save photo', 'സേവ് ചെയ്യുക') + '</button>' +
+              '<button class="btn btn-ghost" type="button" id="gal-cancel" hidden>' + L('Cancel editing', 'തിരുത്തൽ റദ്ദാക്കുക') + '</button></div>' +
+          '</form></div>' +
+          '<div class="dash-card"><h3>' + L('Photos in the gallery', 'ചിത്രശാലയിലെ ഫോട്ടോകൾ') + ' <span class="pill">' + rows.length + '</span></h3>' +
+          (rows.length
+            ? '<div class="list-card" style="overflow:auto"><table class="tbl"><thead><tr><th></th><th>' + L('Photo', 'ഫോട്ടോ') + '</th><th>' + L('Category', 'വിഭാഗം') + '</th><th>' + L('Status', 'നില') + '</th><th></th></tr></thead><tbody>' +
+              rows.map(g => '<tr>' +
+                '<td><img src="' + UI.esc(g.src) + '" alt="" width="64" height="44" loading="lazy" style="object-fit:cover;border-radius:8px"></td>' +
+                '<td><strong>' + UI.esc(g.title_en) + '</strong>' + (g.title_ml ? '<div class="sub">' + UI.esc(g.title_ml) + '</div>' : '') + '</td>' +
+                '<td><span class="pill">' + UI.esc(g.category || 'campus') + '</span></td>' +
+                '<td>' + (g.is_published === false
+                  ? '<span class="badge badge-warn">' + L('Draft', 'ഡ്രാഫ്റ്റ്') + '</span>'
+                  : '<span class="badge badge-green">' + L('Live', 'പ്രസിദ്ധീകരിച്ചു') + '</span>') + '</td>' +
+                '<td><div class="row-actions">' +
+                  '<button class="btn btn-ghost btn-sm" type="button" data-edit-gal="' + g.id + '">' + L('Edit', 'തിരുത്തുക') + '</button>' +
+                  '<button class="btn btn-ghost btn-sm" type="button" data-del-gal="' + g.id + '">' + L('Delete', 'നീക്കുക') + '</button>' +
+                '</div></td></tr>').join('') +
+              '</tbody></table></div>'
+            : none(L('No photos yet.', 'ഇതുവരെ ഫോട്ടോകളില്ല.'))) + '</div>';
+      },
+      after: () => {
+        const form = document.getElementById('gal-edit-form');
+        const msg = document.getElementById('gal-edit-msg');
+        const title = document.getElementById('gal-editor-title');
+        const cancel = document.getElementById('gal-cancel');
+        const preview = document.getElementById('gal-preview');
+        const previewWrap = document.getElementById('gal-preview-wrap');
+
+        const showPreview = (src) => {
+          const ok = !!src;
+          previewWrap.hidden = !ok;
+          if (ok) preview.src = src;
+        };
+
+        const setMode = (row) => {
+          form.reset();
+          UI.hideMsg(msg);
+          form.dataset.id = row ? row.id : '';
+          title.textContent = row ? L('Edit photo', 'ഫോട്ടോ തിരുത്തുക') : L('Add a photo', 'ഫോട്ടോ ചേർക്കുക');
+          cancel.hidden = !row;
+          if (!row) { showPreview(''); return; }
+          ['title_en', 'title_ml', 'category', 'src', 'alt_text'].forEach(k => {
+            if (form.elements[k]) form.elements[k].value = row[k] == null ? '' : String(row[k]);
+          });
+          form.elements.is_published.checked = row.is_published !== false;
+          showPreview(row.src);
+          if (form.scrollIntoView) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        form.elements.photo.addEventListener('change', () => {
+          const f = form.elements.photo.files && form.elements.photo.files[0];
+          if (f) showPreview(URL.createObjectURL(f));
+        });
+        form.elements.src.addEventListener('input', () => showPreview(form.elements.src.value.trim()));
+
+        form.addEventListener('submit', async e => {
+          e.preventDefault();
+          UI.hideMsg(msg);
+          const d = Object.fromEntries(new FormData(form).entries());
+          if (!String(d.title_en || '').trim()) return UI.showMsg(msg, I18NS.t('err.required'), 'error');
+          const file = form.elements.photo.files && form.elements.photo.files[0];
+          let src = String(d.src || '').trim();
+          if (!file && !src) return UI.showMsg(msg, I18NS.t('gal.needphoto'), 'error');
+          const btn = document.getElementById('gal-save');
+          UI.busy(btn, true);
+          try {
+            if (file) {
+              const up = await API.uploadGalleryImage(file);
+              src = up.url;
+            }
+            const payload = {
+              title_en: String(d.title_en).trim(),
+              title_ml: String(d.title_ml || '').trim(),
+              category: d.category || 'campus',
+              src: src,
+              alt_text: String(d.alt_text || '').trim(),
+              is_published: !!d.is_published
+            };
+            if (form.dataset.id) {
+              await API.updateGalleryItem(form.dataset.id, payload);
+              UI.toast(L('Photo updated.', 'ഫോട്ടോ തിരുത്തി.'), 'success');
+            } else {
+              await API.addGalleryItem(payload);
+              UI.toast(L('Photo added to the gallery.', 'ചിത്രശാലയിൽ ഫോട്ടോ ചേർത്തു.'), 'success');
+            }
+            renderPane('gallery');
+          } catch (err) {
+            UI.showMsg(msg, API.errorText(err), 'error');
+            UI.busy(btn, false);
+          }
+        });
+
+        cancel.addEventListener('click', () => setMode(null));
+
+        document.querySelectorAll('[data-edit-gal]').forEach(b => {
+          b.addEventListener('click', () => {
+            const row = galRows.find(g => String(g.id) === b.dataset.editGal);
+            if (row) setMode(row);
+          });
+        });
+
+        document.querySelectorAll('[data-del-gal]').forEach(b => {
+          b.addEventListener('click', async () => {
+            if (!(await UI.confirmDialog(
+              L('Delete this photo?', 'ഈ ഫോട്ടോ നീക്കണോ?'),
+              L('It will disappear from the website immediately.', 'ഇത് ഉടൻ വെബ്സൈറ്റിൽ നിന്ന് മാറും.')))) return;
+            try {
+              await API.deleteGalleryItem(b.dataset.delGal);
+              UI.toast(L('Photo deleted.', 'ഫോട്ടോ നീക്കി.'), 'success');
+              renderPane('gallery');
+            } catch (err) { UI.toast(API.errorText(err), 'error'); }
+          });
+        });
+      }
+    };
+  }
+
   // ================= staff: PDF notes / resources =================
   if (isStaff) {
     PANES.resources = {
@@ -1388,7 +1537,7 @@
   const MENU = ['overview'];
   if (role === 'student') MENU.push('myresults', 'ai');
   if (role === 'parent') MENU.push('children');
-  if (isStaff) MENU.push('publish', 'resources', 'notices', 'achievements', 'moderation', 'students', 'content');
+  if (isStaff) MENU.push('publish', 'resources', 'notices', 'achievements', 'gallery', 'moderation', 'students', 'content');
   if (isAdmin) MENU.push('registrations', 'parents', 'accounts', 'classes', 'enquiries', 'rollover', 'history');
   MENU.push('security');
   if (isAdmin) MENU.push('audit');

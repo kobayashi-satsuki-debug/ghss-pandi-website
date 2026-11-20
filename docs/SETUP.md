@@ -199,6 +199,12 @@ created, in preview mode and in live mode.
        ends with `notify pgrst, 'reload schema'`, and prints the functions it
        found. Run it if step 20 was skipped or stopped early; safe to run
        twice.
+   22. `supabase/24-gallery-editor.sql` — the **Photo gallery** editor. Adds
+       `alt_text`, `is_published` and `updated_at` to `gallery_items`, lets
+       everyone read published photos while drafts stay visible only to staff,
+       and creates the public `gallery` storage bucket (JPG, PNG, WebP or AVIF,
+       3 MB) with staff-only upload and delete. Run it before anybody presses
+       **Add a photo**; safe to run twice.
 3. In **Authentication → URL configuration** set:
    - Site URL: `https://kobayashi-satsuki-debug.github.io/ghss-pandi-website/`
      while the site is on GitHub Pages, then change it to
@@ -228,7 +234,8 @@ created, in preview mode and in live mode.
    rather type it. Both work from the same email.
 5. In **Storage** confirm the bucket `resources` is **private** (the SQL creates
    it that way). Students get ten-minute signed links, so a copied URL stops
-   working.
+   working. The `gallery` bucket is deliberately **public**: those are school
+   photographs meant to be seen, and only staff can add to it or remove from it.
 6. Copy the project URL and anon key into `js/config.js`, set
    `demoFallback: false`, and reload the site.
 

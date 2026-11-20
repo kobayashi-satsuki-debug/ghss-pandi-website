@@ -926,8 +926,35 @@
     async gallery() { return db.gallery.slice(); },
     async addGalleryItem(data) {
       requireRole(['teacher', 'admin'], sessionId());
-      db.gallery.unshift({ id: uid(), ...data });
+      db.gallery.unshift({ id: uid(), created_at: now(), is_published: true, ...data });
       save(db); return true;
+    },
+    async updateGalleryItem(id, patch) {
+      requireRole(['teacher', 'admin'], sessionId());
+      const i = (db.gallery || []).findIndex(g => g.id === id);
+      if (i < 0) throw new Error('err.generic');
+      const clean = Object.assign({}, patch);
+      delete clean.id;
+      db.gallery[i] = Object.assign({}, db.gallery[i], clean, { updated_at: now() });
+      save(db); return db.gallery[i];
+    },
+    async deleteGalleryItem(id) {
+      requireRole(['teacher', 'admin'], sessionId());
+      db.gallery = (db.gallery || []).filter(g => g.id !== id);
+      save(db); return true;
+    },
+    async uploadGalleryImage(file) {
+      requireRole(['teacher', 'admin'], sessionId());
+      if (!file) throw new Error('err.required');
+      if (!/^image\/(jpeg|png|webp|avif)$/.test(file.type || '')) throw new Error('gal.badtype');
+      if (file.size > 3 * 1024 * 1024) throw new Error('gal.toobig');
+      const url = await new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(String(fr.result || ''));
+        fr.onerror = () => reject(new Error('gal.badtype'));
+        fr.readAsDataURL(file);
+      });
+      return { url: url, path: 'demo/' + uid() };
     },
     async addAchievement(data) {
       requireRole(['teacher', 'admin'], sessionId());

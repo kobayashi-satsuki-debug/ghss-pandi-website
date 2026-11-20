@@ -28,8 +28,9 @@
   }
 
   function galleryCard(g) {
-    return '<figure class="gallery-card" data-src="' + esc(g.src) + '" data-title="' + esc(pick(g, 'title')) + '" tabindex="0" role="button" aria-label="' + esc(pick(g, 'title')) + '">' +
-      '<img src="' + esc(g.src) + '" alt="' + esc(pick(g, 'title')) + '" loading="lazy">' +
+    const alt = g.alt_text || pick(g, 'title');
+    return '<figure class="gallery-card" data-src="' + esc(g.src) + '" data-title="' + esc(pick(g, 'title')) + '" tabindex="0" role="button" aria-label="' + esc(alt) + '">' +
+      '<img src="' + esc(g.src) + '" alt="' + esc(alt) + '" loading="lazy">' +
       '<figcaption>' + esc(pick(g, 'title')) + '</figcaption></figure>';
   }
 

@@ -646,6 +646,33 @@
       if (error) fail(error);
       return true;
     },
+    async updateGalleryItem(id, patch) {
+      const clean = Object.assign({}, patch, { updated_at: new Date().toISOString() });
+      delete clean.id;
+      const { data, error } = await client().from('gallery_items').update(clean).eq('id', id).select().single();
+      if (error) fail(error);
+      return data;
+    },
+    async deleteGalleryItem(id) {
+      const { data } = await client().from('gallery_items').select('src').eq('id', id).single();
+      const { error } = await client().from('gallery_items').delete().eq('id', id);
+      if (error) fail(error);
+      const m = /\/storage\/v1\/object\/public\/gallery\/(.+)$/.exec((data && data.src) || '');
+      if (m) await client().storage.from('gallery').remove([decodeURIComponent(m[1])]);
+      return true;
+    },
+    async uploadGalleryImage(file) {
+      if (!file) throw new Error('err.required');
+      if (!/^image\/(jpeg|png|webp|avif)$/.test(file.type || '')) throw new Error('gal.badtype');
+      if (file.size > 3 * 1024 * 1024) throw new Error('gal.toobig');
+      const safe = String(file.name || 'photo.jpg').replace(/[^A-Za-z0-9._-]/g, '_').slice(-80);
+      const path = new Date().toISOString().slice(0, 10) + '/' + Date.now() + '-' + safe;
+      const up = await client().storage.from('gallery')
+        .upload(path, file, { contentType: file.type || 'image/jpeg', upsert: false });
+      if (up.error) fail(up.error);
+      const pub = client().storage.from('gallery').getPublicUrl(path);
+      return { url: pub.data.publicUrl, path: path };
+    },
     async addAchievement(data) {
       const { error } = await client().from('achievements').insert(data);
       if (error) fail(error);

@@ -13,7 +13,7 @@
 
   async function load() {
     try {
-      all = await API.gallery();
+      all = (await API.gallery()).filter(g => g.is_published !== false);
       const active = filters.querySelector('.filter-chip.active');
       render(active ? active.dataset.cat : 'all');
       C.initLightbox(grid);
