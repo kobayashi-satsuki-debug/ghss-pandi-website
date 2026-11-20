@@ -207,5 +207,50 @@
     } catch (e) { return ''; }
   }
 
+  /* ---------- glassmorphic motion ---------- */
+  function glass() {
+    const header = document.querySelector('.site-header');
+    if (header) {
+      const lift = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+      lift();
+      window.addEventListener('scroll', lift, { passive: true });
+    }
+
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || typeof IntersectionObserver === 'undefined') return;
+
+    const SELECTOR = '.section-head, .card, .stat, .gallery-card, .achievement-card, .step-card, .faq-item, .dash-card, .auth-card';
+    const seen = new WeakSet();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('reveal-in');
+        io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: .06 });
+
+    const scan = root => {
+      (root || document).querySelectorAll(SELECTOR).forEach(el => {
+        if (seen.has(el)) return;
+        seen.add(el);
+        el.classList.add('reveal');
+        io.observe(el);
+      });
+    };
+    scan();
+
+    // dashboard panes are painted after load, so watch for new cards
+    const main = document.getElementById('dash-main');
+    if (main && typeof MutationObserver !== 'undefined') {
+      new MutationObserver(() => scan(main)).observe(main, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', glass, { once: true });
+  } else {
+    glass();
+  }
+
   window.Site = { mount, session, requireRole, logout, page, takeSessionError };
 })();

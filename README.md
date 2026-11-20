@@ -6,6 +6,14 @@ Phone 9446553567 · 14101ghsspandi@gmail.com · ghsspandi.org.in
 Static website (HTML, CSS, JavaScript) with a Supabase backend for accounts,
 results, chat and moderation. Every page works in English, Malayalam and Kannada.
 
+## Look and motion
+Glassmorphic surfaces over a slowly drifting aurora: cards, panels, the sign-in
+card and the sticky header are frosted with `backdrop-filter`, cards catch a light
+sweep on hover, and sections fade in as you scroll (`IntersectionObserver`).
+Motion is skipped for `prefers-reduced-motion`, transparency for
+`prefers-reduced-transparency`, and printing or Windows high-contrast fall back to
+solid cards, so no content is ever hidden.
+
 ## Classes
 Classes 1 to 7, high school 8 A/B to 10 A/B, and Plus One / Plus Two Commerce.
 The list lives in `window.SCHOOL_CLASSES` in `js/config.js`.

@@ -822,3 +822,114 @@ html[data-lang="ml"] .site-footer h4 { font-family: var(--font-ml); }
 .app-cta-inner p { margin: 0; color: #eedccb; max-width: 62ch; }
 .app-cta .btn-gold { margin-left: auto; }
 @media (max-width: 700px) { .app-cta .btn-gold { margin-left: 0; width: 100%; text-align: center; } }
+
+/* ==========================================================
+   Glassmorphic layer — animated aurora, frosted surfaces.
+   Everything here is progressive: without backdrop-filter the
+   surfaces fall back to the original solid cards.
+   ========================================================== */
+:root {
+  --glass: rgba(255, 255, 255, .68);
+  --glass-strong: rgba(255, 255, 255, .80);
+  --glass-line: rgba(255, 255, 255, .78);
+  --glass-blur: 18px;
+  --glass-glow: 0 18px 44px rgba(64, 14, 26, .13);
+}
+
+/* the page canvas keeps the cream colour; the body lets the aurora through */
+html { background: var(--cream); }
+body { background: transparent; }
+
+body::before {
+  content: ""; position: fixed; inset: -8vmax; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38vmax 32vmax at 16% 10%, rgba(217, 161, 38, .55), transparent 70%),
+    radial-gradient(34vmax 30vmax at 86% 4%,  rgba(125, 16, 36, .42), transparent 68%),
+    radial-gradient(42vmax 36vmax at 76% 84%, rgba(28, 107, 71, .40), transparent 70%),
+    radial-gradient(30vmax 26vmax at 6% 90%,  rgba(217, 161, 38, .34), transparent 72%),
+    radial-gradient(26vmax 22vmax at 48% 46%, rgba(255, 255, 255, .55), transparent 74%);
+  filter: saturate(112%);
+  animation: auroraShift 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes auroraShift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(2.4%, -2.2%, 0) scale(1.06); }
+  100% { transform: translate3d(-2.6%, 2.4%, 0) scale(1.03); }
+}
+
+/* frosted panels */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .stat, .auth-card, .dash-card, .list-card, .step-card, .modal-card, .faq-item {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(155%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(155%);
+    border-color: var(--glass-line);
+    box-shadow: var(--glass-glow), inset 0 1px 0 rgba(255, 255, 255, .85);
+  }
+  .card:hover, .stat:hover, .dash-card:hover {
+    background: var(--glass-strong);
+    box-shadow: 0 24px 56px rgba(64, 14, 26, .17), inset 0 1px 0 rgba(255, 255, 255, .95);
+  }
+  .site-header {
+    background: rgba(255, 253, 246, .82);
+    -webkit-backdrop-filter: blur(22px) saturate(175%);
+    backdrop-filter: blur(22px) saturate(175%);
+    border-bottom-color: rgba(125, 16, 36, .10);
+  }
+  .tbl thead th { background: rgba(248, 241, 228, .72); }
+}
+
+/* light sweep across a card on hover */
+.card { position: relative; overflow: hidden; }
+.card::after {
+  content: ""; position: absolute; inset: -60% -70%; pointer-events: none;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, .55) 50%, transparent 60%);
+  transform: translateX(-125%);
+  transition: transform .95s cubic-bezier(.2, .7, .3, 1);
+}
+.card:hover::after, .card:focus-within::after { transform: translateX(125%); }
+
+/* sticky header lifts once the page scrolls */
+.site-header.is-stuck { box-shadow: 0 12px 30px rgba(64, 14, 26, .13); }
+
+/* the crest gets a soft glass halo */
+.hero-crest {
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .18), transparent 62%);
+}
+
+/* scroll reveal — added by js/site.js, so no-JS users still see everything */
+.reveal { opacity: 0; transform: translateY(16px) scale(.994); }
+.reveal-in {
+  opacity: 1; transform: none;
+  transition: opacity .65s ease, transform .65s cubic-bezier(.2, .7, .3, 1);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .card, .stat, .auth-card, .dash-card, .list-card, .step-card, .modal-card, .faq-item,
+  .site-header {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .card, .stat, .auth-card, .dash-card, .list-card, .step-card, .modal-card, .faq-item,
+  .site-header { background: Canvas; border: 1px solid CanvasText; box-shadow: none; }
+  body::before, .card::after { display: none; }
+}
+
+@media print {
+  body::before { display: none; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .card::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+  .card::after { display: none; }
+  .reveal { opacity: 1; transform: none; }
+  .reveal-in { transition: none; }
+}
