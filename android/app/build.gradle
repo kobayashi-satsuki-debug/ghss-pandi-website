@@ -1,0 +1,39 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'in.ghsspandi.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'in.ghsspandi.app'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+// The website lives at the repository root; copy it into the APK assets.
+def webRoot = rootDir.toPath().resolve('..').normalize().toFile()
+tasks.register('copyWebAssets', Copy) {
+    from(webRoot) {
+        include '*.html'
+        include 'css/**'
+        include 'js/**'
+        include 'assets/**'
+    }
+    into layout.projectDirectory.dir('src/main/assets/www')
+}
+tasks.named('preBuild') { dependsOn 'copyWebAssets' }

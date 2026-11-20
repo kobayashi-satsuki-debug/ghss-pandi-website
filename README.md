@@ -6,6 +6,14 @@ Phone 9446553567 · 14101ghsspandi@gmail.com · ghsspandi.org.in
 Static website (HTML, CSS, JavaScript) with a Supabase backend for accounts,
 results, chat and moderation. Every page works in English, Malayalam and Kannada.
 
+## Android app
+`download/GHSS-PANDI-1.0.0.apk` is the website in a WebView shell, built from this
+repository by `android/build-apk.sh` (no Gradle needed). The site is served inside
+the app from an https origin so accounts, results and chat behave as they do on the
+web. Rebuild with `cd android && ./build-apk.sh`; the signing key lives in
+`android/.keystore/` and is git-ignored — back it up, or phones cannot install an
+update. Details in `docs/ANDROID-APP.md`.
+
 ## Look and motion
 Glassmorphic surfaces over a slowly drifting aurora: cards, panels, the sign-in
 card and the sticky header are frosted with `backdrop-filter`, cards catch a light

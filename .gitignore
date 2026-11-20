@@ -4,3 +4,10 @@ node_modules/
 *.log
 ghss-pandi-website.zip
 *.whl
+
+# Android build output and the generated asset copy
+android/build/
+android/app/src/main/assets/www/
+android/.gradle/
+android/.keystore/
+*.apk.idsig
