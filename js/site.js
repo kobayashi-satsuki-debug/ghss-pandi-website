@@ -234,6 +234,10 @@
         if (seen.has(el)) return;
         seen.add(el);
         el.classList.add('reveal');
+        // cards in the same grid cascade instead of popping in together
+        const parent = el.parentElement;
+        const index = parent ? Array.prototype.indexOf.call(parent.children, el) : 0;
+        el.style.setProperty('--d', Math.min(Math.max(index, 0), 5) * 80 + 'ms');
         io.observe(el);
       });
     };
@@ -246,10 +250,89 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', glass, { once: true });
-  } else {
+  /* ---------- page loader, hero cascade, parallax ---------- */
+  function liftLoader() {
+    const el = document.querySelector('.page-loader');
+    document.documentElement.classList.remove('is-loading');
+    if (!el || el.classList.contains('is-done')) return;
+    el.classList.add('is-done');
+    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 700);
+  }
+
+  function liftLoaderSoon() {
+    const started = window.__loaderStartedAt || Date.now();
+    const wait = Math.max(0, 450 - (Date.now() - started));
+    setTimeout(liftLoader, wait);
+    setTimeout(liftLoader, 3500);
+  }
+
+  function heroEnter(reduced) {
+    if (reduced) return;
+    const scope = document.querySelector('.hero-inner') || document.querySelector('.page-hero .container');
+    if (!scope) return;
+    const items = scope.querySelectorAll(
+      '.hero-eyebrow, .hero-lead, .hero-actions, .hero-stats, .hero-crest, h1, .eyebrow, p');
+    const list = Array.prototype.slice.call(items);
+    if (!list.length) return;
+    list.forEach((el, i) => {
+      el.classList.add('hero-enter');
+      el.style.setProperty('--d', Math.min(i, 6) * 85 + 'ms');
+    });
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      list.forEach(el => el.classList.add('is-in'));
+    }));
+  }
+
+  function parallax(reduced) {
+    if (reduced || window.innerWidth < 860) return;
+    const hero = document.querySelector('.hero, .page-hero');
+    const crest = document.querySelector('.hero-crest');
+    if (!hero && !crest) return;
+    let queued = 0;
+
+    const paint = () => {
+      queued = 0;
+      const y = window.scrollY || window.pageYOffset || 0;
+      document.documentElement.style.setProperty('--scroll-y', y + 'px');
+      const offset = el => {
+        const r = el.getBoundingClientRect();
+        return r.top + r.height / 2 - window.innerHeight / 2;
+      };
+      if (hero) {
+        const d = offset(hero);
+        hero.style.setProperty('--py', (-d * 0.10).toFixed(1) + 'px');
+        hero.style.setProperty('--py2', (-d * 0.04).toFixed(1) + 'px');
+      }
+      if (crest) {
+        crest.style.setProperty('--py3', (-offset(crest) * 0.06).toFixed(1) + 'px');
+      }
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = requestAnimationFrame(paint);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+  }
+
+  function motion() {
+    const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    liftLoaderSoon();
+    heroEnter(reduced);
+    parallax(reduced);
+  }
+
+  function boot() {
     glass();
+    motion();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
   }
 
   window.Site = { mount, session, requireRole, logout, page, takeSessionError };

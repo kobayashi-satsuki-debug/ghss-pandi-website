@@ -15,6 +15,16 @@ web. Rebuild with `cd android && ./build-apk.sh`; the signing key lives in
 update. Details in `docs/ANDROID-APP.md`.
 
 ## Look and motion
+A loader curtain (logo, school name, gold progress line) covers the first paint
+and lifts itself after about half a second; `js/loader.js` also removes it after
+six seconds no matter what, so a slow page can never stay covered. Cards lift,
+their images zoom and buttons sweep a highlight on hover; the nav draws a gold
+underline; hero copy cascades in line by line and cards reveal as they scroll
+into view, cascading across a grid. The hero glow, dot pattern and crest drift at
+different rates as the page scrolls. Phones skip the parallax, and
+`prefers-reduced-motion` turns every movement off while keeping the content
+visible.
+
 Glassmorphic surfaces over a slowly drifting aurora: cards, panels, the sign-in
 card and the sticky header are frosted with `backdrop-filter`, cards catch a light
 sweep on hover, and sections fade in as you scroll (`IntersectionObserver`).
