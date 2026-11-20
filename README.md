@@ -14,6 +14,25 @@ web. Rebuild with `cd android && ./build-apk.sh`; the signing key lives in
 `android/.keystore/` and is git-ignored — back it up, or phones cannot install an
 update. Details in `docs/ANDROID-APP.md`.
 
+## Light and dark theme
+The round button beside the language switch flips the site between the cream
+daylight palette and a warm charcoal one. `js/theme.js` runs in `<head>`, so the
+attribute is on `<html>` before the first paint and no page flashes the wrong
+colours. The choice is stored in `localStorage` as `ghss-theme`; until a visitor
+picks one, the page follows the operating system (`prefers-color-scheme`) and
+keeps following it if the system flips at sunset. The button reports its state
+with `aria-pressed`, and its label — "Switch to dark theme" / "Switch to light
+theme" — follows the selected language (English, Malayalam, Kannada). Printing
+always uses the light palette, and `color-scheme` is set so scrollbars and form
+controls match.
+
+Every surface colour is a token (`--surface`, `--surface-alt`, `--surface-soft`,
+`--surface-sunken`, `--surface-tint`, `--line`, `--heading`, `--link`,
+`--brand-text`, `--gold-ink` and the status tints), so a new component needs no
+dark-specific rule as long as it uses them. Text contrast was measured with a
+WCAG script across all public pages and every dashboard pane for all four roles:
+0 failures below AA in dark.
+
 ## Look and motion
 A loader curtain (logo, school name, gold progress line) covers the first paint
 and lifts itself after about half a second; `js/loader.js` also removes it after

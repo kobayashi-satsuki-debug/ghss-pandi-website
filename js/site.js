@@ -54,10 +54,16 @@
           '<span>✉️ <a href="mailto:' + C.email + '">' + C.email + '</a></span>' +
           '<span>📍 <span data-en="Pandi, Adoor, Kasaragod, Kerala" data-ml="പാണ്ടി, അടൂർ, കാസർകോട്, കേരളം">Pandi, Adoor, Kasaragod, Kerala</span></span>' +
         '</div>' +
-        '<div class="lang-switch" role="group" aria-label="Language">' +
-          '<button type="button" data-lang="en" class="active">English</button>' +
-          '<button type="button" data-lang="ml">മലയാളം</button>' +
-          '<button type="button" data-lang="kn">ಕನ್ನಡ</button>' +
+        '<div class="topstrip-tools">' +
+          '<div class="lang-switch" role="group" aria-label="Language">' +
+            '<button type="button" data-lang="en" class="active">English</button>' +
+            '<button type="button" data-lang="ml">മലയാളം</button>' +
+            '<button type="button" data-lang="kn">ಕನ್ನಡ</button>' +
+          '</div>' +
+          '<button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Switch to dark theme" title="Switch to dark theme">' +
+            '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>' +
+            '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.4 12H2.2M21.8 12h-2.2M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M6.3 17.7l-1.5 1.5M19.2 4.8l-1.5 1.5"/></svg>' +
+          '</button>' +
         '</div>' +
       '</div></div>' +
       '<div class="container">' +
