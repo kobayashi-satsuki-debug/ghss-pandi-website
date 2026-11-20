@@ -34,6 +34,10 @@ WCAG script across all public pages and every dashboard pane for all four roles:
 0 failures below AA in dark.
 
 ## Look and motion
+
+### Liquid glass on the home page
+
+The home page is built from liquid-glass slabs: a frosted, saturated backdrop with a bright top rim, an inner glow and a refracted conic rim around the edge. The hero copy sits on one large panel, the four statistics are glass chips inside it, and the four quick-link cards float on a slowly drifting gold, maroon and green aurora that the glass bends. `js/liquid.js` moves the specular highlight to wherever the pointer is, so the light slides across the surface as you move; the edge gently morphs between radii on hover. Everything degrades: no JavaScript leaves the highlight at its default spot, `prefers-reduced-motion` stops the morph and the aurora, phones get a lighter blur, and printing drops the blur and the tint. Text contrast was measured on the rendered page (worst case 5.0:1 for white text on the hero panel, 15:1 for card text).
 The two "Apply" buttons (header and hero) carry `.btn-venom`: gold at rest, with
 a slow green pulse every seven seconds; on hover or keyboard focus a dark
 symbiote liquid rises from the bottom with a wobbling edge, green veins rotate
