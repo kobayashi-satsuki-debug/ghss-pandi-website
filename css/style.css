@@ -148,7 +148,7 @@ html[data-lang="ml"] .brand-sub { text-transform: none; letter-spacing: 0; text-
 .site-nav a:hover { color: var(--link); border-bottom-color: var(--gold); }
 .site-nav a[aria-current="page"] { color: var(--link); border-bottom-color: var(--brand-text); font-weight: 600; }
 .site-nav .nav-login { margin-left: auto; }
-.site-nav a.btn { color: #fff; }
+.site-nav a.btn-primary { color: #fff; }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -1270,4 +1270,96 @@ html[data-theme="dark"] .toast { background: #2a2124; color: var(--ink); border:
   html[data-theme="dark"] body::before,
   html[data-theme="dark"] .site-header { background: none !important; }
   html[data-theme="dark"] .card::after { display: none; }
+}
+
+/* ==========================================================
+   Venom apply button — the gold melts into a living black-green
+   symbiote: a wobbling liquid rises from the bottom, green veins
+   rotate under it, the label turns mint and glows. Hover or
+   keyboard focus triggers it; the gold stays at rest.
+   ========================================================== */
+.btn.btn-venom {
+  position: relative; isolation: isolate; overflow: hidden;
+  border: 1px solid rgba(20, 40, 22, .20);
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: #3b2200;
+  transition: color .4s ease, border-color .4s ease,
+              box-shadow .45s ease, transform .4s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn.btn-venom::before {
+  content: ""; position: absolute; inset: -14% -8% -10%; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(58% 48% at 24% 16%, rgba(57, 255, 136, .32), transparent 62%),
+    radial-gradient(50% 42% at 80% 28%, rgba(24, 200, 120, .26), transparent 64%),
+    radial-gradient(120% 130% at 50% 120%, #08110a 0%, #0b150c 46%, #10251a 100%);
+  border-radius: 46% 54% 48% 52% / 22% 26% 30% 24%;
+  transform: translateY(104%) scale(1.06);
+  transition: transform .62s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform, border-radius;
+}
+.btn.btn-venom::after {
+  content: ""; position: absolute; inset: -24%; z-index: -1; pointer-events: none;
+  background: repeating-conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg 8.6deg,
+    rgba(57, 255, 136, .34) 8.6deg 9.6deg,
+    transparent 9.6deg 19deg);
+  -webkit-mask-image: radial-gradient(62% 58% at 50% 50%, transparent 30%, #000 74%);
+  mask-image: radial-gradient(62% 58% at 50% 50%, transparent 30%, #000 74%);
+  opacity: 0; transform: rotate(0deg) scale(1.2);
+  transition: opacity .5s ease;
+  mix-blend-mode: screen;
+}
+.btn.btn-venom:hover,
+.btn.btn-venom:focus-visible {
+  color: #eafff2;
+  border-color: rgba(57, 255, 136, .55);
+  box-shadow: 0 14px 34px rgba(6, 18, 9, .55),
+              0 0 0 1px rgba(57, 255, 136, .22),
+              0 0 28px rgba(57, 255, 136, .24);
+  text-shadow: 0 0 12px rgba(57, 255, 136, .55);
+}
+.btn.btn-venom:hover::before,
+.btn.btn-venom:focus-visible::before {
+  transform: translateY(0) scale(1.02);
+  animation: venom-wobble 3.6s ease-in-out infinite;
+}
+.btn.btn-venom:hover::after,
+.btn.btn-venom:focus-visible::after {
+  opacity: .55;
+  animation: venom-veins 9s linear infinite;
+}
+.btn.btn-venom:active { transform: translateY(0) scale(.985); }
+.btn.btn-venom:active::before { transform: translateY(-3%) scale(1.05); }
+
+/* a slow green pulse at rest so the button reads as alive, not static */
+.btn.btn-venom { animation: venom-idle 7s ease-in-out infinite; }
+.btn.btn-venom:hover, .btn.btn-venom:focus-visible { animation: none; }
+
+@keyframes venom-wobble {
+  0%, 100% { border-radius: 46% 54% 48% 52% / 22% 26% 30% 24%; }
+  33%      { border-radius: 56% 44% 42% 58% / 30% 20% 28% 26%; }
+  66%      { border-radius: 48% 52% 58% 42% / 24% 32% 20% 28%; }
+}
+@keyframes venom-veins {
+  from { transform: rotate(0deg) scale(1.2); }
+  to   { transform: rotate(360deg) scale(1.2); }
+}
+@keyframes venom-idle {
+  0%, 88%, 100% { box-shadow: 0 6px 18px rgba(64, 14, 26, .18); }
+  93%           { box-shadow: 0 8px 24px rgba(20, 80, 40, .30), 0 0 16px rgba(57, 255, 136, .18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.btn-venom { animation: none; }
+  .btn.btn-venom::before { transition: none; }
+  .btn.btn-venom:hover::before,
+  .btn.btn-venom:focus-visible::before { animation: none; transform: translateY(0); }
+  .btn.btn-venom::after { transition: opacity .2s linear; }
+  .btn.btn-venom:hover::after,
+  .btn.btn-venom:focus-visible::after { animation: none; }
+}
+@media print {
+  .btn.btn-venom::before, .btn.btn-venom::after { display: none; }
+  .btn.btn-venom { animation: none; box-shadow: none; }
 }

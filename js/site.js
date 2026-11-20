@@ -76,7 +76,7 @@
             '</span>' +
           '</a>' +
           '<div class="header-actions">' +
-            '<a class="btn btn-gold btn-sm" href="admissions.html" data-en="Apply now" data-ml="അപേക്ഷിക്കുക">Apply now</a>' +
+            '<a class="btn btn-gold btn-sm btn-venom" href="admissions.html" data-en="Apply now" data-ml="അപേക്ഷിക്കുക">Apply now</a>' +
             '<button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false">☰</button>' +
           '</div>' +
         '</div>' +

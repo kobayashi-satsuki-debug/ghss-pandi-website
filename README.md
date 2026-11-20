@@ -34,6 +34,13 @@ WCAG script across all public pages and every dashboard pane for all four roles:
 0 failures below AA in dark.
 
 ## Look and motion
+The two "Apply" buttons (header and hero) carry `.btn-venom`: gold at rest, with
+a slow green pulse every seven seconds; on hover or keyboard focus a dark
+symbiote liquid rises from the bottom with a wobbling edge, green veins rotate
+under it, and the label turns mint and glows. It is pure CSS on two
+pseudo-elements, stops under `prefers-reduced-motion`, and is hidden in print.
+
+
 A loader curtain (logo, school name, gold progress line) covers the first paint
 and lifts itself after about half a second; `js/loader.js` also removes it after
 six seconds no matter what, so a slow page can never stay covered. Cards lift,
