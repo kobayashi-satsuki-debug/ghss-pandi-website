@@ -1073,13 +1073,20 @@
             '<div class="form-field"><label>' + L('Title (Malayalam)', 'തലക്കെട്ട് (മലയാളം)') + '</label><input name="title_ml" maxlength="140"></div></div>' +
             '<div class="form-row"><div class="form-field"><label>' + L('Category', 'വിഭാഗം') + '</label><select name="category">' + opts('campus') + '</select></div>' +
             '<div class="form-field"><label>' + L('Alt text (for screen readers)', 'ആൾട്ട് ടെക്സ്റ്റ്') + '</label><input name="alt_text" maxlength="160" placeholder="' + L('Short description of the photo', 'ഫോട്ടോയുടെ ചെറിയ വിവരണം') + '"></div></div>' +
-            '<div class="form-field"><label>' + L('Upload a photo (JPG, PNG, WebP or AVIF, up to 3 MB)', 'ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക (JPG, PNG, WebP, AVIF — 3 MB വരെ)') + '</label>' +
-              '<input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/avif"></div>' +
+            '<div class="form-field"><label>' + L('Photo', 'ഫോട്ടോ') + '</label>' +
+              '<label class="gal-pick" id="gal-pick" for="gal-photo">' +
+                '<input class="gal-pick-input" type="file" id="gal-photo" name="photo" accept="image/jpeg,image/png,image/webp,image/avif">' +
+                '<span class="gal-pick-icon" aria-hidden="true">🖼️</span>' +
+                '<img class="gal-pick-img" id="gal-preview" alt="" hidden>' +
+                '<span class="gal-pick-text" id="gal-pick-text">' + L('Choose a photo', 'ഒരു ഫോട്ടോ തിരഞ്ഞെടുക്കുക') +
+                  '<span class="gal-pick-hint">' + L('Click here, or drag a photo onto this box — JPG, PNG, WebP or AVIF, up to 3 MB',
+                    'ഇവിടെ ക്ലിക്ക് ചെയ്യുക, അല്ലെങ്കിൽ ഫോട്ടോ ഈ ബോക്സിലേക്ക് വലിച്ചിടുക — JPG, PNG, WebP, AVIF, 3 MB വരെ') + '</span></span>' +
+                '<span class="gal-pick-meta" id="gal-pick-meta" hidden></span>' +
+              '</label></div>' +
             '<div class="form-field"><label>' + L('…or paste an image address', '…അല്ലെങ്കിൽ ചിത്രത്തിന്റെ വിലാസം നൽകുക') + '</label>' +
               '<input name="src" maxlength="600" placeholder="assets/gallery/campus-01.svg"></div>' +
             '<div class="form-field"><label class="check-inline"><input type="checkbox" name="is_published" checked> ' +
               L('Show this photo on the website', 'ഈ ഫോട്ടോ വെബ്സൈറ്റിൽ കാണിക്കുക') + '</label></div>' +
-            '<div id="gal-preview-wrap" hidden><img id="gal-preview" alt="" style="max-width:260px;border-radius:12px;display:block"></div>' +
             '<div class="form-msg" id="gal-edit-msg" role="alert"></div>' +
             '<div class="row-actions"><button class="btn btn-primary" type="submit" id="gal-save">' + L('Save photo', 'സേവ് ചെയ്യുക') + '</button>' +
               '<button class="btn btn-ghost" type="button" id="gal-cancel" hidden>' + L('Cancel editing', 'തിരുത്തൽ റദ്ദാക്കുക') + '</button></div>' +
@@ -1107,12 +1114,38 @@
         const title = document.getElementById('gal-editor-title');
         const cancel = document.getElementById('gal-cancel');
         const preview = document.getElementById('gal-preview');
-        const previewWrap = document.getElementById('gal-preview-wrap');
+        const pick = document.getElementById('gal-pick');
+        const pickText = document.getElementById('gal-pick-text');
+        const pickMeta = document.getElementById('gal-pick-meta');
+        const photoInput = form.elements.photo;
+        let pickedFile = null;
 
-        const showPreview = (src) => {
+        const showPreview = (src, label) => {
           const ok = !!src;
-          previewWrap.hidden = !ok;
-          if (ok) preview.src = src;
+          preview.hidden = !ok;
+          if (ok) preview.src = src; else preview.removeAttribute('src');
+          pick.classList.toggle('has-photo', ok);
+          pickText.hidden = ok;
+          pickMeta.hidden = !ok;
+          pickMeta.textContent = ok
+            ? (label ? label + ' · ' : '') +
+              L('click the box to choose another photo', 'മറ്റൊരു ഫോട്ടോ തിരഞ്ഞെടുക്കാൻ ബോക്സിൽ ക്ലിക്ക് ചെയ്യുക')
+            : '';
+        };
+
+        const readFile = (file) => {
+          if (!file) return;
+          if (!/^image\/(jpeg|png|webp|avif)$/.test(file.type)) {
+            pickedFile = null; photoInput.value = '';
+            return UI.showMsg(msg, I18NS.t('gal.badtype'), 'error');
+          }
+          if (file.size > 3 * 1024 * 1024) {
+            pickedFile = null; photoInput.value = '';
+            return UI.showMsg(msg, I18NS.t('gal.toobig'), 'error');
+          }
+          pickedFile = file;
+          UI.hideMsg(msg);
+          showPreview(URL.createObjectURL(file), file.name);
         };
 
         const setMode = (row) => {
@@ -1121,6 +1154,7 @@
           form.dataset.id = row ? row.id : '';
           title.textContent = row ? L('Edit photo', 'ഫോട്ടോ തിരുത്തുക') : L('Add a photo', 'ഫോട്ടോ ചേർക്കുക');
           cancel.hidden = !row;
+          pickedFile = null;
           if (!row) { showPreview(''); return; }
           ['title_en', 'title_ml', 'category', 'src', 'alt_text'].forEach(k => {
             if (form.elements[k]) form.elements[k].value = row[k] == null ? '' : String(row[k]);
@@ -1130,18 +1164,27 @@
           if (form.scrollIntoView) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
-        form.elements.photo.addEventListener('change', () => {
-          const f = form.elements.photo.files && form.elements.photo.files[0];
-          if (f) showPreview(URL.createObjectURL(f));
+        photoInput.addEventListener('change', () => readFile(photoInput.files && photoInput.files[0]));
+        ['dragenter', 'dragover'].forEach(ev => pick.addEventListener(ev, e => {
+          e.preventDefault(); pick.classList.add('is-over');
+        }));
+        ['dragleave', 'dragend'].forEach(ev => pick.addEventListener(ev, () => pick.classList.remove('is-over')));
+        pick.addEventListener('drop', e => {
+          e.preventDefault();
+          pick.classList.remove('is-over');
+          readFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]);
         });
-        form.elements.src.addEventListener('input', () => showPreview(form.elements.src.value.trim()));
+        form.elements.src.addEventListener('input', () => {
+          pickedFile = null;
+          showPreview(form.elements.src.value.trim());
+        });
 
         form.addEventListener('submit', async e => {
           e.preventDefault();
           UI.hideMsg(msg);
           const d = Object.fromEntries(new FormData(form).entries());
           if (!String(d.title_en || '').trim()) return UI.showMsg(msg, I18NS.t('err.required'), 'error');
-          const file = form.elements.photo.files && form.elements.photo.files[0];
+          const file = pickedFile || (form.elements.photo.files && form.elements.photo.files[0]);
           let src = String(d.src || '').trim();
           if (!file && !src) return UI.showMsg(msg, I18NS.t('gal.needphoto'), 'error');
           const btn = document.getElementById('gal-save');
